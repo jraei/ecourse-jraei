@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { Head, useForm } from '@inertiajs/react';
-import AdminLayout from '@/layouts/admin-layout';
 import { DataTable } from '@/components/admin/data-table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { BookOpen, Calendar, Zap, Database } from 'lucide-react';
+import AdminLayout from '@/layouts/admin-layout';
+import { Head, useForm } from '@inertiajs/react';
+import { BookOpen, Calendar, Database, Zap } from 'lucide-react';
+import { useState } from 'react';
 
 interface Course {
     id: number;
@@ -28,18 +28,24 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingCourse, setEditingCourse] = useState<Course | null>(null);
 
-    const { data, setData, post, put, delete: destroy, processing, errors, reset } = useForm({
+    const {
+        data,
+        setData,
+        post,
+        put,
+        delete: destroy,
+        processing,
+        errors,
+        reset,
+    } = useForm({
         name: '',
         description: '',
         thumbnail: '',
         order: 0,
-        status: 'active' as 'active' | 'inactive'
+        status: 'active' as 'active' | 'inactive',
     });
 
-    const breadcrumbs = [
-        { title: 'Admin', href: '/admin' },
-        { title: 'Courses' }
-    ];
+    const breadcrumbs = [{ title: 'Admin', href: '/admin' }, { title: 'Courses' }];
 
     const columns = [
         {
@@ -49,67 +55,62 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
             render: (value: string, course: Course) => (
                 <div className="flex items-center gap-4">
                     {course.thumbnail ? (
-                        <div className="relative group">
-                            <img 
-                                src={course.thumbnail} 
-                                alt={value} 
-                                className="w-12 h-12 rounded-xl object-cover ring-2 ring-zinc-700 group-hover:ring-cyan-400 transition-all duration-300" 
+                        <div className="group relative">
+                            <img
+                                src={course.thumbnail}
+                                alt={value}
+                                className="h-12 w-12 rounded-xl object-cover ring-2 ring-zinc-700 transition-all duration-300 group-hover:ring-cyan-400"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 opacity-0 transition-opacity group-hover:opacity-100"></div>
                         </div>
                     ) : (
-                        <div className="w-12 h-12 bg-gradient-to-br from-zinc-700 to-zinc-800 rounded-xl flex items-center justify-center ring-2 ring-zinc-600 hover:ring-cyan-400 transition-all duration-300 group">
-                            <BookOpen className="w-6 h-6 text-cyan-400 group-hover:scale-110 transition-transform" />
+                        <div className="group flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-zinc-700 to-zinc-800 ring-2 ring-zinc-600 transition-all duration-300 hover:ring-cyan-400">
+                            <BookOpen className="h-6 w-6 text-cyan-400 transition-transform group-hover:scale-110" />
                         </div>
                     )}
                     <div>
-                        <p className="font-semibold text-white group-hover:text-cyan-200 transition-colors">{value}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                            <Database className="w-3 h-3 text-gray-500" />
-                            <p className="text-xs text-gray-400 font-mono">{course.modules_count || 0} modules</p>
+                        <p className="font-semibold text-white transition-colors group-hover:text-cyan-200">{value}</p>
+                        <div className="mt-1 flex items-center gap-2">
+                            <Database className="h-3 w-3 text-gray-500" />
+                            <p className="font-mono text-xs text-gray-400">{course.modules_count || 0} modules</p>
                         </div>
                     </div>
                 </div>
-            )
+            ),
         },
         {
             key: 'description' as keyof Course,
             label: 'Description',
-            render: (value: string) => (
-                <p className="text-sm text-gray-300 max-w-xs truncate font-mono">{value}</p>
-            )
+            render: (value: string) => <p className="max-w-xs truncate font-mono text-sm text-gray-300">{value}</p>,
         },
         {
             key: 'status' as keyof Course,
             label: 'Status',
             sortable: true,
             render: (value: string) => (
-                <Badge 
-                    className={`
-                        ${value === 'active' 
-                            ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/25' 
+                <Badge
+                    className={` ${
+                        value === 'active'
+                            ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/25'
                             : 'bg-gradient-to-r from-gray-600 to-gray-700 text-gray-300 shadow-lg shadow-gray-500/25'
-                        }
-                        px-3 py-1 rounded-full font-mono text-xs uppercase tracking-wider
-                        hover:scale-105 transition-transform duration-200
-                    `}
+                    } rounded-full px-3 py-1 font-mono text-xs tracking-wider uppercase transition-transform duration-200 hover:scale-105`}
                 >
-                    <div className={`w-2 h-2 rounded-full mr-2 ${value === 'active' ? 'bg-white animate-pulse' : 'bg-gray-400'}`}></div>
+                    <div className={`mr-2 h-2 w-2 rounded-full ${value === 'active' ? 'animate-pulse bg-white' : 'bg-gray-400'}`}></div>
                     {value}
                 </Badge>
-            )
+            ),
         },
         {
             key: 'created_at' as keyof Course,
             label: 'Created',
             sortable: true,
             render: (value: string) => (
-                <div className="flex items-center gap-2 text-sm text-gray-400 font-mono">
-                    <Calendar className="w-4 h-4 text-cyan-400" />
+                <div className="flex items-center gap-2 font-mono text-sm text-gray-400">
+                    <Calendar className="h-4 w-4 text-cyan-400" />
                     {new Date(value).toLocaleDateString()}
                 </div>
-            )
-        }
+            ),
+        },
     ];
 
     const handleAdd = () => {
@@ -124,7 +125,7 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
             description: course.description,
             thumbnail: course.thumbnail,
             order: course.order,
-            status: course.status
+            status: course.status,
         });
         setEditingCourse(course);
         setIsModalOpen(true);
@@ -138,20 +139,20 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (editingCourse) {
             put(`/admin/courses/${editingCourse.id}`, {
                 onSuccess: () => {
                     setIsModalOpen(false);
                     reset();
-                }
+                },
             });
         } else {
             post('/admin/courses', {
                 onSuccess: () => {
                     setIsModalOpen(false);
                     reset();
-                }
+                },
             });
         }
     };
@@ -159,12 +160,12 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Course Management" />
-            
-            <div className="p-6 relative">
+
+            <div className="relative p-6">
                 {/* Animated background */}
-                <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute top-20 right-20 w-60 h-60 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse"></div>
-                    <div className="absolute bottom-20 left-20 w-60 h-60 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+                <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                    <div className="absolute top-20 right-20 h-60 w-60 animate-pulse rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 blur-3xl"></div>
+                    <div className="absolute bottom-20 left-20 h-60 w-60 animate-pulse rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 blur-3xl delay-1000"></div>
                 </div>
 
                 <div className="relative z-10">
@@ -182,76 +183,86 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
             </div>
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="bg-gradient-to-br from-zinc-900/95 via-zinc-800/50 to-zinc-900/95 border border-zinc-700/50 text-white max-w-md backdrop-blur-sm">
+                <DialogContent className="max-w-md border border-zinc-700/50 bg-gradient-to-br from-zinc-900/95 via-zinc-800/50 to-zinc-900/95 text-white backdrop-blur-sm">
                     <DialogHeader>
-                        <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent flex items-center gap-2">
-                            <Zap className="w-6 h-6 text-cyan-400" />
+                        <DialogTitle className="flex items-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-2xl font-bold text-transparent">
+                            <Zap className="h-6 w-6 text-cyan-400" />
                             {editingCourse ? 'Modify Course' : 'Create Course'}
                         </DialogTitle>
                     </DialogHeader>
-                    
+
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-2">
-                            <Label htmlFor="name" className="text-gray-300 font-mono text-sm uppercase tracking-wider">Course Name</Label>
+                            <Label htmlFor="name" className="font-mono text-sm tracking-wider text-gray-300 uppercase">
+                                Course Name
+                            </Label>
                             <Input
                                 id="name"
                                 value={data.name}
                                 onChange={(e) => setData('name', e.target.value)}
-                                className="bg-zinc-800/50 border-zinc-700/50 text-white focus:border-cyan-400 focus:ring-cyan-400/20 rounded-lg backdrop-blur-sm"
+                                className="rounded-lg border-zinc-700/50 bg-zinc-800/50 text-white backdrop-blur-sm focus:border-cyan-400 focus:ring-cyan-400/20"
                                 placeholder="Enter course name"
                             />
-                            {errors.name && <p className="text-red-400 text-sm mt-1 font-mono">{errors.name}</p>}
+                            {errors.name && <p className="mt-1 font-mono text-sm text-red-400">{errors.name}</p>}
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="description" className="text-gray-300 font-mono text-sm uppercase tracking-wider">Description</Label>
+                            <Label htmlFor="description" className="font-mono text-sm tracking-wider text-gray-300 uppercase">
+                                Description
+                            </Label>
                             <Input
                                 id="description"
                                 value={data.description}
                                 onChange={(e) => setData('description', e.target.value)}
-                                className="bg-zinc-800/50 border-zinc-700/50 text-white focus:border-cyan-400 focus:ring-cyan-400/20 rounded-lg backdrop-blur-sm"
+                                className="rounded-lg border-zinc-700/50 bg-zinc-800/50 text-white backdrop-blur-sm focus:border-cyan-400 focus:ring-cyan-400/20"
                                 placeholder="Enter description"
                             />
-                            {errors.description && <p className="text-red-400 text-sm mt-1 font-mono">{errors.description}</p>}
+                            {errors.description && <p className="mt-1 font-mono text-sm text-red-400">{errors.description}</p>}
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="thumbnail" className="text-gray-300 font-mono text-sm uppercase tracking-wider">Thumbnail URL</Label>
+                            <Label htmlFor="thumbnail" className="font-mono text-sm tracking-wider text-gray-300 uppercase">
+                                Thumbnail URL
+                            </Label>
                             <Input
                                 id="thumbnail"
                                 value={data.thumbnail}
                                 onChange={(e) => setData('thumbnail', e.target.value)}
-                                className="bg-zinc-800/50 border-zinc-700/50 text-white focus:border-cyan-400 focus:ring-cyan-400/20 rounded-lg backdrop-blur-sm"
+                                className="rounded-lg border-zinc-700/50 bg-zinc-800/50 text-white backdrop-blur-sm focus:border-cyan-400 focus:ring-cyan-400/20"
                                 placeholder="Enter thumbnail URL"
                             />
-                            {errors.thumbnail && <p className="text-red-400 text-sm mt-1 font-mono">{errors.thumbnail}</p>}
+                            {errors.thumbnail && <p className="mt-1 font-mono text-sm text-red-400">{errors.thumbnail}</p>}
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="order" className="text-gray-300 font-mono text-sm uppercase tracking-wider">Order</Label>
+                            <Label htmlFor="order" className="font-mono text-sm tracking-wider text-gray-300 uppercase">
+                                Order
+                            </Label>
                             <Input
                                 id="order"
                                 type="number"
                                 value={data.order}
                                 onChange={(e) => setData('order', parseInt(e.target.value) || 0)}
-                                className="bg-zinc-800/50 border-zinc-700/50 text-white focus:border-cyan-400 focus:ring-cyan-400/20 rounded-lg backdrop-blur-sm"
+                                className="rounded-lg border-zinc-700/50 bg-zinc-800/50 text-white backdrop-blur-sm focus:border-cyan-400 focus:ring-cyan-400/20"
                                 placeholder="Enter order"
                             />
-                            {errors.order && <p className="text-red-400 text-sm mt-1 font-mono">{errors.order}</p>}
+                            {errors.order && <p className="mt-1 font-mono text-sm text-red-400">{errors.order}</p>}
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="status" className="text-gray-300 font-mono text-sm uppercase tracking-wider">Status</Label>
+                            <Label htmlFor="status" className="font-mono text-sm tracking-wider text-gray-300 uppercase">
+                                Status
+                            </Label>
                             <select
                                 id="status"
                                 value={data.status}
                                 onChange={(e) => setData('status', e.target.value as 'active' | 'inactive')}
-                                className="w-full bg-zinc-800/50 border border-zinc-700/50 text-white rounded-lg px-3 py-2 focus:border-cyan-400 focus:outline-none backdrop-blur-sm"
+                                className="w-full rounded-lg border border-zinc-700/50 bg-zinc-800/50 px-3 py-2 text-white backdrop-blur-sm focus:border-cyan-400 focus:outline-none"
                             >
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
                             </select>
-                            {errors.status && <p className="text-red-400 text-sm mt-1 font-mono">{errors.status}</p>}
+                            {errors.status && <p className="mt-1 font-mono text-sm text-red-400">{errors.status}</p>}
                         </div>
 
                         <div className="flex gap-3 pt-6">
@@ -259,16 +270,16 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
                                 type="button"
                                 variant="outline"
                                 onClick={() => setIsModalOpen(false)}
-                                className="flex-1 border-zinc-600/50 text-white hover:bg-zinc-700/50 backdrop-blur-sm"
+                                className="flex-1 border-zinc-600/50 text-white backdrop-blur-sm hover:bg-zinc-700/50"
                             >
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
                                 disabled={processing}
-                                className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-medium shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300"
+                                className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-500 font-medium text-white shadow-lg shadow-cyan-500/25 transition-all duration-300 hover:from-cyan-600 hover:to-blue-600 hover:shadow-cyan-500/40"
                             >
-                                {processing ? 'Processing...' : (editingCourse ? 'Update' : 'Create')}
+                                {processing ? 'Processing...' : editingCourse ? 'Update' : 'Create'}
                             </Button>
                         </div>
                     </form>
