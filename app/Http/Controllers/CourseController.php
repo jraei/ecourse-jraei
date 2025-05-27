@@ -1,9 +1,11 @@
+
 <?php
 
 namespace App\Http\Controllers;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CourseController extends Controller
 {
@@ -12,7 +14,14 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        $courses = Course::withCount('modules')
+            ->orderBy('order')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return Inertia::render('admin/courses', [
+            'courses' => $courses
+        ]);
     }
 
     /**
@@ -20,7 +29,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        //
+        return redirect()->route('admin.courses.index');
     }
 
     /**
@@ -28,7 +37,18 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'thumbnail' => 'nullable|url',
+            'order' => 'nullable|integer|min:0',
+            'status' => 'required|in:active,inactive'
+        ]);
+
+        Course::create($validated);
+
+        return redirect()->route('admin.courses.index')
+            ->with('success', 'Course created successfully.');
     }
 
     /**
@@ -36,7 +56,7 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        //
+        return redirect()->route('admin.courses.index');
     }
 
     /**
@@ -44,7 +64,7 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        //
+        return redirect()->route('admin.courses.index');
     }
 
     /**
@@ -52,7 +72,18 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'thumbnail' => 'nullable|url',
+            'order' => 'nullable|integer|min:0',
+            'status' => 'required|in:active,inactive'
+        ]);
+
+        $course->update($validated);
+
+        return redirect()->route('admin.courses.index')
+            ->with('success', 'Course updated successfully.');
     }
 
     /**
@@ -60,6 +91,9 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        //
+        $course->delete();
+
+        return redirect()->route('admin.courses.index')
+            ->with('success', 'Course deleted successfully.');
     }
 }
