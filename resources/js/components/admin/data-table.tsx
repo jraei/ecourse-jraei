@@ -1,10 +1,9 @@
-
 import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Search, Plus, ChevronLeft, ChevronRight, ArrowUpDown } from 'lucide-react';
+import { Search, Plus, ChevronLeft, ChevronRight, ArrowUpDown, Database, Zap } from 'lucide-react';
 
 interface Column<T> {
     key: keyof T;
@@ -79,88 +78,101 @@ export function DataTable<T extends Record<string, any>>({
     };
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
-                <div>
-                    <h1 className="text-3xl font-bold text-white">{title}</h1>
-                    <p className="text-gray-400 mt-1">
-                        Showing {paginatedData.length} of {sortedData.length} entries
-                    </p>
+        <div className="space-y-8">
+            {/* Enhanced Header */}
+            <div className="flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-center">
+                <div className="flex items-center gap-4">
+                    <div className="w-1 h-12 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-full"></div>
+                    <div>
+                        <div className="flex items-center gap-3">
+                            <Database className="w-8 h-8 text-cyan-400" />
+                            <h1 className="text-3xl font-bold bg-gradient-to-r from-white via-cyan-200 to-white bg-clip-text text-transparent">
+                                {title}
+                            </h1>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                            <p className="text-gray-400 font-mono text-sm">
+                                {paginatedData.length} of {sortedData.length} entries loaded
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 {onAdd && (
                     <Button
                         onClick={onAdd}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/25"
+                        className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 px-6 py-3"
                     >
-                        <Plus className="w-4 h-4 mr-2" />
+                        <Plus className="w-5 h-5 mr-2" />
                         {addButtonText}
+                        <Zap className="w-4 h-4 ml-2" />
                     </Button>
                 )}
             </div>
 
-            {/* Search */}
+            {/* Enhanced Search */}
             <div className="relative max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-cyan-400 w-5 h-5" />
                 <Input
                     placeholder={searchPlaceholder}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="pl-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-gray-400 focus:border-yellow-400 focus:ring-yellow-400/20"
+                    className="pl-12 bg-zinc-900/50 border-zinc-700/50 text-white placeholder:text-gray-400 focus:border-cyan-400 focus:ring-cyan-400/20 rounded-xl backdrop-blur-sm h-12"
                 />
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/10 to-blue-500/10 opacity-0 hover:opacity-100 transition-opacity pointer-events-none"></div>
             </div>
 
-            {/* Desktop Table */}
-            <Card className="bg-zinc-900 border-zinc-800 hidden md:block overflow-hidden">
+            {/* Enhanced Desktop Table */}
+            <Card className="bg-gradient-to-br from-zinc-900/90 via-zinc-800/50 to-zinc-900/90 border border-zinc-700/50 hidden lg:block overflow-hidden backdrop-blur-sm shadow-2xl">
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead>
-                            <tr className="border-b border-zinc-800">
+                        <thead className="bg-gradient-to-r from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm">
+                            <tr className="border-b border-zinc-700/50">
                                 {columns.map((column) => (
                                     <th
                                         key={String(column.key)}
-                                        className="text-left p-4 text-gray-300 font-medium"
+                                        className="text-left p-6 text-gray-300 font-semibold uppercase tracking-wider text-sm"
                                     >
                                         {column.sortable ? (
                                             <button
                                                 onClick={() => handleSort(column.key)}
-                                                className="flex items-center gap-2 hover:text-yellow-400 transition-colors"
+                                                className="flex items-center gap-2 hover:text-cyan-400 transition-colors group"
                                             >
                                                 {column.label}
-                                                <ArrowUpDown className="w-4 h-4" />
+                                                <ArrowUpDown className="w-4 h-4 group-hover:scale-110 transition-transform" />
                                             </button>
                                         ) : (
                                             column.label
                                         )}
                                     </th>
                                 ))}
-                                <th className="text-left p-4 text-gray-300 font-medium">Actions</th>
+                                <th className="text-left p-6 text-gray-300 font-semibold uppercase tracking-wider text-sm">Operations</th>
                             </tr>
                         </thead>
                         <tbody>
                             {paginatedData.map((item, index) => (
                                 <tr
                                     key={index}
-                                    className="border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors"
+                                    className="border-b border-zinc-800/50 hover:bg-gradient-to-r hover:from-zinc-800/30 hover:to-zinc-700/30 transition-all duration-300 group"
                                 >
                                     {columns.map((column) => (
-                                        <td key={String(column.key)} className="p-4 text-white">
+                                        <td key={String(column.key)} className="p-6 text-white">
                                             {column.render
                                                 ? column.render(item[column.key], item)
                                                 : String(item[column.key])
                                             }
                                         </td>
                                     ))}
-                                    <td className="p-4">
-                                        <div className="flex gap-2">
+                                    <td className="p-6">
+                                        <div className="flex gap-3">
                                             {onEdit && (
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => onEdit(item)}
-                                                    className="border-zinc-600 text-white hover:bg-yellow-500 hover:text-black hover:border-yellow-500 transition-all"
+                                                    className="border-cyan-600/50 text-cyan-400 hover:bg-cyan-500 hover:text-white hover:border-cyan-500 transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-cyan-500/25"
                                                 >
-                                                    Edit
+                                                    Modify
                                                 </Button>
                                             )}
                                             {onDelete && (
@@ -168,7 +180,7 @@ export function DataTable<T extends Record<string, any>>({
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => onDelete(item)}
-                                                    className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white transition-all"
+                                                    className="border-red-600/50 text-red-400 hover:bg-red-600 hover:text-white transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-red-500/25"
                                                 >
                                                     Delete
                                                 </Button>
@@ -182,15 +194,15 @@ export function DataTable<T extends Record<string, any>>({
                 </div>
             </Card>
 
-            {/* Mobile Cards */}
-            <div className="md:hidden space-y-4">
+            {/* Enhanced Mobile Cards */}
+            <div className="lg:hidden space-y-4">
                 {paginatedData.map((item, index) => (
-                    <Card key={index} className="bg-zinc-900 border-zinc-800 p-4">
-                        <div className="space-y-3">
+                    <Card key={index} className="bg-gradient-to-br from-zinc-900/90 via-zinc-800/50 to-zinc-900/90 border border-zinc-700/50 p-6 hover:border-cyan-400/50 transition-all duration-300 backdrop-blur-sm">
+                        <div className="space-y-4">
                             {columns.map((column) => (
-                                <div key={String(column.key)} className="flex justify-between">
-                                    <span className="text-gray-400 text-sm">{column.label}:</span>
-                                    <span className="text-white text-sm">
+                                <div key={String(column.key)} className="flex justify-between items-start">
+                                    <span className="text-gray-400 text-sm font-mono uppercase tracking-wider">{column.label}:</span>
+                                    <span className="text-white text-sm text-right flex-1 ml-4">
                                         {column.render
                                             ? column.render(item[column.key], item)
                                             : String(item[column.key])
@@ -198,15 +210,15 @@ export function DataTable<T extends Record<string, any>>({
                                     </span>
                                 </div>
                             ))}
-                            <div className="flex gap-2 pt-2">
+                            <div className="flex gap-3 pt-4 border-t border-zinc-700/50">
                                 {onEdit && (
                                     <Button
                                         variant="outline"
                                         size="sm"
                                         onClick={() => onEdit(item)}
-                                        className="border-zinc-600 text-white hover:bg-yellow-500 hover:text-black hover:border-yellow-500 transition-all flex-1"
+                                        className="border-cyan-600/50 text-cyan-400 hover:bg-cyan-500 hover:text-white hover:border-cyan-500 transition-all duration-300 flex-1"
                                     >
-                                        Edit
+                                        Modify
                                     </Button>
                                 )}
                                 {onDelete && (
@@ -214,7 +226,7 @@ export function DataTable<T extends Record<string, any>>({
                                         variant="outline"
                                         size="sm"
                                         onClick={() => onDelete(item)}
-                                        className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white transition-all flex-1"
+                                        className="border-red-600/50 text-red-400 hover:bg-red-600 hover:text-white transition-all duration-300 flex-1"
                                     >
                                         Delete
                                     </Button>
@@ -225,29 +237,31 @@ export function DataTable<T extends Record<string, any>>({
                 ))}
             </div>
 
-            {/* Pagination */}
+            {/* Enhanced Pagination */}
             {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-2">
+                <div className="flex justify-center items-center gap-4">
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                         disabled={currentPage === 1}
-                        className="border-zinc-600 text-white hover:bg-zinc-700"
+                        className="border-zinc-600/50 text-white hover:bg-zinc-700/50 disabled:opacity-30 backdrop-blur-sm"
                     >
                         <ChevronLeft className="w-4 h-4" />
                     </Button>
                     
-                    <span className="text-white px-4">
-                        Page {currentPage} of {totalPages}
-                    </span>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 rounded-lg backdrop-blur-sm border border-zinc-700/50">
+                        <span className="text-cyan-400 font-mono text-sm">Page</span>
+                        <span className="text-white font-bold">{currentPage}</span>
+                        <span className="text-gray-400 font-mono text-sm">of {totalPages}</span>
+                    </div>
                     
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                         disabled={currentPage === totalPages}
-                        className="border-zinc-600 text-white hover:bg-zinc-700"
+                        className="border-zinc-600/50 text-white hover:bg-zinc-700/50 disabled:opacity-30 backdrop-blur-sm"
                     >
                         <ChevronRight className="w-4 h-4" />
                     </Button>

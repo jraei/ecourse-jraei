@@ -162,3 +162,74 @@
         @apply dark;
     }
 }
+
+/* Futuristic animations and effects */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes glow-pulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(34, 211, 238, 0.5);
+    }
+}
+
+@keyframes data-flow {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-glow-pulse {
+    animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-data-flow {
+    animation: data-flow 3s ease-in-out infinite;
+}
+
+/* Hover effects */
+.hover-scale-102:hover {
+    transform: scale(1.02);
+}
+
+.group:hover .group-hover-glow {
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.4);
+}
+
+/* Gradient text animations */
+@keyframes gradient-x {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.animate-gradient-x {
+    background-size: 200% 200%;
+    animation: gradient-x 3s ease infinite;
+}
