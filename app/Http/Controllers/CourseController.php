@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class CourseController extends Controller
 {
@@ -13,11 +12,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::withCount('modules')->latest()->get();
-        
-        return Inertia::render('admin/courses/index', [
-            'courses' => $courses
-        ]);
+        //
     }
 
     /**
@@ -33,23 +28,7 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'thumbnail' => 'nullable|string|max:255',
-            'status' => 'required|in:active,inactive,draft',
-        ]);
-
-        Course::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'thumbnail' => $request->thumbnail,
-            'status' => $request->status,
-            'order' => Course::max('order') + 1,
-        ]);
-
-        return redirect()->route('admin.courses.index')
-            ->with('success', 'Course created successfully.');
+        //
     }
 
     /**
@@ -73,22 +52,7 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'thumbnail' => 'nullable|string|max:255',
-            'status' => 'required|in:active,inactive,draft',
-        ]);
-
-        $course->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'thumbnail' => $request->thumbnail,
-            'status' => $request->status,
-        ]);
-
-        return redirect()->route('admin.courses.index')
-            ->with('success', 'Course updated successfully.');
+        //
     }
 
     /**
@@ -96,9 +60,6 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        $course->delete();
-
-        return redirect()->route('admin.courses.index')
-            ->with('success', 'Course deleted successfully.');
+        //
     }
 }
