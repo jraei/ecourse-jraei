@@ -1,12 +1,15 @@
 import { DataTable } from '@/components/admin/data-table';
+import { ExpandableText } from '@/components/expandable-text';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import AdminLayout from '@/layouts/admin-layout';
-import { Head, useForm } from '@inertiajs/react';
-import { BookOpen, Calendar, Database, Zap } from 'lucide-react';
+import { Head, useForm, usePage } from '@inertiajs/react';
+import { Calendar, Database, Zap } from 'lucide-react';
 import { useState } from 'react';
 
 interface Course {
@@ -25,6 +28,8 @@ interface CoursesPageProps {
 }
 
 export default function CoursesPage({ courses }: CoursesPageProps) {
+    const { flash } = usePage().props;
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingCourse, setEditingCourse] = useState<Course | null>(null);
 
@@ -53,21 +58,7 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
             label: 'Course Name',
             sortable: true,
             render: (value: string, course: Course) => (
-                <div className="flex items-center gap-4">
-                    {course.thumbnail ? (
-                        <div className="group relative">
-                            <img
-                                src={course.thumbnail}
-                                alt={value}
-                                className="h-12 w-12 rounded-xl object-cover ring-2 ring-zinc-700 transition-all duration-300 group-hover:ring-cyan-400"
-                            />
-                            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 opacity-0 transition-opacity group-hover:opacity-100"></div>
-                        </div>
-                    ) : (
-                        <div className="group flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-zinc-700 to-zinc-800 ring-2 ring-zinc-600 transition-all duration-300 hover:ring-cyan-400">
-                            <BookOpen className="h-6 w-6 text-cyan-400 transition-transform group-hover:scale-110" />
-                        </div>
-                    )}
+                <div className="flex items-center justify-end gap-4 lg:justify-normal">
                     <div>
                         <p className="font-semibold text-white transition-colors group-hover:text-cyan-200">{value}</p>
                         <div className="mt-1 flex items-center gap-2">
@@ -79,9 +70,14 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
             ),
         },
         {
+            key: 'thumbnail' as keyof Course,
+            label: 'Thumbnail',
+            render: (value: string) => <img src={value} className="w-5 bg-cover" alt="thumbnail" />,
+        },
+        {
             key: 'description' as keyof Course,
             label: 'Description',
-            render: (value: string) => <p className="max-w-xs truncate font-mono text-sm text-gray-300">{value}</p>,
+            render: (value: string) => <ExpandableText text={value} />,
         },
         {
             key: 'status' as keyof Course,
@@ -162,6 +158,13 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
             <Head title="Course Management" />
 
             <div className="relative p-6">
+                {/* flash success */}
+                {flash.success && (
+                    <Alert variant="destructive" className="mb-4 border border-blue-500/30 bg-gradient-to-r from-green-500/20 to-zinc-900">
+                        <AlertTitle>Success</AlertTitle>
+                        <AlertDescription>{flash.success}</AlertDescription>
+                    </Alert>
+                )}
                 {/* Animated background */}
                 <div className="pointer-events-none absolute inset-0 overflow-hidden">
                     <div className="absolute top-20 right-20 h-60 w-60 animate-pulse rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 blur-3xl"></div>
@@ -210,8 +213,9 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
                             <Label htmlFor="description" className="font-mono text-sm tracking-wider text-gray-300 uppercase">
                                 Description
                             </Label>
-                            <Input
+                            <Textarea
                                 id="description"
+                                rows={4}
                                 value={data.description}
                                 onChange={(e) => setData('description', e.target.value)}
                                 className="rounded-lg border-zinc-700/50 bg-zinc-800/50 text-white backdrop-blur-sm focus:border-cyan-400 focus:ring-cyan-400/20"
