@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         Route::resource('courses', CourseController::class);
         Route::resource('modules', ModuleController::class);
+        Route::resource('users', UserController::class);
     });
 });
 

@@ -1,9 +1,12 @@
+
 <?php
 
 namespace App\Http\Controllers;
 
 use App\Models\Module;
+use App\Models\Course;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ModuleController extends Controller
 {
@@ -12,7 +15,17 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        //
+        $modules = Module::with('course')
+            ->orderBy('order')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $courses = Course::orderBy('name')->get();
+
+        return Inertia::render('admin/modules', [
+            'modules' => $modules,
+            'courses' => $courses
+        ]);
     }
 
     /**
@@ -20,7 +33,7 @@ class ModuleController extends Controller
      */
     public function create()
     {
-        //
+        return redirect()->route('admin.modules.index');
     }
 
     /**
@@ -28,7 +41,19 @@ class ModuleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'video_path' => 'nullable|url',
+            'order' => 'nullable|integer|min:0',
+            'status' => 'required|in:draft,published',
+            'course_id' => 'required|exists:courses,id'
+        ]);
+
+        Module::create($validated);
+
+        return redirect()->route('admin.modules.index')
+            ->with('success', 'Module created successfully.');
     }
 
     /**
@@ -36,7 +61,7 @@ class ModuleController extends Controller
      */
     public function show(Module $module)
     {
-        //
+        return redirect()->route('admin.modules.index');
     }
 
     /**
@@ -44,7 +69,7 @@ class ModuleController extends Controller
      */
     public function edit(Module $module)
     {
-        //
+        return redirect()->route('admin.modules.index');
     }
 
     /**
@@ -52,7 +77,19 @@ class ModuleController extends Controller
      */
     public function update(Request $request, Module $module)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'video_path' => 'nullable|url',
+            'order' => 'nullable|integer|min:0',
+            'status' => 'required|in:draft,published',
+            'course_id' => 'required|exists:courses,id'
+        ]);
+
+        $module->update($validated);
+
+        return redirect()->route('admin.modules.index')
+            ->with('success', 'Module updated successfully.');
     }
 
     /**
@@ -60,6 +97,9 @@ class ModuleController extends Controller
      */
     public function destroy(Module $module)
     {
-        //
+        $module->delete();
+
+        return redirect()->route('admin.modules.index')
+            ->with('success', 'Module deleted successfully.');
     }
 }
