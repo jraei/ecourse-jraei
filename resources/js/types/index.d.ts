@@ -1,3 +1,4 @@
+
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
 
@@ -7,7 +8,7 @@ export interface Auth {
 
 export interface BreadcrumbItem {
     title: string;
-    href: string;
+    href?: string;
 }
 
 export interface NavGroup {
@@ -28,6 +29,10 @@ export interface SharedData {
     auth: Auth;
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
+    flash: {
+        success?: string;
+        error?: string;
+    };
     [key: string]: unknown;
 }
 
@@ -35,7 +40,11 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    email_verified_at?: string;
+    avatar?: string;
+    email_verified_at: string | null;
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
@@ -48,7 +57,26 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     };
 };
 
-export interface BreadcrumbItem {
-    title: string;
-    href?: string;
+export interface Course {
+    id: number;
+    name: string;
+    description?: string;
+    thumbnail?: string;
+    order?: number;
+    status: string;
+    module_count: number;
+    completion_percentage: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Module {
+    id: number;
+    name: string;
+    video_path?: string;
+    order?: number;
+    status: string;
+    course_id: number;
+    created_at: string;
+    updated_at: string;
 }
