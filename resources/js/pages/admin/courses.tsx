@@ -16,7 +16,7 @@ interface Course {
     id: number;
     name: string;
     description: string;
-    thumbnail: string;
+    thumbnail: string | null;
     order: number;
     status: 'active' | 'inactive';
     created_at: string;
@@ -37,15 +37,16 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
         data,
         setData,
         post,
-        put,
+        transform,
         delete: destroy,
         processing,
         errors,
         reset,
+        progress,
     } = useForm({
         name: '',
         description: '',
-        thumbnail: '',
+        thumbnail: '' as string | null,
         order: 0,
         status: 'active' as 'active' | 'inactive',
     });
@@ -72,7 +73,7 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
         {
             key: 'thumbnail' as keyof Course,
             label: 'Thumbnail',
-            render: (value: string) => <img src={value} className="w-5 bg-cover" alt="thumbnail" />,
+            render: (value: string) => <img src={'/storage/' + value} className="w-12 rounded bg-cover" alt="thumbnail" />,
         },
         {
             key: 'description' as keyof Course,
@@ -119,7 +120,7 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
         setData({
             name: course.name,
             description: course.description,
-            thumbnail: course.thumbnail,
+            thumbnail: null,
             order: course.order,
             status: course.status,
         });
@@ -137,7 +138,12 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
         e.preventDefault();
 
         if (editingCourse) {
-            put(`/admin/courses/${editingCourse.id}`, {
+            transform((data) => ({
+                ...data,
+                _method: 'put',
+            }));
+
+            post(`/admin/courses/${editingCourse.id}`, {
                 onSuccess: () => {
                     setIsModalOpen(false);
                     reset();
@@ -145,6 +151,7 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
             });
         } else {
             post('/admin/courses', {
+                forceFormData: true,
                 onSuccess: () => {
                     setIsModalOpen(false);
                     reset();
@@ -230,11 +237,16 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
                             </Label>
                             <Input
                                 id="thumbnail"
-                                value={data.thumbnail}
-                                onChange={(e) => setData('thumbnail', e.target.value)}
+                                type="file"
+                                onChange={(e) => setData('thumbnail', e.target.files[0] ?? null)}
                                 className="rounded-lg border-zinc-700/50 bg-zinc-800/50 text-white backdrop-blur-sm focus:border-cyan-400 focus:ring-cyan-400/20"
-                                placeholder="Enter thumbnail URL"
+                                placeholder="Enter thumbnail"
                             />
+                            {progress && (
+                                <progress value={progress.percentage} max="100">
+                                    {progress.percentage}%
+                                </progress>
+                            )}
                             {errors.thumbnail && <p className="mt-1 font-mono text-sm text-red-400">{errors.thumbnail}</p>}
                         </div>
 

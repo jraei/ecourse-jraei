@@ -1,12 +1,12 @@
-
 <?php
 
 namespace App\Http\Controllers;
 
-use App\Models\Module;
-use App\Models\Course;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Course;
+use App\Models\Module;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ModuleController extends Controller
 {
@@ -43,12 +43,17 @@ class ModuleController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'video_path' => 'nullable|url',
+            'video_path' => 'required|file|mimetypes:video/avi,video/mp4,video/mpeg,video/quicktime|max:202400',
             'order' => 'nullable|integer|min:0',
             'status' => 'required|in:draft,published',
             'course_id' => 'required|exists:courses,id'
         ]);
+
+        // Simpan video ke storage
+        if ($request->hasFile('video_path')) {
+            $path = $request->file('video_path')->store('videos', 'public');
+            $validated['video_path'] = $path;
+        }
 
         Module::create($validated);
 
@@ -77,14 +82,26 @@ class ModuleController extends Controller
      */
     public function update(Request $request, Module $module)
     {
+        // dd($request->all());
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'video_path' => 'nullable|url',
+            'video_path' => 'nullable|file|mimetypes:video/avi,video/mp4,video/mpeg,video/quicktime|max:202400',
             'order' => 'nullable|integer|min:0',
             'status' => 'required|in:draft,published',
             'course_id' => 'required|exists:courses,id'
         ]);
+
+        // Jika user upload file baru
+        if ($request->hasFile('video_path')) {
+            // Optional: hapus file lama jika ada
+            if ($module->video_path && Storage::disk('public')->exists($module->video_path)) {
+                Storage::disk('public')->delete($module->video_path);
+            }
+
+            $path = $request->file('video_path')->store('videos', 'public');
+            $validated['video_path'] = $path;
+        }
 
         $module->update($validated);
 

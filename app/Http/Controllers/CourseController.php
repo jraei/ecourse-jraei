@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Course;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class CourseController extends Controller
 {
@@ -39,10 +40,16 @@ class CourseController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|url',
+            'thumbnail' => 'required|file|image|mimes:jpeg,png,webp|max:10480',
             'order' => 'nullable|integer|min:0',
             'status' => 'required|in:active,inactive'
         ]);
+
+        // Simpan video ke storage
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('courseThumbnail', 'public');
+            $validated['thumbnail'] = $path;
+        }
 
         Course::create($validated);
 
@@ -74,10 +81,22 @@ class CourseController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|url',
             'order' => 'nullable|integer|min:0',
             'status' => 'required|in:active,inactive'
         ]);
+
+        if ($request->hasFile('thumbnail')) {
+            // Optional: hapus file lama jika ada
+            if ($course->thumbnail && Storage::disk('public')->exists($course->thumbnail)) {
+                Storage::disk('public')->delete($course->thumbnail);
+            }
+
+            $path = $request->file('thumbnail')->store('courseThumbnail', 'public');
+            $validated['thumbnail'] = $path;
+        } else {
+            // Jika tidak ada file baru, pertahankan thumbnail lama
+            $validated['thumbnail'] = $course->thumbnail;
+        }
 
         $course->update($validated);
 

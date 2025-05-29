@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Models;
@@ -13,5 +12,10 @@ class Module extends Model
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function materials()
+    {
+        return $this->hasMany(ModuleMaterial::class);
     }
 }

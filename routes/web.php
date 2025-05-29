@@ -1,10 +1,10 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\ModuleMaterialController;
 use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
@@ -15,7 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
-    
+
     // Admin routes
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', function () {
@@ -25,17 +25,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 'total_modules' => \App\Models\Module::count(),
                 'active_courses' => \App\Models\Course::where('status', 'active')->count(),
             ];
-            
+
             return Inertia::render('admin/dashboard', [
                 'stats' => $stats
             ]);
         })->name('dashboard');
-        
+
         Route::resource('courses', CourseController::class);
         Route::resource('modules', ModuleController::class);
+        Route::resource('module-materials', ModuleMaterialController::class);
         Route::resource('users', UserController::class);
     });
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';

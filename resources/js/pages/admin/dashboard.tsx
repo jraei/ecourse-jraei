@@ -1,9 +1,8 @@
-
-import { Head } from '@inertiajs/react';
-import AdminLayout from '@/layouts/admin-layout';
-import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Users, BookOpen, Play, TrendingUp, Zap, Activity } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import AdminLayout from '@/layouts/admin-layout';
+import { Head } from '@inertiajs/react';
+import { Activity, BookOpen, Play, TrendingUp, Users, Zap } from 'lucide-react';
 
 interface AdminDashboardProps {
     stats: {
@@ -15,10 +14,7 @@ interface AdminDashboardProps {
 }
 
 export default function AdminDashboard({ stats }: AdminDashboardProps) {
-    const breadcrumbs = [
-        { title: 'Admin', href: '/admin' },
-        { title: 'Dashboard' }
-    ];
+    const breadcrumbs = [{ title: 'Admin', href: '/admin' }, { title: 'Dashboard' }];
 
     const statCards = [
         {
@@ -26,89 +22,86 @@ export default function AdminDashboard({ stats }: AdminDashboardProps) {
             value: stats.total_users,
             icon: Users,
             color: 'from-cyan-400 to-blue-500',
-            glow: 'shadow-cyan-500/20'
+            glow: 'shadow-cyan-500/20',
         },
         {
             title: 'Total Courses',
             value: stats.total_courses,
             icon: BookOpen,
             color: 'from-purple-400 to-pink-500',
-            glow: 'shadow-purple-500/20'
+            glow: 'shadow-purple-500/20',
         },
         {
             title: 'Total Modules',
             value: stats.total_modules,
             icon: Play,
             color: 'from-green-400 to-emerald-500',
-            glow: 'shadow-green-500/20'
+            glow: 'shadow-green-500/20',
         },
         {
             title: 'Active Courses',
             value: stats.active_courses,
             icon: TrendingUp,
             color: 'from-yellow-400 to-orange-500',
-            glow: 'shadow-yellow-500/20'
-        }
+            glow: 'shadow-yellow-500/20',
+        },
     ];
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Admin Dashboard" />
-            
-            <div className="p-6 space-y-8 relative">
+
+            <div className="relative space-y-8 p-6">
                 {/* Animated background elements */}
-                <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-                    <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+                <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                    <div className="absolute -top-40 -right-40 h-80 w-80 animate-pulse rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 blur-3xl"></div>
+                    <div className="absolute -bottom-40 -left-40 h-80 w-80 animate-pulse rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 blur-3xl delay-1000"></div>
                 </div>
 
                 {/* Header with futuristic styling */}
                 <div className="relative">
-                    <div className="flex items-center gap-4 mb-2">
-                        <div className="w-2 h-8 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-full animate-pulse"></div>
-                        <h1 className="text-4xl font-bold bg-gradient-to-r from-white via-cyan-200 to-white bg-clip-text text-transparent">
+                    <div className="mb-2 flex items-center gap-4">
+                        <div className="h-8 w-2 animate-pulse rounded-full bg-gradient-to-b from-cyan-400 to-blue-500"></div>
+                        <h1 className="bg-gradient-to-r from-white via-cyan-200 to-white bg-clip-text text-4xl font-bold text-transparent">
                             Command Center
                         </h1>
-                        <Zap className="w-8 h-8 text-yellow-400 animate-pulse" />
+                        <Zap className="h-8 w-8 animate-pulse text-yellow-400" />
                     </div>
-                    <p className="text-gray-400 ml-6 font-mono">SYSTEM STATUS: OPERATIONAL</p>
+                    <p className="ml-6 font-mono text-gray-400">SYSTEM STATUS: OPERATIONAL</p>
                 </div>
 
                 {/* Enhanced stats cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
                     {statCards.map((stat, index) => (
-                        <Card key={index} className={`
-                            bg-gradient-to-br from-zinc-900/90 via-zinc-800/50 to-zinc-900/90 
-                            border border-zinc-700/50 hover:border-cyan-400/50 
-                            transition-all duration-500 hover:scale-105 
-                            hover:shadow-2xl ${stat.glow} 
-                            backdrop-blur-sm group cursor-pointer
-                            animate-fade-in
-                        `} style={{ animationDelay: `${index * 100}ms` }}>
-                            <div className="p-6 relative overflow-hidden">
+                        <Card
+                            key={index}
+                            className={`border border-zinc-700/50 bg-gradient-to-br from-zinc-900/90 via-zinc-800/50 to-zinc-900/90 transition-all duration-500 hover:scale-105 hover:border-cyan-400/50 hover:shadow-2xl ${stat.glow} group animate-fade-in cursor-pointer backdrop-blur-sm`}
+                            style={{ animationDelay: `${index * 100}ms` }}
+                        >
+                            <div className="relative overflow-hidden p-6">
                                 {/* Card glow effect */}
-                                <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
-                                
-                                <div className="flex items-center justify-between relative z-10">
+                                <div
+                                    className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 transition-opacity duration-500 group-hover:opacity-10`}
+                                ></div>
+
+                                <div className="relative z-10 flex items-center justify-between">
                                     <div>
-                                        <p className="text-xs font-mono text-gray-500 uppercase tracking-wider mb-1">{stat.title}</p>
-                                        <p className="text-3xl font-bold text-white group-hover:text-cyan-200 transition-colors duration-300">
+                                        <p className="mb-1 font-mono text-xs tracking-wider text-gray-500 uppercase">{stat.title}</p>
+                                        <p className="text-3xl font-bold text-white transition-colors duration-300 group-hover:text-cyan-200">
                                             {stat.value.toLocaleString()}
                                         </p>
                                     </div>
-                                    <div className={`
-                                        p-4 rounded-xl bg-gradient-to-r ${stat.color} 
-                                        group-hover:scale-110 transition-transform duration-300
-                                        shadow-lg
-                                    `}>
-                                        <stat.icon className="w-6 h-6 text-white" />
+                                    <div
+                                        className={`rounded-xl bg-gradient-to-r p-4 ${stat.color} shadow-lg transition-transform duration-300 group-hover:scale-110`}
+                                    >
+                                        <stat.icon className="h-6 w-6 text-white" />
                                     </div>
                                 </div>
-                                
+
                                 {/* Progress indicator */}
-                                <div className="mt-4 h-1 bg-zinc-700 rounded-full overflow-hidden">
-                                    <div 
-                                        className={`h-full bg-gradient-to-r ${stat.color} rounded-full transform -translate-x-full group-hover:translate-x-0 transition-transform duration-1000`}
+                                <div className="mt-4 h-1 overflow-hidden rounded-full bg-zinc-700">
+                                    <div
+                                        className={`h-full bg-gradient-to-r ${stat.color} -translate-x-full transform rounded-full transition-transform duration-1000 group-hover:translate-x-0`}
                                     ></div>
                                 </div>
                             </div>
@@ -116,33 +109,35 @@ export default function AdminDashboard({ stats }: AdminDashboardProps) {
                     ))}
                 </div>
 
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
                     {/* Enhanced Quick Actions */}
-                    <Card className="bg-gradient-to-br from-zinc-900/90 via-zinc-800/50 to-zinc-900/90 border border-zinc-700/50 hover:border-cyan-400/30 transition-all duration-500 backdrop-blur-sm">
+                    <Card className="border border-zinc-700/50 bg-gradient-to-br from-zinc-900/90 via-zinc-800/50 to-zinc-900/90 backdrop-blur-sm transition-all duration-500 hover:border-cyan-400/30">
                         <div className="p-6">
-                            <div className="flex items-center gap-3 mb-6">
-                                <Activity className="w-6 h-6 text-cyan-400" />
-                                <h3 className="text-xl font-bold bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
+                            <div className="mb-6 flex items-center gap-3">
+                                <Activity className="h-6 w-6 text-cyan-400" />
+                                <h3 className="bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-xl font-bold text-transparent">
                                     Quick Actions
                                 </h3>
                             </div>
                             <div className="space-y-4">
                                 {[
-                                    { href: "/admin/courses", icon: BookOpen, label: "Manage Courses", color: "from-purple-500 to-pink-500" },
-                                    { href: "/admin/users", icon: Users, label: "Manage Users", color: "from-blue-500 to-cyan-500" },
-                                    { href: "/admin/modules", icon: Play, label: "Manage Modules", color: "from-green-500 to-emerald-500" }
+                                    { href: '/admin/courses', icon: BookOpen, label: 'Manage Courses', color: 'from-purple-500 to-pink-500' },
+                                    { href: '/admin/users', icon: Users, label: 'Manage Users', color: 'from-blue-500 to-cyan-500' },
+                                    { href: '/admin/modules', icon: Play, label: 'Manage Modules', color: 'from-green-500 to-emerald-500' },
                                 ].map((action, index) => (
-                                    <a 
+                                    <a
                                         key={index}
-                                        href={action.href} 
-                                        className="group flex items-center gap-4 p-4 rounded-xl bg-zinc-800/50 hover:bg-zinc-700/50 border border-zinc-700/30 hover:border-cyan-400/50 transition-all duration-300 hover:scale-102"
+                                        href={action.href}
+                                        className="group flex items-center gap-4 rounded-xl border border-zinc-700/30 bg-zinc-800/50 p-4 transition-all duration-300 hover:scale-102 hover:border-cyan-400/50 hover:bg-zinc-700/50"
                                     >
-                                        <div className={`p-3 rounded-lg bg-gradient-to-r ${action.color} group-hover:scale-110 transition-transform duration-300`}>
-                                            <action.icon className="w-5 h-5 text-white" />
+                                        <div
+                                            className={`rounded-lg bg-gradient-to-r p-3 ${action.color} transition-transform duration-300 group-hover:scale-110`}
+                                        >
+                                            <action.icon className="h-5 w-5 text-white" />
                                         </div>
-                                        <span className="text-white group-hover:text-cyan-200 transition-colors font-medium">{action.label}</span>
-                                        <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                                        <span className="font-medium text-white transition-colors group-hover:text-cyan-200">{action.label}</span>
+                                        <div className="ml-auto opacity-0 transition-opacity group-hover:opacity-100">
+                                            <div className="h-2 w-2 animate-pulse rounded-full bg-cyan-400"></div>
                                         </div>
                                     </a>
                                 ))}
@@ -151,24 +146,27 @@ export default function AdminDashboard({ stats }: AdminDashboardProps) {
                     </Card>
 
                     {/* Enhanced Recent Activity */}
-                    <Card className="bg-gradient-to-br from-zinc-900/90 via-zinc-800/50 to-zinc-900/90 border border-zinc-700/50 hover:border-cyan-400/30 transition-all duration-500 backdrop-blur-sm">
+                    <Card className="border border-zinc-700/50 bg-gradient-to-br from-zinc-900/90 via-zinc-800/50 to-zinc-900/90 backdrop-blur-sm transition-all duration-500 hover:border-cyan-400/30">
                         <div className="p-6">
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                                <h3 className="text-xl font-bold bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
+                            <div className="mb-6 flex items-center gap-3">
+                                <div className="h-3 w-3 animate-pulse rounded-full bg-green-400"></div>
+                                <h3 className="bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-xl font-bold text-transparent">
                                     System Activity
                                 </h3>
                             </div>
                             <div className="space-y-4">
                                 {[
-                                    { status: "success", message: "New course created", time: "2 min ago", color: "green" },
-                                    { status: "warning", message: "Module updated", time: "5 min ago", color: "yellow" },
-                                    { status: "info", message: "User registered", time: "10 min ago", color: "blue" }
+                                    { status: 'success', message: 'New course created', time: '2 min ago', color: 'green' },
+                                    { status: 'warning', message: 'Module updated', time: '5 min ago', color: 'yellow' },
+                                    { status: 'info', message: 'User registered', time: '10 min ago', color: 'blue' },
                                 ].map((activity, index) => (
-                                    <div key={index} className="flex items-center gap-4 p-3 rounded-lg bg-zinc-800/30 hover:bg-zinc-700/30 transition-colors border border-zinc-700/20">
-                                        <div className={`w-3 h-3 bg-${activity.color}-400 rounded-full animate-pulse`}></div>
-                                        <span className="text-gray-300 flex-1 font-mono text-sm">{activity.message}</span>
-                                        <Badge variant="secondary" className="bg-zinc-700/50 text-gray-400 font-mono text-xs">
+                                    <div
+                                        key={index}
+                                        className="flex items-center gap-4 rounded-lg border border-zinc-700/20 bg-zinc-800/30 p-3 transition-colors hover:bg-zinc-700/30"
+                                    >
+                                        <div className={`h-3 w-3 bg-${activity.color}-400 animate-pulse rounded-full`}></div>
+                                        <span className="flex-1 font-mono text-sm text-gray-300">{activity.message}</span>
+                                        <Badge variant="secondary" className="bg-zinc-700/50 font-mono text-xs text-gray-400">
                                             {activity.time}
                                         </Badge>
                                     </div>

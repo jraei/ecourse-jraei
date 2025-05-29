@@ -1,13 +1,10 @@
-
 import { DataTable } from '@/components/admin/data-table';
-import { ExpandableText } from '@/components/expandable-text';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import AdminLayout from '@/layouts/admin-layout';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { Calendar, Database, PlayCircle, Upload, Zap } from 'lucide-react';
@@ -21,8 +18,7 @@ interface Course {
 interface Module {
     id: number;
     name: string;
-    description: string;
-    video_path: string;
+    video_path: null | string;
     order: number;
     status: 'draft' | 'published';
     course_id: number;
@@ -45,15 +41,15 @@ export default function ModulesPage({ modules, courses }: ModulesPageProps) {
         data,
         setData,
         post,
-        put,
+        progress,
+        transform,
         delete: destroy,
         processing,
         errors,
         reset,
     } = useForm({
         name: '',
-        description: '',
-        video_path: '',
+        video_path: null,
         order: 0,
         status: 'draft' as 'draft' | 'published',
         course_id: '',
@@ -70,11 +66,7 @@ export default function ModulesPage({ modules, courses }: ModulesPageProps) {
                 <div className="flex items-center gap-4">
                     <div className="relative">
                         <div className="flex h-12 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-900 ring-1 ring-zinc-700">
-                            {module.video_path ? (
-                                <PlayCircle className="h-6 w-6 text-cyan-400" />
-                            ) : (
-                                <Upload className="h-5 w-5 text-gray-500" />
-                            )}
+                            {module.video_path ? <PlayCircle className="h-6 w-6 text-cyan-400" /> : <Upload className="h-5 w-5 text-gray-500" />}
                         </div>
                         {module.video_path && (
                             <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 opacity-0 transition-opacity group-hover:opacity-100"></div>
@@ -90,11 +82,7 @@ export default function ModulesPage({ modules, courses }: ModulesPageProps) {
                 </div>
             ),
         },
-        {
-            key: 'description' as keyof Module,
-            label: 'Description',
-            render: (value: string) => <ExpandableText text={value} />,
-        },
+
         {
             key: 'order' as keyof Module,
             label: 'Order',
@@ -146,8 +134,7 @@ export default function ModulesPage({ modules, courses }: ModulesPageProps) {
     const handleEdit = (module: Module) => {
         setData({
             name: module.name,
-            description: module.description,
-            video_path: module.video_path,
+            video_path: null,
             order: module.order,
             status: module.status,
             course_id: module.course_id.toString(),
@@ -166,7 +153,12 @@ export default function ModulesPage({ modules, courses }: ModulesPageProps) {
         e.preventDefault();
 
         if (editingModule) {
-            put(`/admin/modules/${editingModule.id}`, {
+            transform((data) => ({
+                ...data,
+                _method: 'put',
+            }));
+            post(`/admin/modules/${editingModule.id}`, {
+                // forceFormData: true,
                 onSuccess: () => {
                     setIsModalOpen(false);
                     reset();
@@ -174,6 +166,7 @@ export default function ModulesPage({ modules, courses }: ModulesPageProps) {
             });
         } else {
             post('/admin/modules', {
+                forceFormData: true,
                 onSuccess: () => {
                     setIsModalOpen(false);
                     reset();
@@ -223,34 +216,20 @@ export default function ModulesPage({ modules, courses }: ModulesPageProps) {
                         </DialogTitle>
                     </DialogHeader>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    <form onSubmit={handleSubmit} className="space-y-5" encType="multipart/form-data">
                         <div className="space-y-2">
                             <Label htmlFor="name" className="font-mono text-sm tracking-wider text-gray-300 uppercase">
                                 Module Name
                             </Label>
                             <Input
                                 id="name"
+                                type="text"
                                 value={data.name}
                                 onChange={(e) => setData('name', e.target.value)}
                                 className="rounded-lg border-zinc-700/50 bg-zinc-800/50 text-white backdrop-blur-sm focus:border-cyan-400 focus:ring-cyan-400/20"
                                 placeholder="Enter module name"
                             />
                             {errors.name && <p className="mt-1 font-mono text-sm text-red-400">{errors.name}</p>}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="description" className="font-mono text-sm tracking-wider text-gray-300 uppercase">
-                                Description
-                            </Label>
-                            <Textarea
-                                id="description"
-                                rows={4}
-                                value={data.description}
-                                onChange={(e) => setData('description', e.target.value)}
-                                className="rounded-lg border-zinc-700/50 bg-zinc-800/50 text-white backdrop-blur-sm focus:border-cyan-400 focus:ring-cyan-400/20"
-                                placeholder="Enter description"
-                            />
-                            {errors.description && <p className="mt-1 font-mono text-sm text-red-400">{errors.description}</p>}
                         </div>
 
                         <div className="space-y-2">
@@ -275,15 +254,20 @@ export default function ModulesPage({ modules, courses }: ModulesPageProps) {
 
                         <div className="space-y-2">
                             <Label htmlFor="video_path" className="font-mono text-sm tracking-wider text-gray-300 uppercase">
-                                Video URL
+                                Video
                             </Label>
                             <Input
+                                type="file"
                                 id="video_path"
-                                value={data.video_path}
-                                onChange={(e) => setData('video_path', e.target.value)}
+                                onChange={(e) => setData('video_path', e.target.files[0] ?? null)}
                                 className="rounded-lg border-zinc-700/50 bg-zinc-800/50 text-white backdrop-blur-sm focus:border-cyan-400 focus:ring-cyan-400/20"
                                 placeholder="Enter video URL"
                             />
+                            {progress && (
+                                <progress value={progress.percentage} max="100">
+                                    {progress.percentage}%
+                                </progress>
+                            )}
                             {errors.video_path && <p className="mt-1 font-mono text-sm text-red-400">{errors.video_path}</p>}
                         </div>
 
