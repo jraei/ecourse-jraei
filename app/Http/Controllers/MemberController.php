@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Http\Controllers;
@@ -11,14 +10,18 @@ class MemberController extends Controller
     public function index()
     {
         $courses = Course::select([
-                'id',
-                'name', 
-                'description',
-                'thumbnail',
-                'order',
-                'status'
-            ])
+            'id',
+            'name',
+            'slug',
+            'description',
+            'thumbnail',
+            'order',
+            'status'
+        ])
             ->where('status', 'active')
+            ->whereHas('modules', function ($query) {
+                $query->where('status', 'published');
+            })
             ->withCount('modules as module_count')
             ->orderBy('order', 'asc')
             ->orderBy('name', 'asc')
@@ -27,7 +30,7 @@ class MemberController extends Controller
                 // For now, we'll simulate completion percentage
                 // In a real app, this would be calculated based on user progress
                 $course->completion_percentage = rand(0, 100);
-                
+
                 // Add placeholder thumbnails for courses without images
                 if (!$course->thumbnail) {
                     $placeholders = [
@@ -38,12 +41,19 @@ class MemberController extends Controller
                     ];
                     $course->thumbnail = $placeholders[array_rand($placeholders)];
                 }
-                
+
                 return $course;
             });
 
         return Inertia::render('member/index', [
             'courses' => $courses
+        ]);
+    }
+
+    public function course(Course $course)
+    {
+        return Inertia::render('member/course', [
+            'course' => $course
         ]);
     }
 }

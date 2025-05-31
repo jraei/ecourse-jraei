@@ -45,6 +45,9 @@ class CourseController extends Controller
             'status' => 'required|in:active,inactive'
         ]);
 
+        $slug = str()->slug($request->name);
+        $validated['slug'] = $slug;
+
         // Simpan video ke storage
         if ($request->hasFile('thumbnail')) {
             $path = $request->file('thumbnail')->store('courseThumbnail', 'public');
@@ -84,6 +87,9 @@ class CourseController extends Controller
             'order' => 'nullable|integer|min:0',
             'status' => 'required|in:active,inactive'
         ]);
+
+        $slug = str()->slug($request->name);
+        $validated['slug'] = $slug;
 
         if ($request->hasFile('thumbnail')) {
             // Optional: hapus file lama jika ada

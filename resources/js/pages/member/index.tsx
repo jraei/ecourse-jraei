@@ -1,14 +1,13 @@
-
-import { useState, useMemo } from 'react';
-import { Head } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, Rocket, CirclePercent } from 'lucide-react';
+import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
-import type { PageProps, Course } from '@/types';
+import type { Course, PageProps } from '@/types';
+import { Head, router } from '@inertiajs/react';
+import { Airplay, Rocket, Search } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
 interface MemberDashboardProps extends PageProps {
     courses: Course[];
@@ -16,13 +15,13 @@ interface MemberDashboardProps extends PageProps {
 
 function CourseCardSkeleton() {
     return (
-        <Card className="group overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm">
-            <div className="aspect-video relative">
-                <Skeleton className="w-full h-full" />
+        <Card className="group border-border/50 bg-card/50 overflow-hidden backdrop-blur-sm">
+            <div className="relative aspect-video">
+                <Skeleton className="h-full w-full" />
             </div>
             <CardContent className="p-6">
-                <Skeleton className="h-6 w-3/4 mb-3" />
-                <div className="flex items-center gap-4 mb-4">
+                <Skeleton className="mb-3 h-6 w-3/4" />
+                <div className="mb-4 flex items-center gap-4">
                     <Skeleton className="h-4 w-20" />
                     <Skeleton className="h-4 w-16" />
                 </div>
@@ -32,93 +31,97 @@ function CourseCardSkeleton() {
     );
 }
 
+function visitCourse(slug: string) {
+    return () => {
+        router.get(route('member.course', { course: slug }));
+    };
+}
+
 function CourseCard({ course }: { course: Course }) {
-    const progressColor = course.completion_percentage > 75 
-        ? 'bg-primary' 
-        : course.completion_percentage > 50 
-        ? 'bg-yellow-500' 
-        : 'bg-orange-500';
+    const progressColor = course.completion_percentage > 75 ? 'bg-primary' : course.completion_percentage > 50 ? 'bg-yellow-500' : 'bg-orange-500';
 
     return (
-        <Card className={cn(
-            "group overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm",
-            "hover:border-primary/50 hover:bg-card/70 hover:shadow-2xl hover:shadow-primary/10",
-            "transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1",
-            "cursor-pointer relative before:absolute before:inset-0 before:bg-gradient-to-br before:from-primary/5 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500",
-            course.completion_percentage === 100 && "ring-1 ring-primary/30 animate-glow-pulse"
-        )}>
-            <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-secondary to-muted">
+        <Card
+            className={cn(
+                'group bg-card/50 border-border/50 overflow-hidden backdrop-blur-sm',
+                'hover:border-primary/50 hover:bg-card/70 hover:shadow-primary/10 hover:shadow-2xl',
+                'transition-all duration-500 hover:-translate-y-1 hover:scale-[1.02]',
+                'before:from-primary/5 relative cursor-pointer before:absolute before:inset-0 before:bg-gradient-to-br before:to-transparent before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100',
+                course.completion_percentage === 100 && 'ring-primary/30 animate-glow-pulse ring-1',
+            )}
+            onClick={visitCourse(course.slug)}
+        >
+            <div className="from-secondary to-muted relative aspect-video overflow-hidden bg-gradient-to-br">
                 {course.thumbnail ? (
-                    <img 
-                        src={course.thumbnail}
+                    <img
+                        src={'/storage/' + course.thumbnail}
                         alt={course.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                         loading="lazy"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 via-secondary to-muted">
-                        <div className="text-center space-y-2">
-                            <Rocket className="w-12 h-12 mx-auto text-primary/60" />
-                            <div className="w-16 h-1 bg-primary/30 mx-auto rounded-full animate-pulse" />
+                    <div className="from-primary/20 via-secondary to-muted flex h-full w-full items-center justify-center bg-gradient-to-br">
+                        <div className="space-y-2 text-center">
+                            <Rocket className="text-primary/60 mx-auto h-12 w-12" />
+                            <div className="bg-primary/30 mx-auto h-1 w-16 animate-pulse rounded-full" />
                         </div>
                     </div>
                 )}
-                
+
                 {/* Hover overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
                 {/* Progress badge */}
                 <div className="absolute top-3 right-3">
-                    <Badge variant="secondary" className="bg-black/70 text-white border-primary/30">
-                        <CirclePercent className="w-3 h-3 mr-1" />
+                    <Badge variant="secondary" className="border-primary/30 bg-black/70 text-white">
+                        <Airplay className="mr-1 h-3 w-3" />
                         {course.completion_percentage}%
                     </Badge>
                 </div>
             </div>
-            
-            <CardContent className="p-6 space-y-4">
+
+            <CardContent className="space-y-4 p-6">
                 <div>
-                    <h3 className="font-semibold text-lg text-foreground line-clamp-2 group-hover:text-primary transition-colors duration-300">
+                    <h3 className="text-foreground group-hover:text-primary line-clamp-2 text-lg font-semibold transition-colors duration-300">
                         {course.name}
                     </h3>
-                    
-                    <div className="flex items-center gap-4 mt-3 text-sm text-muted-foreground">
+
+                    <div className="text-muted-foreground mt-3 flex items-center gap-4 text-sm">
                         <div className="flex items-center gap-1">
-                            <Rocket className="w-4 h-4" />
+                            <Rocket className="h-4 w-4" />
                             <span>{course.module_count} Modules</span>
                         </div>
-                        
+
                         <div className="flex items-center gap-1">
-                            <div className={cn("w-2 h-2 rounded-full", progressColor)} />
+                            <div className={cn('h-2 w-2 rounded-full', progressColor)} />
                             <span>
-                                {course.completion_percentage === 100 
-                                    ? 'Complete' 
-                                    : course.completion_percentage === 0 
-                                    ? 'Not Started' 
-                                    : 'In Progress'
-                                }
+                                {course.completion_percentage === 100
+                                    ? 'Complete'
+                                    : course.completion_percentage === 0
+                                      ? 'Not Started'
+                                      : 'In Progress'}
                             </span>
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Progress bar */}
                 <div className="space-y-2">
-                    <div className="flex justify-between text-xs text-muted-foreground">
+                    <div className="text-muted-foreground flex justify-between text-xs">
                         <span>Progress</span>
                         <span>{course.completion_percentage}%</span>
                     </div>
-                    <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                        <div 
+                    <div className="bg-secondary h-2 overflow-hidden rounded-full">
+                        <div
                             className={cn(
-                                "h-full transition-all duration-1000 rounded-full relative overflow-hidden",
+                                'relative h-full overflow-hidden rounded-full transition-all duration-1000',
                                 progressColor,
-                                course.completion_percentage > 0 && "animate-pulse"
+                                // course.completion_percentage > 0 && 'animate-pulse',
                             )}
                             style={{ width: `${course.completion_percentage}%` }}
                         >
                             {course.completion_percentage > 0 && (
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-data-flow" />
+                                <div className="animate-data-flow absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                             )}
                         </div>
                     </div>
@@ -134,10 +137,11 @@ export default function MemberDashboard({ courses = [] }: MemberDashboardProps) 
 
     const filteredCourses = useMemo(() => {
         if (!searchQuery.trim()) return courses;
-        
-        return courses.filter(course =>
-            course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            course.description?.toLowerCase().includes(searchQuery.toLowerCase())
+
+        return courses.filter(
+            (course) =>
+                course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                course.description?.toLowerCase().includes(searchQuery.toLowerCase()),
         );
     }, [courses, searchQuery]);
 
@@ -148,25 +152,25 @@ export default function MemberDashboard({ courses = [] }: MemberDashboardProps) 
     return (
         <>
             <Head title="Member Dashboard" />
-            
+
             <AppLayout>
-                <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10">
+                <div className="from-background via-background to-secondary/10 min-h-screen bg-gradient-to-br">
                     {/* Hero Section */}
-                    <div className="relative overflow-hidden bg-gradient-to-r from-background via-primary/5 to-background border-b border-border/50">
-                        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23059669" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50" />
-                        
-                        <div className="relative max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-                            <div className="text-center space-y-4 animate-fade-in">
-                                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
-                                    <Rocket className="w-4 h-4" />
+                    <div className="from-background via-primary/5 to-background border-border/50 relative overflow-hidden border-b bg-gradient-to-r">
+                        {/* <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23059669" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50" /> */}
+
+                        <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+                            <div className="animate-fade-in space-y-4 text-center">
+                                <div className="bg-primary/10 border-primary/20 text-primary inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium">
+                                    <Rocket className="h-4 w-4" />
                                     <span>Learning Dashboard</span>
                                 </div>
-                                
-                                <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent animate-gradient-x">
+
+                                <h1 className="from-foreground via-primary to-foreground animate-gradient-x bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent md:text-6xl">
                                     Your Learning Journey
                                 </h1>
-                                
-                                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+
+                                <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
                                     Continue your progress and explore new courses to advance your skills
                                 </p>
                             </div>
@@ -174,19 +178,19 @@ export default function MemberDashboard({ courses = [] }: MemberDashboardProps) 
                     </div>
 
                     {/* Search Section */}
-                    <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b border-border/50">
-                        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-                            <div className="relative max-w-md mx-auto">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                    <div className="bg-background/80 border-border/50 sticky top-0 z-10 border-b backdrop-blur-md">
+                        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                            <div className="relative mx-auto max-w-md">
+                                <Search className="text-muted-foreground absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform" />
                                 <Input
                                     type="text"
                                     placeholder="Search courses..."
                                     value={searchQuery}
                                     onChange={handleSearchChange}
-                                    className="pl-10 pr-4 py-3 bg-card/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 rounded-xl text-base backdrop-blur-sm"
+                                    className="bg-card/50 border-border/50 border-primary/30 focus:border-primary/50 focus:ring-primary/20 rounded-xl border py-3 pr-4 pl-10 text-base backdrop-blur-sm"
                                 />
                                 {searchQuery && (
-                                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                    <div className="absolute top-1/2 right-3 -translate-y-1/2 transform">
                                         <Badge variant="outline" className="text-xs">
                                             {filteredCourses.length} found
                                         </Badge>
@@ -197,36 +201,33 @@ export default function MemberDashboard({ courses = [] }: MemberDashboardProps) 
                     </div>
 
                     {/* Courses Grid */}
-                    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+                    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                         {isLoading ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
                                 {Array.from({ length: 6 }).map((_, i) => (
                                     <CourseCardSkeleton key={i} />
                                 ))}
                             </div>
                         ) : filteredCourses.length === 0 ? (
-                            <div className="text-center py-16 space-y-4">
-                                <div className="w-24 h-24 mx-auto bg-secondary/20 rounded-full flex items-center justify-center">
-                                    <Search className="w-10 h-10 text-muted-foreground" />
+                            <div className="space-y-4 py-16 text-center">
+                                <div className="bg-secondary/20 mx-auto flex h-24 w-24 items-center justify-center rounded-full">
+                                    <Search className="text-muted-foreground h-10 w-10" />
                                 </div>
-                                <h3 className="text-xl font-semibold text-foreground">
-                                    {searchQuery ? 'No courses found' : 'No courses available'}
-                                </h3>
-                                <p className="text-muted-foreground max-w-md mx-auto">
-                                    {searchQuery 
+                                <h3 className="text-foreground text-xl font-semibold">{searchQuery ? 'No courses found' : 'No courses available'}</h3>
+                                <p className="text-muted-foreground mx-auto max-w-md">
+                                    {searchQuery
                                         ? `No courses match "${searchQuery}". Try a different search term.`
-                                        : 'There are no courses available at the moment. Check back later!'
-                                    }
+                                        : 'There are no courses available at the moment. Check back later!'}
                                 </p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 animate-fade-in">
+                            <div className="animate-fade-in grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
                                 {filteredCourses.map((course, index) => (
-                                    <div 
+                                    <div
                                         key={course.id}
-                                        style={{ 
+                                        style={{
                                             animationDelay: `${index * 100}ms`,
-                                            animationFillMode: 'both'
+                                            animationFillMode: 'both',
                                         }}
                                         className="animate-fade-in"
                                     >

@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -9,19 +8,18 @@ use App\Http\Controllers\ModuleMaterialController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MemberController;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+// Route::get('/', function () {
+//     return Inertia::render('welcome');
+// })->name('home');
 
+Route::get('/', [MemberController::class, 'index'])->name('index');
+Route::get('course/{course:slug}', [MemberController::class, 'course'])->name('member.course');
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    // Route::get('dashboard', function () {
+    //     return Inertia::render('dashboard');
+    // })->name('dashboard');
 
     // Member routes
-    Route::prefix('member')->name('member.')->group(function () {
-        Route::get('/', [MemberController::class, 'index'])->name('dashboard');
-    });
 
     // Admin routes
     Route::prefix('admin')->name('admin.')->group(function () {

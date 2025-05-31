@@ -1,4 +1,3 @@
-
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
 
@@ -60,6 +59,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
 export interface Course {
     id: number;
     name: string;
+    slug: string;
     description?: string;
     thumbnail?: string;
     order?: number;
