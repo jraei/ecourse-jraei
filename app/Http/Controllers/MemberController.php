@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Http\Controllers;
@@ -52,6 +53,36 @@ class MemberController extends Controller
 
     public function course(Course $course)
     {
+        // Load course with modules and simulate progress data
+        $course->load(['modules' => function ($query) {
+            $query->where('status', 'published')
+                  ->orderBy('order', 'asc')
+                  ->orderBy('name', 'asc');
+        }]);
+
+        // Add placeholder thumbnail if none exists
+        if (!$course->thumbnail) {
+            $placeholders = [
+                'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80',
+                'https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?w=800&q=80',
+                'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&q=80',
+                'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=800&q=80'
+            ];
+            $course->thumbnail = $placeholders[array_rand($placeholders)];
+        }
+
+        // Simulate completion data for modules
+        $course->modules->transform(function ($module) {
+            $module->is_completed = rand(0, 1) === 1;
+            $module->duration = rand(5, 45) . ' min';
+            return $module;
+        });
+
+        // Calculate overall progress
+        $totalModules = $course->modules->count();
+        $completedModules = $course->modules->where('is_completed', true)->count();
+        $course->completion_percentage = $totalModules > 0 ? round(($completedModules / $totalModules) * 100) : 0;
+
         return Inertia::render('member/course', [
             'course' => $course
         ]);
