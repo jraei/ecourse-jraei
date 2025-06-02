@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Http\Controllers;
@@ -94,40 +93,41 @@ class MemberController extends Controller
         // Load the module with its course and all course modules
         $module->load([
             'course' => function ($query) {
-                $query->select('id', 'name', 'slug', 'description', 'thumbnail');
+                $query->select('id', 'name', 'slug', 'description', 'thumbnail', 'completion_percentage');
             },
             'course.modules' => function ($query) {
                 $query->where('status', 'published')
                     ->orderBy('order', 'asc')
                     ->orderBy('name', 'asc')
-                    ->select('id', 'name', 'slug', 'course_id', 'order', 'video_path');
+                    ->select('id', 'name', 'slug', 'course_id', 'order', 'video_path', 'is_completed', 'duration', 'status');
+            },
+            'materials' => function ($query) {
+                $query->select('id', 'name', 'module_id', 'url', 'text');
             }
         ]);
 
-        // Simulate module data
-        $module->is_completed = rand(0, 1) === 1;
-        $module->duration = rand(5, 45) . ' min';
-        $module->video_url = $module->video_path ?: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
         // Simulate completion data for all course modules
         $module->course->modules->transform(function ($siblingModule) use ($module) {
-            $siblingModule->is_completed = $siblingModule->id === $module->id ? $module->is_completed : rand(0, 1) === 1;
-            $siblingModule->duration = rand(5, 45) . ' min';
+            // $siblingModule->duration = $siblingModule->duration . ' min';
             $siblingModule->is_current = $siblingModule->id === $module->id;
             return $siblingModule;
         });
 
         // Calculate course progress
-        $totalModules = $module->course->modules->count();
-        $completedModules = $module->course->modules->where('is_completed', true)->count();
+        $totalModules = $module->course->modules->where('status', 'published')->count();
+        $completedModules = $module->course->modules->where('status', 'published')->where('is_completed', 1)->count();
         $module->course->completion_percentage = $totalModules > 0 ? round(($completedModules / $totalModules) * 100) : 0;
 
         // Find current module index and determine navigation
         $modulesList = $module->course->modules->toArray();
         $currentIndex = array_search($module->id, array_column($modulesList, 'id'));
-        
+
         $prevModule = $currentIndex > 0 ? $modulesList[$currentIndex - 1] : null;
         $nextModule = $currentIndex < count($modulesList) - 1 ? $modulesList[$currentIndex + 1] : null;
+
+        // dd($module->course);
+        // dd('totalModules', $totalModules, 'completedModules', $completedModules);
 
         return Inertia::render('member/module', [
             'module' => $module,

@@ -1,7 +1,6 @@
-
-import { useEffect, useRef, useState } from 'react';
-import { Play, Pause, Volume2, VolumeX, Maximize, RotateCcw, RotateCw, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Maximize, Pause, Play, RotateCcw, RotateCw, Settings, Volume2, VolumeX } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 interface VideoPlayerProps {
     src: string;
@@ -44,7 +43,7 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
 
             // Auto-complete at 95%
             if (progress >= 95) {
-                onComplete?();
+                onComplete?.();
             }
         };
 
@@ -72,7 +71,7 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
 
     useEffect(() => {
         let hideControlsTimer: NodeJS.Timeout;
-        
+
         const handleMouseMove = () => {
             setShowControls(true);
             clearTimeout(hideControlsTimer);
@@ -181,11 +180,7 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
     return (
         <div
             ref={containerRef}
-            className={cn(
-                'group relative overflow-hidden rounded-2xl bg-black shadow-2xl',
-                'border border-neutral-800/50',
-                className
-            )}
+            className={cn('group relative overflow-hidden rounded-2xl bg-black shadow-2xl', 'border border-neutral-800/50', className)}
         >
             {/* Video Element */}
             <video
@@ -201,7 +196,7 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
             {/* Loading Spinner */}
             {isBuffering && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-                    <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent" />
+                    <div className="border-primary h-12 w-12 animate-spin rounded-full border-2 border-t-transparent" />
                 </div>
             )}
 
@@ -209,14 +204,14 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
             <div
                 className={cn(
                     'absolute inset-0 flex items-center justify-center bg-black/20 transition-opacity duration-300',
-                    showControls ? 'opacity-0' : 'opacity-100'
+                    showControls ? 'opacity-0' : 'opacity-100',
                 )}
             >
                 <button
                     onClick={togglePlayPause}
-                    className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 border border-primary/50 text-primary transition-all duration-300 hover:bg-primary hover:text-black hover:scale-110"
+                    className="bg-primary/20 border-primary/50 text-primary hover:bg-primary flex h-20 w-20 items-center justify-center rounded-full border transition-all duration-300 hover:scale-110 hover:text-black"
                 >
-                    {isPlaying ? <Pause className="h-8 w-8 ml-0.5" fill="currentColor" /> : <Play className="h-8 w-8 ml-1" fill="currentColor" />}
+                    {isPlaying ? <Pause className="ml-0.5 h-8 w-8" fill="currentColor" /> : <Play className="ml-1 h-8 w-8" fill="currentColor" />}
                 </button>
             </div>
 
@@ -224,22 +219,22 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
             <div
                 className={cn(
                     'absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6 transition-all duration-300',
-                    showControls ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+                    showControls ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0',
                 )}
             >
                 {/* Progress Bar */}
                 <div className="mb-4">
                     <div
                         ref={progressBarRef}
-                        className="group/progress relative h-2 w-full cursor-pointer rounded-full bg-neutral-700 hover:h-3 transition-all duration-200"
+                        className="group/progress relative h-2 w-full cursor-pointer rounded-full bg-neutral-700 transition-all duration-200 hover:h-3"
                         onClick={handleProgressClick}
                     >
                         <div
-                            className="h-full rounded-full bg-gradient-to-r from-primary to-yellow-400 transition-all duration-200"
+                            className="from-primary h-full rounded-full bg-gradient-to-r to-yellow-400 transition-all duration-200"
                             style={{ width: `${(currentTime / duration) * 100}%` }}
                         />
                         <div
-                            className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-primary border-2 border-white shadow-lg opacity-0 group-hover/progress:opacity-100 transition-opacity duration-200"
+                            className="bg-primary absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-white opacity-0 shadow-lg transition-opacity duration-200 group-hover/progress:opacity-100"
                             style={{ left: `${(currentTime / duration) * 100}%`, transform: 'translateX(-50%) translateY(-50%)' }}
                         />
                     </div>
@@ -251,21 +246,21 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
                         {/* Play/Pause */}
                         <button
                             onClick={togglePlayPause}
-                            className="flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-white/20 transition-colors duration-200"
+                            className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors duration-200 hover:bg-white/20"
                         >
-                            {isPlaying ? <Pause className="h-5 w-5" fill="currentColor" /> : <Play className="h-5 w-5 ml-0.5" fill="currentColor" />}
+                            {isPlaying ? <Pause className="h-5 w-5" fill="currentColor" /> : <Play className="ml-0.5 h-5 w-5" fill="currentColor" />}
                         </button>
 
                         {/* Skip Buttons */}
                         <button
                             onClick={() => skipTime(-10)}
-                            className="flex h-8 w-8 items-center justify-center rounded-full text-white hover:bg-white/20 transition-colors duration-200"
+                            className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors duration-200 hover:bg-white/20"
                         >
                             <RotateCcw className="h-4 w-4" />
                         </button>
                         <button
                             onClick={() => skipTime(10)}
-                            className="flex h-8 w-8 items-center justify-center rounded-full text-white hover:bg-white/20 transition-colors duration-200"
+                            className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors duration-200 hover:bg-white/20"
                         >
                             <RotateCw className="h-4 w-4" />
                         </button>
@@ -274,24 +269,17 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
                         <div className="flex items-center space-x-2">
                             <button
                                 onClick={toggleMute}
-                                className="flex h-8 w-8 items-center justify-center rounded-full text-white hover:bg-white/20 transition-colors duration-200"
+                                className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors duration-200 hover:bg-white/20"
                             >
                                 {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
                             </button>
-                            <div
-                                ref={volumeBarRef}
-                                className="w-16 h-1 bg-neutral-600 rounded-full cursor-pointer"
-                                onClick={handleVolumeChange}
-                            >
-                                <div
-                                    className="h-full bg-primary rounded-full"
-                                    style={{ width: `${isMuted ? 0 : volume * 100}%` }}
-                                />
+                            <div ref={volumeBarRef} className="h-1 w-16 cursor-pointer rounded-full bg-neutral-600" onClick={handleVolumeChange}>
+                                <div className="bg-primary h-full rounded-full" style={{ width: `${isMuted ? 0 : volume * 100}%` }} />
                             </div>
                         </div>
 
                         {/* Time */}
-                        <div className="text-sm text-white font-mono">
+                        <div className="font-mono text-sm text-white">
                             {formatTime(currentTime)} / {formatTime(duration)}
                         </div>
                     </div>
@@ -301,22 +289,22 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
                         <div className="relative">
                             <button
                                 onClick={() => setShowSettings(!showSettings)}
-                                className="flex h-8 w-8 items-center justify-center rounded-full text-white hover:bg-white/20 transition-colors duration-200"
+                                className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors duration-200 hover:bg-white/20"
                             >
                                 <Settings className="h-4 w-4" />
                             </button>
 
                             {showSettings && (
-                                <div className="absolute bottom-10 right-0 bg-black/90 border border-neutral-700 rounded-lg p-3 min-w-32 backdrop-blur-sm">
-                                    <div className="text-white text-sm font-medium mb-2">Playback Speed</div>
+                                <div className="absolute right-0 bottom-10 min-w-32 rounded-lg border border-neutral-700 bg-black/90 p-3 backdrop-blur-sm">
+                                    <div className="mb-2 text-sm font-medium text-white">Playback Speed</div>
                                     <div className="space-y-1">
                                         {[0.5, 0.75, 1, 1.25, 1.5, 2].map((rate) => (
                                             <button
                                                 key={rate}
                                                 onClick={() => changePlaybackRate(rate)}
                                                 className={cn(
-                                                    'block w-full text-left px-2 py-1 text-sm rounded hover:bg-white/20 transition-colors',
-                                                    playbackRate === rate ? 'text-primary' : 'text-white'
+                                                    'block w-full rounded px-2 py-1 text-left text-sm transition-colors hover:bg-white/20',
+                                                    playbackRate === rate ? 'text-primary' : 'text-white',
                                                 )}
                                             >
                                                 {rate}x
@@ -330,7 +318,7 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
                         {/* Fullscreen */}
                         <button
                             onClick={toggleFullscreen}
-                            className="flex h-8 w-8 items-center justify-center rounded-full text-white hover:bg-white/20 transition-colors duration-200"
+                            className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors duration-200 hover:bg-white/20"
                         >
                             <Maximize className="h-4 w-4" />
                         </button>
