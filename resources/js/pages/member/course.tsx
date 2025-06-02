@@ -37,7 +37,7 @@ function ModuleCard({ module, index }: { module: CoursePageProps['course']['modu
                                 : 'group-hover:border-primary/50 border-2 border-neutral-700 bg-neutral-800 text-neutral-400'
                         }`}
                     >
-                        {module.is_completed ? <CheckCircle className="h-5 w-5" /> : <span>{index + 1}</span>}
+                        {module.is_completed == true ? <CheckCircle className="h-5 w-5" /> : <span>{index + 1}</span>}
                     </div>
                 </div>
 
@@ -47,16 +47,16 @@ function ModuleCard({ module, index }: { module: CoursePageProps['course']['modu
                     <div className="mt-1 flex items-center space-x-3">
                         <div className="flex items-center space-x-1 text-neutral-400">
                             <Clock className="h-3 w-3" />
-                            <span className="text-xs">{module.duration}</span>
+                            <span className="text-xs">{module.duration} min</span>
                         </div>
-                        {module.is_completed && <span className="text-xs font-medium text-green-400">Completed</span>}
+                        {module.is_completed == true && <span className="text-xs font-medium text-green-400">Completed</span>}
                     </div>
                 </div>
 
                 {/* Play Button */}
                 <div className="flex-shrink-0">
                     <button
-                        className="bg-primary/10 border-primary/30 text-primary hover:bg-primary group-hover:animate-glow-pulse flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300 hover:scale-110 hover:text-black"
+                        className="bg-primary/10 border-primary/30 text-primary hover:bg-primary group-hover:animate-glow-pulse flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border transition-all duration-300 hover:scale-110 hover:text-black"
                         onClick={visitModule(module.slug)}
                     >
                         <Play className="ml-0.5 h-4 w-4" fill="currentColor" />

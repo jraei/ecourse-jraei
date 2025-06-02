@@ -72,15 +72,15 @@ class MemberController extends Controller
         }
 
         // Simulate completion data for modules
-        $course->modules->transform(function ($module) {
-            $module->is_completed = rand(0, 1) === 1;
-            $module->duration = rand(5, 45) . ' min';
-            return $module;
-        });
+        // $course->modules->transform(function ($module) {
+        //     $module->is_completed = rand(0, 1) === 1;
+        //     $module->duration = rand(5, 45) . ' min';
+        //     return $module;
+        // });
 
         // Calculate overall progress
-        $totalModules = $course->modules->count();
-        $completedModules = $course->modules->where('is_completed', true)->count();
+        $totalModules = $course->modules->where('status', 'published')->count();
+        $completedModules = $course->modules->where('status', 'published')->where('is_completed', true)->count();
         $course->completion_percentage = $totalModules > 0 ? round(($completedModules / $totalModules) * 100) : 0;
 
         return Inertia::render('member/course', [

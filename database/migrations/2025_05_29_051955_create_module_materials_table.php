@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('module_materials', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('module_id')->constrained();
+            $table->foreignId('module_id')->constrained()->nullOnDelete();
             $table->string('url')->nullable();
             $table->string('text')->nullable();
             $table->timestamps();
