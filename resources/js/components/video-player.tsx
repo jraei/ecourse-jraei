@@ -1,3 +1,4 @@
+
 import { cn } from '@/lib/utils';
 import { Maximize, Pause, Play, RotateCcw, RotateCw, Settings, Volume2, VolumeX } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -103,25 +104,34 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
         if (isPlaying) {
             video.pause();
         } else {
-            video.play();
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.error('Error playing video:', error);
+                });
+            }
         }
     };
 
     const skipTime = (seconds: number) => {
         const video = videoRef.current;
-        if (!video) return;
+        if (!video || !duration) return;
 
-        video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
+        const newTime = Math.max(0, Math.min(duration, currentTime + seconds));
+        video.currentTime = newTime;
+        setCurrentTime(newTime);
     };
 
     const handleProgressClick = (e: React.MouseEvent) => {
         const bar = progressBarRef.current;
         const video = videoRef.current;
-        if (!bar || !video) return;
+        if (!bar || !video || !duration) return;
 
         const rect = bar.getBoundingClientRect();
         const percent = (e.clientX - rect.left) / rect.width;
-        video.currentTime = percent * video.duration;
+        const newTime = percent * duration;
+        video.currentTime = newTime;
+        setCurrentTime(newTime);
     };
 
     const handleVolumeChange = (e: React.MouseEvent) => {
@@ -231,11 +241,11 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
                     >
                         <div
                             className="from-primary h-full rounded-full bg-gradient-to-r to-yellow-400 transition-all duration-200"
-                            style={{ width: `${(currentTime / duration) * 100}%` }}
+                            style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%` }}
                         />
                         <div
                             className="bg-primary absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-white opacity-0 shadow-lg transition-opacity duration-200 group-hover/progress:opacity-100"
-                            style={{ left: `${(currentTime / duration) * 100}%`, transform: 'translateX(-50%) translateY(-50%)' }}
+                            style={{ left: `${duration > 0 ? (currentTime / duration) * 100 : 0}%`, transform: 'translateX(-50%) translateY(-50%)' }}
                         />
                     </div>
                 </div>

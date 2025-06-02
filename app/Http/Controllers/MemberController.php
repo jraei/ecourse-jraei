@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Http\Controllers;
@@ -5,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\Module;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
@@ -134,5 +136,38 @@ class MemberController extends Controller
             'prevModule' => $prevModule,
             'nextModule' => $nextModule
         ]);
+    }
+
+    public function markComplete(Request $request, Module $module)
+    {
+        try {
+            // Verify user has access to the module (simplified for now)
+            // In a real app, you'd check user enrollment in the course
+            
+            // Update module completion status
+            $module->update(['is_completed' => true]);
+            
+            // Reload the course with all modules to recalculate progress
+            $course = $module->course()->with(['modules' => function ($query) {
+                $query->where('status', 'published');
+            }])->first();
+            
+            // Calculate updated course progress
+            $totalModules = $course->modules->where('status', 'published')->count();
+            $completedModules = $course->modules->where('status', 'published')->where('is_completed', true)->count();
+            $completionPercentage = $totalModules > 0 ? round(($completedModules / $totalModules) * 100) : 0;
+            
+            return response()->json([
+                'success' => true,
+                'completion_percentage' => $completionPercentage,
+                'message' => 'Module completed successfully!'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to mark module as complete. Please try again.'
+            ], 500);
+        }
     }
 }

@@ -1,10 +1,12 @@
+
 import { Button } from '@/components/ui/button';
 import { VideoPlayer } from '@/components/video-player';
 import AppHeaderLayout from '@/layouts/app/app-header-layout';
 import { type Module } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { ArrowLeft, BookOpen, CheckCircle, ChevronRight, Clock, Play } from 'lucide-react';
+import { ArrowLeft, BookOpen, CheckCircle, ChevronRight, Clock, Play, Download, ExternalLink, FileText } from 'lucide-react';
 import { useState } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface ModulePageProps {
     module: Module & {
@@ -17,7 +19,7 @@ interface ModulePageProps {
             module_id: number;
             url: string;
             text: string;
-        };
+        }[];
         course: {
             id: number;
             name: string;
@@ -103,34 +105,125 @@ function ModuleCard({ module }: { module: ModulePageProps['module']['course']['m
     );
 }
 
+function MaterialCard({ material }: { material: ModulePageProps['module']['materials'][0] }) {
+    const handleMaterialClick = () => {
+        if (material.url) {
+            window.open(material.url, '_blank', 'noopener,noreferrer');
+        }
+    };
+
+    const isExternalLink = !!material.url;
+
+    return (
+        <div
+            className={`group relative rounded-xl border border-neutral-800/50 bg-gradient-to-r from-neutral-900/50 to-black/50 p-4 transition-all duration-300 hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/10 ${
+                isExternalLink ? 'cursor-pointer' : ''
+            }`}
+            onClick={isExternalLink ? handleMaterialClick : undefined}
+        >
+            {/* Animated border effect */}
+            <div className="from-primary/0 via-primary/5 to-primary/0 absolute inset-0 rounded-xl bg-gradient-to-r opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+            <div className="relative flex items-start space-x-4">
+                {/* Material Icon */}
+                <div className="flex-shrink-0">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-neutral-700 bg-neutral-800 transition-all duration-300 group-hover:border-primary/50">
+                        {isExternalLink ? (
+                            <ExternalLink className="h-6 w-6 text-neutral-400 transition-colors group-hover:text-primary" />
+                        ) : (
+                            <FileText className="h-6 w-6 text-neutral-400 transition-colors group-hover:text-primary" />
+                        )}
+                    </div>
+                </div>
+
+                {/* Material Content */}
+                <div className="min-w-0 flex-1">
+                    <h3 className="mb-2 font-semibold text-white transition-colors duration-300 group-hover:text-primary">
+                        {material.name}
+                    </h3>
+                    
+                    {material.text && (
+                        <p className="text-sm text-neutral-400 leading-relaxed">
+                            {material.text}
+                        </p>
+                    )}
+                    
+                    {isExternalLink && (
+                        <div className="mt-2 flex items-center space-x-2 text-xs text-neutral-500">
+                            <span>Click to open external resource</span>
+                            <ExternalLink className="h-3 w-3" />
+                        </div>
+                    )}
+                </div>
+
+                {/* Action Arrow for external links */}
+                {isExternalLink && (
+                    <div className="flex-shrink-0">
+                        <ChevronRight className="h-5 w-5 text-neutral-600 transition-all duration-300 group-hover:text-primary group-hover:translate-x-1" />
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
 export default function Module({ module, prevModule, nextModule }: ModulePageProps) {
     const [isCompleted, setIsCompleted] = useState(module.is_completed);
-    const [videoProgress, setVideoProgress] = useState(0);
+    const [courseProgress, setCourseProgress] = useState(module.course.completion_percentage);
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleVideoProgress = (progress: number) => {
-        setVideoProgress(progress);
+        // Video progress tracking
     };
 
     const handleVideoComplete = () => {
         if (!isCompleted) {
-            setIsCompleted(true);
-            // Here you would typically make an API call to update completion status
-            console.log('Module completed automatically');
+            markCompleteHandler();
         }
     };
 
-    const markComplete = () => {
-        setIsCompleted(true);
-        // Here you would typically make an API call to update completion status
-        console.log('Module marked complete manually');
+    const markCompleteHandler = async () => {
+        if (isLoading || isCompleted) return;
+        
+        setIsLoading(true);
+        
+        try {
+            const response = await fetch(route('member.module.complete', { module: module.id }), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                },
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Optimistic UI updates
+                setIsCompleted(true);
+                setCourseProgress(data.completion_percentage);
+                setToastMessage(data.message);
+                setShowToast(true);
+                
+                // Hide toast after 3 seconds
+                setTimeout(() => setShowToast(false), 3000);
+            } else {
+                throw new Error(data.message || 'Failed to mark module as complete');
+            }
+        } catch (error) {
+            console.error('Error marking module complete:', error);
+            setToastMessage('Failed to mark module as complete. Please try again.');
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 3000);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const navigateToModule = (moduleSlug: string) => {
         router.get(route('member.module', { module: moduleSlug }));
-    };
-
-    const navigateToMaterials = (url: string) => {
-        router.visit(url);
     };
 
     return (
@@ -142,6 +235,18 @@ export default function Module({ module, prevModule, nextModule }: ModulePagePro
             ]}
         >
             <Head title={`${module.name} - ${module.course.name}`} />
+
+            {/* Toast Notification */}
+            {showToast && (
+                <div className="fixed top-4 right-4 z-50 animate-fade-in">
+                    <Alert className="border-primary/50 bg-primary/10 backdrop-blur-sm">
+                        <CheckCircle className="h-4 w-4 text-primary" />
+                        <AlertDescription className="text-primary font-medium">
+                            {toastMessage}
+                        </AlertDescription>
+                    </Alert>
+                </div>
+            )}
 
             <div className="min-h-screen overflow-hidden bg-black">
                 {/* Video Hero Section */}
@@ -182,7 +287,7 @@ export default function Module({ module, prevModule, nextModule }: ModulePagePro
                                     <Clock className="h-4 w-4" />
                                     <span>{module.duration} min</span>
                                 </div>
-                                {isCompleted == true && (
+                                {isCompleted && (
                                     <div className="flex items-center space-x-2 text-green-400">
                                         <CheckCircle className="h-4 w-4" />
                                         <span>Completed</span>
@@ -205,15 +310,17 @@ export default function Module({ module, prevModule, nextModule }: ModulePagePro
                             {!isCompleted && (
                                 <div className="absolute top-4 right-4">
                                     <Button
-                                        onClick={markComplete}
+                                        onClick={markCompleteHandler}
+                                        disabled={isLoading}
                                         className="bg-primary/20 border-primary/50 text-primary hover:bg-primary border text-xs transition-all duration-300 hover:text-black lg:text-sm"
                                     >
                                         <CheckCircle className="mr-2 h-4 w-4" />
-                                        Mark Complete
+                                        {isLoading ? 'Marking...' : 'Mark Complete'}
                                     </Button>
                                 </div>
                             )}
                         </div>
+
                         {/* Navigation Controls */}
                         <div className="mb-12 flex items-center justify-between">
                             {prevModule ? (
@@ -242,6 +349,32 @@ export default function Module({ module, prevModule, nextModule }: ModulePagePro
                     </div>
                 </div>
 
+                {/* Module Materials Section */}
+                {module.materials && module.materials.length > 0 && (
+                    <div className="mx-auto max-w-7xl px-4 pb-12">
+                        <div className="space-y-6">
+                            <div className="text-center lg:text-left">
+                                <div className="mb-2 flex items-center space-x-3">
+                                    <Download className="text-primary h-6 w-6" />
+                                    <h2 className="text-3xl font-bold text-white">Module Materials</h2>
+                                </div>
+                                <p className="text-neutral-400">
+                                    Additional resources and materials for this module
+                                </p>
+                            </div>
+
+                            {/* Materials Grid */}
+                            <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+                                {module.materials.map((material, index) => (
+                                    <div key={material.id} className="animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                                        <MaterialCard material={material} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Course Modules Section */}
                 <div className="mx-auto max-w-7xl px-4 pb-16">
                     <div className="space-y-8">
@@ -256,12 +389,12 @@ export default function Module({ module, prevModule, nextModule }: ModulePagePro
                         <div className="w-full">
                             <div className="mb-2 flex items-center justify-between">
                                 <span className="text-sm font-medium text-white">Course Progress</span>
-                                <span className="text-primary text-sm font-bold">{module.course.completion_percentage}%</span>
+                                <span className="text-primary text-sm font-bold">{courseProgress}%</span>
                             </div>
                             <div className="h-3 w-full overflow-hidden rounded-full bg-neutral-800 backdrop-blur-sm">
                                 <div
                                     className="from-primary animate-glow-pulse h-full rounded-full bg-gradient-to-r via-yellow-400 to-yellow-400 transition-all duration-1000"
-                                    style={{ width: `${module.course.completion_percentage}%` }}
+                                    style={{ width: `${courseProgress}%` }}
                                 />
                             </div>
                         </div>
