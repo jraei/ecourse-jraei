@@ -28,8 +28,11 @@ class MemberController extends Controller
             ->orderBy('name', 'asc')
             ->get()
             ->map(function ($course) {
+                // For now, we'll simulate completion percentage
+                // In a real app, this would be calculated based on user progress
                 $course->completion_percentage = rand(0, 100);
 
+                // Add placeholder thumbnails for courses without images
                 if (!$course->thumbnail) {
                     $placeholders = [
                         'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80',
@@ -50,12 +53,14 @@ class MemberController extends Controller
 
     public function course(Course $course)
     {
+        // Load course with modules and simulate progress data
         $course->load(['modules' => function ($query) {
             $query->where('status', 'published')
                 ->orderBy('order', 'asc')
                 ->orderBy('name', 'asc');
         }]);
 
+        // Add placeholder thumbnail if none exists
         if (!$course->thumbnail) {
             $placeholders = [
                 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80',
@@ -66,12 +71,14 @@ class MemberController extends Controller
             $course->thumbnail = $placeholders[array_rand($placeholders)];
         }
 
+        // Simulate completion data for modules
         $course->modules->transform(function ($module) {
             $module->is_completed = rand(0, 1) === 1;
             $module->duration = rand(5, 45) . ' min';
             return $module;
         });
 
+        // Calculate overall progress
         $totalModules = $course->modules->count();
         $completedModules = $course->modules->where('is_completed', true)->count();
         $course->completion_percentage = $totalModules > 0 ? round(($completedModules / $totalModules) * 100) : 0;
@@ -83,46 +90,8 @@ class MemberController extends Controller
 
     public function module(Module $module)
     {
-        $module->load(['course.modules' => function ($query) {
-            $query->where('status', 'published')
-                ->orderBy('order', 'asc')
-                ->orderBy('name', 'asc');
-        }]);
-
-        $module->is_completed = rand(0, 1) === 1;
-        $module->duration = rand(5, 45) . ' min';
-        $module->video_duration = rand(300, 2700); // 5-45 minutes in seconds
-
-        if (!$module->video_path) {
-            $module->video_path = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-        }
-
-        $module->course->modules->transform(function ($siblingModule) use ($module) {
-            $siblingModule->is_completed = rand(0, 1) === 1;
-            $siblingModule->duration = rand(5, 45) . ' min';
-            $siblingModule->is_current = $siblingModule->id === $module->id;
-            return $siblingModule;
-        });
-
-        $modules = $module->course->modules;
-        $currentIndex = $modules->search(function ($item) use ($module) {
-            return $item->id === $module->id;
-        });
-
-        $previousModule = $currentIndex > 0 ? $modules[$currentIndex - 1] : null;
-        $nextModule = $currentIndex < $modules->count() - 1 ? $modules[$currentIndex + 1] : null;
-
-        $totalModules = $modules->count();
-        $completedModules = $modules->where('is_completed', true)->count();
-        $courseProgress = $totalModules > 0 ? round(($completedModules / $totalModules) * 100) : 0;
-
         return Inertia::render('member/module', [
-            'module' => $module,
-            'course' => $module->course,
-            'modules' => $modules,
-            'previousModule' => $previousModule,
-            'nextModule' => $nextModule,
-            'courseProgress' => $courseProgress
+            'module' => $module
         ]);
     }
 }
