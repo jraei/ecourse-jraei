@@ -1,9 +1,9 @@
-
 <?php
 
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Module;
 use Inertia\Inertia;
 
 class MemberController extends Controller
@@ -56,8 +56,8 @@ class MemberController extends Controller
         // Load course with modules and simulate progress data
         $course->load(['modules' => function ($query) {
             $query->where('status', 'published')
-                  ->orderBy('order', 'asc')
-                  ->orderBy('name', 'asc');
+                ->orderBy('order', 'asc')
+                ->orderBy('name', 'asc');
         }]);
 
         // Add placeholder thumbnail if none exists
@@ -85,6 +85,13 @@ class MemberController extends Controller
 
         return Inertia::render('member/course', [
             'course' => $course
+        ]);
+    }
+
+    public function module(Module $module)
+    {
+        return Inertia::render('member/module', [
+            'module' => $module
         ]);
     }
 }

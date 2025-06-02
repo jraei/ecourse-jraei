@@ -49,11 +49,15 @@ class ModuleController extends Controller
             'course_id' => 'required|exists:courses,id'
         ]);
 
+
         // Simpan video ke storage
         if ($request->hasFile('video_path')) {
             $path = $request->file('video_path')->store('videos', 'public');
             $validated['video_path'] = $path;
         }
+
+        $slug = str()->slug($request->name);
+        $validated['slug'] = $slug;
 
         Module::create($validated);
 
@@ -103,6 +107,9 @@ class ModuleController extends Controller
             $validated['video_path'] = $path;
         }
 
+        $slug = str()->slug($request->name);
+        $validated['slug'] = $slug;
+
         $module->update($validated);
 
         return redirect()->route('admin.modules.index')
@@ -114,6 +121,12 @@ class ModuleController extends Controller
      */
     public function destroy(Module $module)
     {
+
+        // delete video
+        if ($module->video_path && Storage::disk('public')->exists($module->video_path)) {
+            Storage::disk('public')->delete($module->video_path);
+        }
+
         $module->delete();
 
         return redirect()->route('admin.modules.index')

@@ -115,6 +115,12 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
+
+        // delete thumbnail
+        if ($course->thumbnail && Storage::disk('public')->exists($course->thumbnail)) {
+            Storage::disk('public')->delete($course->thumbnail);
+        }
+
         $course->delete();
 
         return redirect()->route('admin.courses.index')

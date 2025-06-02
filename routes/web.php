@@ -14,6 +14,7 @@ use App\Http\Controllers\MemberController;
 
 Route::get('/', [MemberController::class, 'index'])->name('index');
 Route::get('course/{course:slug}', [MemberController::class, 'course'])->name('member.course');
+Route::get('module/{module:slug}', [MemberController::class, 'module'])->name('member.module');
 Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('dashboard', function () {
     //     return Inertia::render('dashboard');

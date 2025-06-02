@@ -1,4 +1,3 @@
-
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Icon } from '@/components/icon';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,7 +12,6 @@ import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
-import { type ReactNode } from 'react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 
@@ -42,14 +40,12 @@ const activeItemStyles = 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral
 
 interface AppHeaderProps {
     breadcrumbs?: BreadcrumbItem[];
-    mobileSidebarContent?: ReactNode;
 }
 
-export function AppHeader({ breadcrumbs = [], mobileSidebarContent }: AppHeaderProps) {
+export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
-    
     return (
         <>
             <div className="border-sidebar-border/80 border-b">
@@ -62,48 +58,38 @@ export function AppHeader({ breadcrumbs = [], mobileSidebarContent }: AppHeaderP
                                     <Menu className="h-5 w-5" />
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="left" className="bg-sidebar flex h-full w-80 flex-col items-stretch justify-between p-0">
+                            <SheetContent side="left" className="bg-sidebar flex h-full w-64 flex-col items-stretch justify-between">
                                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                                
-                                {/* Custom sidebar content or default navigation */}
-                                {mobileSidebarContent ? (
-                                    <div className="flex h-full flex-col">
-                                        {mobileSidebarContent}
-                                    </div>
-                                ) : (
-                                    <>
-                                        <SheetHeader className="flex justify-start text-left p-6">
-                                            <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
-                                        </SheetHeader>
-                                        <div className="flex h-full flex-1 flex-col space-y-4 p-4">
-                                            <div className="flex h-full flex-col justify-between text-sm">
-                                                <div className="flex flex-col space-y-4">
-                                                    {mainNavItems.map((item) => (
-                                                        <Link key={item.title} href={item.href} className="flex items-center space-x-2 font-medium">
-                                                            {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
-                                                            <span>{item.title}</span>
-                                                        </Link>
-                                                    ))}
-                                                </div>
-
-                                                <div className="flex flex-col space-y-4">
-                                                    {rightNavItems.map((item) => (
-                                                        <a
-                                                            key={item.title}
-                                                            href={item.href}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex items-center space-x-2 font-medium"
-                                                        >
-                                                            {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
-                                                            <span>{item.title}</span>
-                                                        </a>
-                                                    ))}
-                                                </div>
-                                            </div>
+                                <SheetHeader className="flex justify-start text-left">
+                                    <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
+                                </SheetHeader>
+                                <div className="flex h-full flex-1 flex-col space-y-4 p-4">
+                                    <div className="flex h-full flex-col justify-between text-sm">
+                                        <div className="flex flex-col space-y-4">
+                                            {mainNavItems.map((item) => (
+                                                <Link key={item.title} href={item.href} className="flex items-center space-x-2 font-medium">
+                                                    {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
+                                                    <span>{item.title}</span>
+                                                </Link>
+                                            ))}
                                         </div>
-                                    </>
-                                )}
+
+                                        <div className="flex flex-col space-y-4">
+                                            {rightNavItems.map((item) => (
+                                                <a
+                                                    key={item.title}
+                                                    href={item.href}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center space-x-2 font-medium"
+                                                >
+                                                    {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
+                                                    <span>{item.title}</span>
+                                                </a>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
                             </SheetContent>
                         </Sheet>
                     </div>

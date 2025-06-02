@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('slug')->unique()->nullable();
             $table->string('video_path')->nullable();
             $table->bigInteger('order')->nullable();
+            $table->boolean('is_completed')->default(false);
+            $table->unsignedInteger('duration')->nullable();
             $table->string('status')->default('draft');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->timestamps();
@@ -26,6 +28,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+
     public function down(): void
     {
         Schema::dropIfExists('modules');

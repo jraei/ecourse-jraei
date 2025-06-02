@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique()->nullable();
             $table->longText('description')->nullable();
             $table->string('thumbnail')->nullable();
+            $table->integer('completion_percentage')->nullable();
             $table->bigInteger('order')->nullable();
             $table->string('status')->default('active');
             $table->timestamps();
