@@ -1,6 +1,5 @@
-
 import { cn } from '@/lib/utils';
-import { MoneyBackGuarantee, CheckCircle, Shield } from 'lucide-react';
+import { CheckCircle, HandCoins, Shield } from 'lucide-react';
 
 interface BenefitItemProps {
     icon: React.ReactNode;
@@ -10,27 +9,27 @@ interface BenefitItemProps {
 
 function BenefitItem({ icon, title, delay = 0 }: BenefitItemProps) {
     return (
-        <div 
+        <div
             className={cn(
-                'group flex items-center gap-4 p-4 rounded-xl',
-                'bg-card/30 border border-border/30 backdrop-blur-sm',
-                'hover:bg-card/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10',
+                'group flex items-center gap-4 rounded-xl p-4',
+                'bg-card/30 border-border/30 border backdrop-blur-sm',
+                'hover:bg-card/50 hover:border-primary/30 hover:shadow-primary/10 hover:shadow-lg',
                 'transition-all duration-500 hover:-translate-y-1',
-                'animate-fade-in cursor-pointer'
+                'animate-fade-in cursor-pointer',
             )}
             style={{ animationDelay: `${delay}ms`, animationFillMode: 'both' }}
         >
-            <div className={cn(
-                'flex h-12 w-12 items-center justify-center rounded-full',
-                'bg-primary/10 border border-primary/20 text-primary',
-                'group-hover:bg-primary/20 group-hover:border-primary/40',
-                'transition-all duration-300 group-hover:scale-110'
-            )}>
+            <div
+                className={cn(
+                    'flex h-12 w-12 items-center justify-center rounded-full',
+                    'bg-primary/10 border-primary/20 text-primary border',
+                    'group-hover:bg-primary/20 group-hover:border-primary/40',
+                    'transition-all duration-300 group-hover:scale-110',
+                )}
+            >
                 {icon}
             </div>
-            <span className="text-foreground font-medium group-hover:text-primary transition-colors duration-300">
-                {title}
-            </span>
+            <span className="text-foreground group-hover:text-primary font-medium transition-colors duration-300">{title}</span>
         </div>
     );
 }
@@ -40,33 +39,25 @@ export function LearningBenefits() {
         <div className="space-y-6">
             <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center">
-                        <CheckCircle className="h-4 w-4 text-primary" />
+                    <div className="bg-primary/20 flex h-8 w-8 items-center justify-center rounded-full">
+                        <CheckCircle className="text-primary h-12 w-12" />
                     </div>
-                    <h3 className="text-2xl font-bold text-foreground">Yang Akan Kalian Pelajari</h3>
+                    <h3 className="text-foreground text-2xl font-bold">Yang Akan Kalian Pelajari</h3>
                 </div>
-                <p className="text-lg text-muted-foreground leading-relaxed">
+                <p className="text-muted-foreground text-lg leading-relaxed">
                     Master professional video editing with DaVinci Resolve - the industry-standard software used by Hollywood professionals.
                 </p>
-                <p className="text-sm text-muted-foreground/80">
+                <p className="text-muted-foreground/80 text-sm">
                     Dari basic hingga advanced techniques yang akan mengubah konten Anda menjadi karya profesional.
                 </p>
             </div>
 
             <div className="space-y-4">
-                <BenefitItem 
-                    icon={<MoneyBackGuarantee className="h-6 w-6" />}
-                    title="Gratis"
-                    delay={100}
-                />
-                <BenefitItem 
-                    icon={<CheckCircle className="h-6 w-6" />}
-                    title="Fitur Lengkap"
-                    delay={200}
-                />
-                <BenefitItem 
+                <BenefitItem icon={<HandCoins className="h-6 w-6" />} title="Gratis, jadi gaperlu bayar apa apa lagi" delay={100} />
+                <BenefitItem icon={<CheckCircle className="h-6 w-6" />} title="Fitur Lengkap, animasi, motion graphic, color grade" delay={200} />
+                <BenefitItem
                     icon={<Shield className="h-6 w-6" />}
-                    title="Reliable"
+                    title="Reliable, sudah berjalan dari 2004 dan fundamentalnya selalu sama"
                     delay={300}
                 />
             </div>
