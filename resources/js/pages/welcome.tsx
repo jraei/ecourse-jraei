@@ -1,50 +1,55 @@
 
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { GlowingBadge } from '@/components/glowing-badge';
-import { VideoHero } from '@/components/video-hero';
-import { FeatureListItem } from '@/components/feature-list-item';
-import { MonitorPlay, DollarSign, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { HeroBadge } from '@/components/landing/hero-badge';
+import { VideoPlayer } from '@/components/landing/video-player';
+import { LearningBenefits } from '@/components/landing/learning-benefits';
+import { CtaButton } from '@/components/ui/cta-button';
+import { ArrowRight, Youtube } from 'lucide-react';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
 
     return (
         <>
-            <Head title="Editor Amplifier - Belajar Editing Video Tingkat Tinggi">
+            <Head title="Editor Amplifier - Belajar Editing Tingkat Tinggi">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
-                <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700&display=swap" rel="stylesheet" />
+                <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800" rel="stylesheet" />
             </Head>
             
-            <div className="min-h-screen bg-background text-foreground overflow-hidden">
+            <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10">
                 {/* Navigation */}
-                <header className="relative z-50 w-full border-b border-border/50 backdrop-blur-xl bg-background/80">
-                    <div className="container mx-auto px-6 lg:px-8">
-                        <nav className="flex items-center justify-between h-16">
-                            <div className="flex items-center space-x-2">
-                                <MonitorPlay className="w-8 h-8 text-primary" />
-                                <span className="text-xl font-bold">Editor Amplifier</span>
+                <header className="relative z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <nav className="flex h-16 items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center">
+                                    <Youtube className="h-4 w-4 text-primary" />
+                                </div>
+                                <span className="text-xl font-bold text-foreground">Editor Amplifier</span>
                             </div>
-                            <div className="flex items-center space-x-4">
+                            
+                            <div className="flex items-center gap-4">
                                 {auth.user ? (
-                                    <Link href={route('member.index')}>
-                                        <Button variant="outline" size="sm">
-                                            Member area
-                                        </Button>
+                                    <Link
+                                        href={route('member.index')}
+                                        className="inline-block rounded-lg border border-border/50 px-4 py-2 text-sm leading-normal text-foreground hover:border-primary/30 hover:bg-card/50 transition-all duration-300"
+                                    >
+                                        Member area
                                     </Link>
                                 ) : (
                                     <>
-                                        <Link href={route('login')}>
-                                            <Button variant="ghost" size="sm">
-                                                Log in
-                                            </Button>
+                                        <Link
+                                            href={route('login')}
+                                            className="inline-block rounded-lg px-4 py-2 text-sm leading-normal text-muted-foreground hover:text-foreground transition-colors duration-300"
+                                        >
+                                            Log in
                                         </Link>
-                                        <Link href={route('register')}>
-                                            <Button size="sm">
-                                                Register
-                                            </Button>
+                                        <Link
+                                            href={route('register')}
+                                            className="inline-block rounded-lg border border-border/50 px-4 py-2 text-sm leading-normal text-foreground hover:border-primary/30 hover:bg-card/50 transition-all duration-300"
+                                        >
+                                            Register
                                         </Link>
                                     </>
                                 )}
@@ -53,121 +58,106 @@ export default function Welcome() {
                     </div>
                 </header>
 
-                {/* Background Effects */}
-                <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-primary/5 via-transparent to-transparent" />
-                </div>
-
-                <main className="relative z-10">
-                    {/* Headline Section */}
-                    <section className="pt-20 pb-16 px-6 lg:px-8">
-                        <div className="container mx-auto text-center max-w-5xl">
+                {/* Headline Section */}
+                <section className="relative overflow-hidden py-20 lg:py-32">
+                    {/* Background pattern */}
+                    <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23059669" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30" />
+                    
+                    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <div className="text-center space-y-8">
                             <div className="animate-fade-in">
-                                <GlowingBadge className="mb-8">
-                                    🚀 Premium Video Editing Course
-                                </GlowingBadge>
-                                
-                                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 bg-gradient-to-br from-foreground via-foreground to-foreground/80 bg-clip-text text-transparent">
-                                    Belajar Editing Tingkat Tinggi Dan{' '}
-                                    <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient-x">
-                                        Tingkatkan Views Video Youtube Sebanyak 31%
+                                <HeroBadge text="Premium Video Editing Course" />
+                            </div>
+                            
+                            <div className="space-y-6 animate-fade-in" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
+                                <h1 className="mx-auto max-w-5xl text-4xl font-bold tracking-tight text-foreground md:text-6xl lg:text-7xl">
+                                    <span className="block">Belajar Editing Tingkat Tinggi</span>
+                                    <span className="block mt-2">Dan Tingkatkan Views Video</span>
+                                    <span className="from-primary via-primary/80 to-primary animate-gradient-x bg-gradient-to-r bg-clip-text text-transparent">
+                                        Youtube Sebanyak 31%
                                     </span>
                                 </h1>
                                 
-                                <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-                                    Dibimbing dari 0 sampai menguasai software editing baru
+                                <p className="mx-auto max-w-2xl text-xl text-muted-foreground leading-relaxed">
+                                    Dibimbing dari 0 sampai menguasai software editing baru dengan teknik profesional yang terbukti meningkatkan engagement.
                                 </p>
-                                
-                                <Button 
-                                    size="lg" 
-                                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl hover:shadow-primary/25 transition-all duration-300 hover:scale-105"
-                                >
+                            </div>
+                            
+                            <div className="animate-fade-in" style={{ animationDelay: '400ms', animationFillMode: 'both' }}>
+                                <CtaButton variant="primary" size="lg" className="group">
                                     Pelajari Lebih Dalam
-                                </Button>
+                                    <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+                                </CtaButton>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </section>
 
-                    {/* Hero Video Section */}
-                    <section className="py-16 px-6 lg:px-8">
-                        <div className="container mx-auto">
-                            <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                                <VideoHero />
+                {/* Hero Video Section */}
+                <section className="relative py-16 lg:py-24">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <div className="space-y-12">
+                            <div className="animate-fade-in" style={{ animationDelay: '600ms', animationFillMode: 'both' }}>
+                                <VideoPlayer />
+                            </div>
+                            
+                            <div className="text-center animate-fade-in" style={{ animationDelay: '800ms', animationFillMode: 'both' }}>
+                                <CtaButton variant="secondary" size="lg" className="group">
+                                    <Youtube className="transition-transform duration-300 group-hover:scale-110" />
+                                    Gabung sekarang
+                                    <div className="absolute -top-1 -right-1 h-3 w-3 bg-primary rounded-full animate-pulse" />
+                                </CtaButton>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </section>
 
-                    {/* Kalian akan belajar Section */}
-                    <section className="py-20 px-6 lg:px-8">
-                        <div className="container mx-auto">
-                            <div className="grid lg:grid-cols-5 gap-12 items-center">
-                                {/* Left Column - Image */}
-                                <div className="lg:col-span-2 animate-fade-in" style={{ animationDelay: '0.5s' }}>
-                                    <div className="relative group">
-                                        <div className="absolute -inset-4 bg-gradient-to-r from-primary/50 to-accent/50 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300" />
-                                        <Card className="relative overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm">
-                                            <CardContent className="p-0">
-                                                <img
-                                                    src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=600&h=400&fit=crop"
-                                                    alt="DaVinci Resolve Workspace"
-                                                    className="w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-105"
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
-                                            </CardContent>
-                                        </Card>
-                                    </div>
-                                </div>
-
-                                {/* Right Column - Content */}
-                                <div className="lg:col-span-3 animate-fade-in" style={{ animationDelay: '0.7s' }}>
-                                    <div className="flex items-center space-x-3 mb-6">
-                                        <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
-                                            <MonitorPlay className="w-6 h-6 text-primary" />
-                                        </div>
-                                        <h2 className="text-3xl md:text-4xl font-bold">
-                                            Kalian akan belajar
-                                        </h2>
+                {/* Learning Benefits Section */}
+                <section className="relative py-16 lg:py-24 border-t border-border/50">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center">
+                            {/* Left column - Image (40%) */}
+                            <div className="lg:col-span-2 animate-fade-in" style={{ animationDelay: '1000ms', animationFillMode: 'both' }}>
+                                <div className="relative">
+                                    <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-border/50 shadow-2xl shadow-primary/10">
+                                        <img
+                                            src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop"
+                                            alt="DaVinci Resolve workspace"
+                                            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                                            loading="lazy"
+                                        />
                                     </div>
                                     
-                                    <div className="mb-8">
-                                        <h3 className="text-2xl font-semibold text-foreground mb-3">
-                                            DaVinci Resolve
-                                        </h3>
-                                        <p className="text-lg text-muted-foreground mb-2">
-                                            Software editing video profesional yang digunakan di Hollywood
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">
-                                            Gratis, powerful, dan mudah dipelajari untuk pemula
-                                        </p>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <FeatureListItem
-                                            icon={DollarSign}
-                                            title="Gratis"
-                                            description="Tidak perlu membayar lisensi mahal"
-                                        />
-                                        <FeatureListItem
-                                            icon={CheckCircle2}
-                                            title="Fitur Lengkap"
-                                            description="Color grading, visual effects, dan audio editing"
-                                        />
-                                        <FeatureListItem
-                                            icon={ShieldCheck}
-                                            title="Reliable"
-                                            description="Digunakan oleh profesional di seluruh dunia"
-                                        />
-                                    </div>
+                                    {/* Floating elements */}
+                                    <div className="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm animate-pulse" />
+                                    <div className="absolute -bottom-6 -left-6 h-16 w-16 rounded-full bg-primary/5 border border-primary/10 backdrop-blur-sm animate-pulse" style={{ animationDelay: '1s' }} />
                                 </div>
                             </div>
+                            
+                            {/* Right column - Content (60%) */}
+                            <div className="lg:col-span-3 animate-fade-in" style={{ animationDelay: '1200ms', animationFillMode: 'both' }}>
+                                <LearningBenefits />
+                            </div>
                         </div>
-                    </section>
+                    </div>
+                </section>
 
-                    {/* Spacer for more sections */}
-                    <div className="h-20" />
-                </main>
+                {/* Footer */}
+                <footer className="relative border-t border-border/50 bg-card/30 backdrop-blur-sm">
+                    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+                        <div className="text-center">
+                            <div className="flex items-center justify-center gap-3 mb-4">
+                                <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center">
+                                    <Youtube className="h-4 w-4 text-primary" />
+                                </div>
+                                <span className="text-xl font-bold text-foreground">Editor Amplifier</span>
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                                © 2024 Editor Amplifier. Tingkatkan skills video editing Anda.
+                            </p>
+                        </div>
+                    </div>
+                </footer>
             </div>
         </>
     );
