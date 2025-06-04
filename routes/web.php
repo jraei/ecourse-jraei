@@ -1,29 +1,29 @@
-
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ModuleMaterialController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\MemberController;
 
-// Route::get('/', function () {
-//     return Inertia::render('welcome');
-// })->name('home');
+Route::get('/', function () {
+    return Inertia::render('welcome');
+})->name('home');
 
-Route::get('/', [MemberController::class, 'index'])->name('index');
-Route::get('course/{course:slug}', [MemberController::class, 'course'])->name('member.course');
-Route::get('module/{module:slug}', [MemberController::class, 'module'])->name('member.module');
-Route::post('module/{module}/complete', [MemberController::class, 'markComplete'])->name('member.module.complete');
+
+Route::post('/register/get-snap-token', [RegisteredUserController::class, 'getSnapToken'])->name('register.get-snap-token');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Route::get('dashboard', function () {
-    //     return Inertia::render('dashboard');
-    // })->name('dashboard');
-
     // Member routes
+    Route::prefix('member')->name('member.')->group(function () {
+        Route::get('/', [MemberController::class, 'index'])->name('index');
+        Route::get('course/{course:slug}', [MemberController::class, 'course'])->name('course');
+        Route::get('module/{module:slug}', [MemberController::class, 'module'])->name('module');
+        Route::post('module/complete/{module}', [MemberController::class, 'markComplete'])->name('module.complete');
+    });
 
     // Admin routes
     Route::prefix('admin')->name('admin.')->group(function () {

@@ -1,12 +1,12 @@
-
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { VideoPlayer } from '@/components/video-player';
 import AppHeaderLayout from '@/layouts/app/app-header-layout';
 import { type Module } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { ArrowLeft, BookOpen, CheckCircle, ChevronRight, Clock, Play, Download, ExternalLink, FileText } from 'lucide-react';
+import axios from 'axios';
+import { ArrowLeft, BookOpen, CheckCircle, ChevronRight, Clock, Download, ExternalLink, FileText, ListVideo, Play } from 'lucide-react';
 import { useState } from 'react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface ModulePageProps {
     module: Module & {
@@ -85,7 +85,7 @@ function ModuleCard({ module }: { module: ModulePageProps['module']['course']['m
                     <div className="mt-1 flex items-center space-x-3">
                         <div className="flex items-center space-x-1 text-neutral-400">
                             <Clock className="h-3 w-3" />
-                            <span className="text-xs">{module.duration} min</span>
+                            <span className="text-xs">{module.duration}</span>
                         </div>
                         {module.is_completed == true && <span className="text-xs font-medium text-green-400">Completed</span>}
                         {module.is_current && <span className="text-primary text-xs font-medium">Currently Playing</span>}
@@ -116,7 +116,7 @@ function MaterialCard({ material }: { material: ModulePageProps['module']['mater
 
     return (
         <div
-            className={`group relative rounded-xl border border-neutral-800/50 bg-gradient-to-r from-neutral-900/50 to-black/50 p-4 transition-all duration-300 hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/10 ${
+            className={`group hover:border-primary/30 hover:shadow-primary/10 relative rounded-xl border border-neutral-800/50 bg-gradient-to-r from-neutral-900/50 to-black/50 p-4 transition-all duration-300 hover:shadow-2xl ${
                 isExternalLink ? 'cursor-pointer' : ''
             }`}
             onClick={isExternalLink ? handleMaterialClick : undefined}
@@ -127,27 +127,21 @@ function MaterialCard({ material }: { material: ModulePageProps['module']['mater
             <div className="relative flex items-start space-x-4">
                 {/* Material Icon */}
                 <div className="flex-shrink-0">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-neutral-700 bg-neutral-800 transition-all duration-300 group-hover:border-primary/50">
+                    <div className="group-hover:border-primary/50 flex h-12 w-12 items-center justify-center rounded-full border-2 border-neutral-700 bg-neutral-800 transition-all duration-300">
                         {isExternalLink ? (
-                            <ExternalLink className="h-6 w-6 text-neutral-400 transition-colors group-hover:text-primary" />
+                            <ExternalLink className="group-hover:text-primary h-6 w-6 text-neutral-400 transition-colors" />
                         ) : (
-                            <FileText className="h-6 w-6 text-neutral-400 transition-colors group-hover:text-primary" />
+                            <FileText className="group-hover:text-primary h-6 w-6 text-neutral-400 transition-colors" />
                         )}
                     </div>
                 </div>
 
                 {/* Material Content */}
                 <div className="min-w-0 flex-1">
-                    <h3 className="mb-2 font-semibold text-white transition-colors duration-300 group-hover:text-primary">
-                        {material.name}
-                    </h3>
-                    
-                    {material.text && (
-                        <p className="text-sm text-neutral-400 leading-relaxed">
-                            {material.text}
-                        </p>
-                    )}
-                    
+                    <h3 className="group-hover:text-primary mb-2 font-semibold text-white transition-colors duration-300">{material.name}</h3>
+
+                    {material.text && <p className="text-sm leading-relaxed text-neutral-400">{material.text}</p>}
+
                     {isExternalLink && (
                         <div className="mt-2 flex items-center space-x-2 text-xs text-neutral-500">
                             <span>Click to open external resource</span>
@@ -159,7 +153,7 @@ function MaterialCard({ material }: { material: ModulePageProps['module']['mater
                 {/* Action Arrow for external links */}
                 {isExternalLink && (
                     <div className="flex-shrink-0">
-                        <ChevronRight className="h-5 w-5 text-neutral-600 transition-all duration-300 group-hover:text-primary group-hover:translate-x-1" />
+                        <ChevronRight className="group-hover:text-primary h-5 w-5 text-neutral-600 transition-all duration-300 group-hover:translate-x-1" />
                     </div>
                 )}
             </div>
@@ -186,35 +180,30 @@ export default function Module({ module, prevModule, nextModule }: ModulePagePro
 
     const markCompleteHandler = async () => {
         if (isLoading || isCompleted) return;
-        
-        setIsLoading(true);
-        
-        try {
-            const response = await fetch(route('member.module.complete', { module: module.id }), {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                },
-            });
 
-            const data = await response.json();
+        setIsLoading(true);
+
+        try {
+            const response = await axios.post(
+                route('member.module.complete', { module: module.id }),
+                {}, // jika tidak ada payload
+            );
+
+            const data = response.data;
 
             if (data.success) {
-                // Optimistic UI updates
                 setIsCompleted(true);
                 setCourseProgress(data.completion_percentage);
                 setToastMessage(data.message);
                 setShowToast(true);
-                
-                // Hide toast after 3 seconds
+
                 setTimeout(() => setShowToast(false), 3000);
             } else {
                 throw new Error(data.message || 'Failed to mark module as complete');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error marking module complete:', error);
-            setToastMessage('Failed to mark module as complete. Please try again.');
+            setToastMessage(error.response?.data?.message || 'Failed to mark module as complete. Please try again.');
             setShowToast(true);
             setTimeout(() => setShowToast(false), 3000);
         } finally {
@@ -238,12 +227,10 @@ export default function Module({ module, prevModule, nextModule }: ModulePagePro
 
             {/* Toast Notification */}
             {showToast && (
-                <div className="fixed top-4 right-4 z-50 animate-fade-in">
+                <div className="animate-fade-in fixed top-4 right-4 z-50">
                     <Alert className="border-primary/50 bg-primary/10 backdrop-blur-sm">
-                        <CheckCircle className="h-4 w-4 text-primary" />
-                        <AlertDescription className="text-primary font-medium">
-                            {toastMessage}
-                        </AlertDescription>
+                        <CheckCircle className="text-primary h-4 w-4" />
+                        <AlertDescription className="text-primary font-medium">{toastMessage}</AlertDescription>
                     </Alert>
                 </div>
             )}
@@ -285,9 +272,9 @@ export default function Module({ module, prevModule, nextModule }: ModulePagePro
                             <div className="flex items-center space-x-6 text-neutral-400">
                                 <div className="flex items-center space-x-2">
                                     <Clock className="h-4 w-4" />
-                                    <span>{module.duration} min</span>
+                                    <span>{module.duration}</span>
                                 </div>
-                                {isCompleted && (
+                                {isCompleted == true && (
                                     <div className="flex items-center space-x-2 text-green-400">
                                         <CheckCircle className="h-4 w-4" />
                                         <span>Completed</span>
@@ -358,9 +345,7 @@ export default function Module({ module, prevModule, nextModule }: ModulePagePro
                                     <Download className="text-primary h-6 w-6" />
                                     <h2 className="text-3xl font-bold text-white">Module Materials</h2>
                                 </div>
-                                <p className="text-neutral-400">
-                                    Additional resources and materials for this module
-                                </p>
+                                <p className="text-neutral-400">Additional resources and materials for this module</p>
                             </div>
 
                             {/* Materials Grid */}
@@ -379,7 +364,10 @@ export default function Module({ module, prevModule, nextModule }: ModulePagePro
                 <div className="mx-auto max-w-7xl px-4 pb-16">
                     <div className="space-y-8">
                         <div className="text-center lg:text-left">
-                            <h2 className="mb-2 text-3xl font-bold text-white">Course Modules</h2>
+                            <div className="mb-2 flex items-center space-x-3">
+                                <ListVideo className="text-primary h-6 w-6" />
+                                <h2 className="mb-2 text-3xl font-bold text-white">Course Modules</h2>
+                            </div>
                             <p className="text-neutral-400">
                                 {module.course.modules.filter((m) => m.is_completed).length} of {module.course.modules.length} modules completed
                             </p>

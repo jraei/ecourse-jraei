@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('module_materials', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('module_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('url')->nullable();
-            $table->string('text')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('module_materials');
+        Schema::dropIfExists('orders');
     }
 };

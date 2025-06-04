@@ -1,4 +1,3 @@
-
 import { cn } from '@/lib/utils';
 import { Maximize, Pause, Play, RotateCcw, RotateCw, Settings, Volume2, VolumeX } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -106,7 +105,7 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
         } else {
             const playPromise = video.play();
             if (playPromise !== undefined) {
-                playPromise.catch(error => {
+                playPromise.catch((error) => {
                     console.error('Error playing video:', error);
                 });
             }
@@ -115,23 +114,22 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
 
     const skipTime = (seconds: number) => {
         const video = videoRef.current;
-        if (!video || !duration) return;
+        if (!video || isNaN(video.duration)) return;
 
-        const newTime = Math.max(0, Math.min(duration, currentTime + seconds));
+        const newTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
         video.currentTime = newTime;
-        setCurrentTime(newTime);
     };
 
     const handleProgressClick = (e: React.MouseEvent) => {
         const bar = progressBarRef.current;
         const video = videoRef.current;
-        if (!bar || !video || !duration) return;
+        if (!bar || !video || isNaN(video.duration)) return;
 
         const rect = bar.getBoundingClientRect();
         const percent = (e.clientX - rect.left) / rect.width;
-        const newTime = percent * duration;
+        const newTime = percent * video.duration;
+
         video.currentTime = newTime;
-        setCurrentTime(newTime);
     };
 
     const handleVolumeChange = (e: React.MouseEvent) => {
@@ -233,22 +231,27 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
                 )}
             >
                 {/* Progress Bar */}
-                <div className="mb-4">
-                    <div
-                        ref={progressBarRef}
-                        className="group/progress relative h-2 w-full cursor-pointer rounded-full bg-neutral-700 transition-all duration-200 hover:h-3"
-                        onClick={handleProgressClick}
-                    >
+                {duration > 0 && (
+                    <div className="mb-4">
                         <div
-                            className="from-primary h-full rounded-full bg-gradient-to-r to-yellow-400 transition-all duration-200"
-                            style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%` }}
-                        />
-                        <div
-                            className="bg-primary absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-white opacity-0 shadow-lg transition-opacity duration-200 group-hover/progress:opacity-100"
-                            style={{ left: `${duration > 0 ? (currentTime / duration) * 100 : 0}%`, transform: 'translateX(-50%) translateY(-50%)' }}
-                        />
+                            ref={progressBarRef}
+                            className="group/progress relative h-2 w-full cursor-pointer rounded-full bg-neutral-700 transition-all duration-200 hover:h-3"
+                            onClick={handleProgressClick}
+                        >
+                            <div
+                                className="from-primary h-full rounded-full bg-gradient-to-r to-yellow-400 transition-all duration-200"
+                                style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%` }}
+                            />
+                            <div
+                                className="bg-primary absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-white opacity-0 shadow-lg transition-opacity duration-200 group-hover/progress:opacity-100"
+                                style={{
+                                    left: `${duration > 0 ? (currentTime / duration) * 100 : 0}%`,
+                                    transform: 'translateX(-50%) translateY(-50%)',
+                                }}
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* Controls Row */}
                 <div className="flex items-center justify-between">
@@ -336,7 +339,7 @@ export function VideoPlayer({ src, title, onProgress, onComplete, className }: V
                 </div>
             </div>
 
-            <style jsx>{`
+            <style>{`
                 video::-webkit-media-controls {
                     display: none !important;
                 }

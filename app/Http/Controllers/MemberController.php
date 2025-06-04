@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Http\Controllers;
@@ -19,7 +18,8 @@ class MemberController extends Controller
             'description',
             'thumbnail',
             'order',
-            'status'
+            'status',
+            'completion_percentage'
         ])
             ->where('status', 'active')
             ->whereHas('modules', function ($query) {
@@ -30,9 +30,9 @@ class MemberController extends Controller
             ->orderBy('name', 'asc')
             ->get()
             ->map(function ($course) {
-                // For now, we'll simulate completion percentage
+                // For now, we'll simulate completion percentage    
                 // In a real app, this would be calculated based on user progress
-                $course->completion_percentage = rand(0, 100);
+                // $course->completion_percentage = rand(0, 100);
 
                 // Add placeholder thumbnails for courses without images
                 if (!$course->thumbnail) {
@@ -73,12 +73,11 @@ class MemberController extends Controller
             $course->thumbnail = $placeholders[array_rand($placeholders)];
         }
 
-        // Simulate completion data for modules
-        // $course->modules->transform(function ($module) {
-        //     $module->is_completed = rand(0, 1) === 1;
-        //     $module->duration = rand(5, 45) . ' min';
-        //     return $module;
-        // });
+        $course->modules->transform(function ($module) {
+            // change duration format from second into minute and second
+            $module->duration = $this->formatDuration($module->duration);
+            return $module;
+        });
 
         // Calculate overall progress
         $totalModules = $course->modules->where('status', 'published')->count();
@@ -108,11 +107,14 @@ class MemberController extends Controller
             }
         ]);
 
+        $module->duration = $this->formatDuration($module->duration);
 
         // Simulate completion data for all course modules
         $module->course->modules->transform(function ($siblingModule) use ($module) {
-            // $siblingModule->duration = $siblingModule->duration . ' min';
+
             $siblingModule->is_current = $siblingModule->id === $module->id;
+            $siblingModule->duration = $this->formatDuration($siblingModule->duration);
+
             return $siblingModule;
         });
 
@@ -128,9 +130,6 @@ class MemberController extends Controller
         $prevModule = $currentIndex > 0 ? $modulesList[$currentIndex - 1] : null;
         $nextModule = $currentIndex < count($modulesList) - 1 ? $modulesList[$currentIndex + 1] : null;
 
-        // dd($module->course);
-        // dd('totalModules', $totalModules, 'completedModules', $completedModules);
-
         return Inertia::render('member/module', [
             'module' => $module,
             'prevModule' => $prevModule,
@@ -141,33 +140,40 @@ class MemberController extends Controller
     public function markComplete(Request $request, Module $module)
     {
         try {
-            // Verify user has access to the module (simplified for now)
-            // In a real app, you'd check user enrollment in the course
-            
-            // Update module completion status
             $module->update(['is_completed' => true]);
-            
-            // Reload the course with all modules to recalculate progress
+
             $course = $module->course()->with(['modules' => function ($query) {
                 $query->where('status', 'published');
             }])->first();
-            
-            // Calculate updated course progress
-            $totalModules = $course->modules->where('status', 'published')->count();
-            $completedModules = $course->modules->where('status', 'published')->where('is_completed', true)->count();
-            $completionPercentage = $totalModules > 0 ? round(($completedModules / $totalModules) * 100) : 0;
-            
+
+            $totalModules = $course->modules->count();
+            $completedModules = $course->modules->where('is_completed', true)->count();
+            $completionPercentage = $totalModules > 0
+                ? round(($completedModules / $totalModules) * 100)
+                : 0;
+
+            $course->update(['completion_percentage' => $completionPercentage]);
+
+            // ✅ Return JSON response
             return response()->json([
                 'success' => true,
                 'completion_percentage' => $completionPercentage,
-                'message' => 'Module completed successfully!'
+                'message' => 'Module has been completed.',
             ]);
-            
         } catch (\Exception $e) {
+            // ❌ Error response
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to mark module as complete. Please try again.'
-            ], 500);
+                'message' => 'Error: ' . $e->getMessage(),
+            ], 500); // Status code 500 untuk men-trigger onError
         }
+    }
+
+    private function formatDuration($seconds)
+    {
+        if (!$seconds) return '0 sec';
+        $minutes = floor($seconds / 60);
+        $remainingSeconds = $seconds % 60;
+        return ($minutes > 0 ? "{$minutes} min " : '') . "{$remainingSeconds} sec";
     }
 }

@@ -47,7 +47,6 @@ function CourseCard({ course }: { course: Course }) {
                 'hover:border-primary/50 hover:bg-card/70 hover:shadow-primary/10 hover:shadow-2xl',
                 'transition-all duration-500 hover:-translate-y-1 hover:scale-[1.02]',
                 'before:from-primary/5 relative cursor-pointer before:absolute before:inset-0 before:bg-gradient-to-br before:to-transparent before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100',
-                course.completion_percentage === 100 && 'ring-primary/30 animate-glow-pulse ring-1',
             )}
             onClick={visitCourse(course.slug)}
         >
@@ -73,9 +72,12 @@ function CourseCard({ course }: { course: Course }) {
 
                 {/* Progress badge */}
                 <div className="absolute top-3 right-3">
-                    <Badge variant="secondary" className="border-primary/30 bg-black/70 text-white">
+                    <Badge
+                        variant="secondary"
+                        className={cn('border-primary/30 bg-black/70 text-white', course.completion_percentage === 100 && 'text-primary')}
+                    >
                         <Airplay className="mr-1 h-3 w-3" />
-                        {course.completion_percentage}%
+                        {course.completion_percentage ?? 0}%
                     </Badge>
                 </div>
             </div>
@@ -109,7 +111,7 @@ function CourseCard({ course }: { course: Course }) {
                 <div className="space-y-2">
                     <div className="text-muted-foreground flex justify-between text-xs">
                         <span>Progress</span>
-                        <span>{course.completion_percentage}%</span>
+                        <span>{course.completion_percentage ?? 0}%</span>
                     </div>
                     <div className="bg-secondary h-2 overflow-hidden rounded-full">
                         <div
@@ -118,7 +120,7 @@ function CourseCard({ course }: { course: Course }) {
                                 progressColor,
                                 // course.completion_percentage > 0 && 'animate-pulse',
                             )}
-                            style={{ width: `${course.completion_percentage}%` }}
+                            style={{ width: `${course.completion_percentage ?? 1}%` }}
                         >
                             {course.completion_percentage > 0 && (
                                 <div className="animate-data-flow absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent" />

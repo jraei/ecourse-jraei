@@ -47,7 +47,7 @@ function ModuleCard({ module, index }: { module: CoursePageProps['course']['modu
                     <div className="mt-1 flex items-center space-x-3">
                         <div className="flex items-center space-x-1 text-neutral-400">
                             <Clock className="h-3 w-3" />
-                            <span className="text-xs">{module.duration} min</span>
+                            <span className="text-xs">{module.duration}</span>
                         </div>
                         {module.is_completed == true && <span className="text-xs font-medium text-green-400">Completed</span>}
                     </div>

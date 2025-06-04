@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use Midtrans\Snap;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
+use Midtrans\Config;
+use Inertia\Response;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Auth\Events\Registered;
 
 class RegisteredUserController extends Controller
 {
@@ -23,6 +25,44 @@ class RegisteredUserController extends Controller
         return Inertia::render('auth/register');
     }
 
+    public function getSnapToken(Request $request)
+    {
+        // 1. Validasi data form
+        $validated = $request->validate([
+            'username' => 'required|string|max:255|alpha_dash|unique:users',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255|min_digits:8',
+            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        // 2. Konfigurasi Midtrans
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = false;
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        // 3. Buat parameter Snap
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'REG-' . time(),
+                'gross_amount' => env('COURSE_PRICE'), // harga pendaftaran
+            ],
+            'customer_details' => [
+                'first_name' => $validated['name'],
+                'email' => $validated['email'],
+            ],
+        ];
+
+        $snapToken = Snap::getSnapToken($params);
+
+        // 4. Kirim Snap Token + data form ke React
+        return response()->json([
+            'snapToken' => $snapToken,
+            'formData' => $validated,
+        ]);
+    }
+
     /**
      * Handle an incoming registration request.
      *
@@ -30,22 +70,22 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
+            'username' => 'required|string|max:255|alpha_dash|unique:users',
             'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255|min_digits:8',
             'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $validated['password'] = Hash::make($validated['password']);
+
+        $user = User::create($validated);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return to_route('index');
+        return to_route('member.index')->with('success', 'Registration successful!');
     }
 }
