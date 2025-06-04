@@ -86,9 +86,9 @@ export default function Welcome() {
                             </div>
 
                             <div className="animate-fade-in" style={{ animationDelay: '400ms', animationFillMode: 'both' }}>
-                                <CtaButton variant="primary" size="lg" className="group">
-                                    Pelajari Lebih Dalam
-                                    <ArrowRight className="ms-2 inline transition-transform duration-300 group-hover:translate-x-1" />
+                                <CtaButton variant="secondary" size="lg2" className="group border-primary/50">
+                                    Gabung sekarang
+                                    <ArrowRight className="ms-2 inline h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                                 </CtaButton>
                             </div>
                         </div>
@@ -104,7 +104,7 @@ export default function Welcome() {
                             </div>
 
                             <div className="animate-fade-in text-center" style={{ animationDelay: '800ms', animationFillMode: 'both' }}>
-                                <CtaButton variant="secondary" size="lg" className="group">
+                                <CtaButton variant="secondary" size="lg" className="group border-primary/50">
                                     <Youtube className="me-2 inline transition-transform duration-300 group-hover:scale-110" />
                                     Gabung sekarang
                                     <div className="bg-primary absolute -top-1 -right-1 h-3 w-3 animate-pulse rounded-full" />
