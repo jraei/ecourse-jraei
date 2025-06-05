@@ -1,3 +1,4 @@
+
 @import 'tailwindcss';
 
 @plugin 'tailwindcss-animate';
@@ -194,6 +195,28 @@
     }
 }
 
+@keyframes accordion-down {
+    from {
+        height: 0;
+        opacity: 0;
+    }
+    to {
+        height: var(--radix-accordion-content-height);
+        opacity: 1;
+    }
+}
+
+@keyframes accordion-up {
+    from {
+        height: var(--radix-accordion-content-height);
+        opacity: 1;
+    }
+    to {
+        height: 0;
+        opacity: 0;
+    }
+}
+
 .animate-fade-in {
     animation: fade-in 0.6s ease-out forwards;
 }
@@ -204,6 +227,14 @@
 
 .animate-data-flow {
     animation: data-flow 3s ease-in-out infinite;
+}
+
+.animate-accordion-down {
+    animation: accordion-down 0.3s ease-out;
+}
+
+.animate-accordion-up {
+    animation: accordion-up 0.3s ease-out;
 }
 
 /* Hover effects */

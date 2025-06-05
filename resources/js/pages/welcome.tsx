@@ -6,6 +6,8 @@ import { VideoPlayer } from '@/components/landing/video-player';
 import { VideoResults } from '@/components/landing/video-results';
 import { CurriculumSection } from '@/components/landing/curriculum-section';
 import { MentorProfile } from '@/components/landing/mentor-profile';
+import { PricingSection } from '@/components/landing/pricing-section';
+import { FaqSection } from '@/components/landing/faq-section';
 import { CtaButton } from '@/components/ui/cta-button';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
@@ -152,6 +154,12 @@ export default function Welcome() {
 
                 {/* Mentor Profile Section */}
                 <MentorProfile />
+
+                {/* Pricing Section */}
+                <PricingSection />
+
+                {/* FAQ Section */}
+                <FaqSection />
 
                 {/* Footer */}
                 <footer className="border-border/50 bg-card/30 relative border-t backdrop-blur-sm">
