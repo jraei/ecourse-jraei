@@ -1,3 +1,4 @@
+
 import AppLogo from '@/components/app-logo';
 import { CurriculumSection } from '@/components/landing/curriculum-section';
 import { FaqSection } from '@/components/landing/faq-section';
@@ -8,12 +9,34 @@ import { PricingSection } from '@/components/landing/pricing-section';
 import { VideoPlayer } from '@/components/landing/video-player';
 import { VideoResults } from '@/components/landing/video-results';
 import { CtaButton } from '@/components/ui/cta-button';
+import { useAnalytics } from '@/hooks/use-analytics';
+import { useScrollTracking } from '@/hooks/use-scroll-tracking';
+import { useDwellTime } from '@/hooks/use-dwell-time';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Youtube } from 'lucide-react';
+import { useEffect } from 'react';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
+    const { trackVisit, trackEngagement } = useAnalytics();
+    
+    // Initialize tracking hooks
+    useScrollTracking();
+    const hasEngaged = useDwellTime(15000);
+
+    // Track page visit on mount
+    useEffect(() => {
+        trackVisit();
+    }, [trackVisit]);
+
+    // Track CTA button click
+    const handleCtaClick = () => {
+        trackEngagement('cta_click', {
+            button_text: 'Gabung sekarang',
+            location: 'hero_section'
+        });
+    };
 
     return (
         <>
@@ -103,11 +126,13 @@ export default function Welcome() {
                             </div>
 
                             <div className="animate-fade-in text-center" style={{ animationDelay: '800ms', animationFillMode: 'both' }}>
-                                <CtaButton variant="secondary" size="lg" className="group border-primary/50">
-                                    <Youtube className="me-2 inline transition-transform duration-300 group-hover:scale-110" />
-                                    Gabung sekarang
-                                    <div className="bg-primary absolute -top-1 -right-1 h-3 w-3 animate-pulse rounded-full" />
-                                </CtaButton>
+                                <Link href={route('register')} onClick={handleCtaClick}>
+                                    <CtaButton variant="secondary" size="lg" className="group border-primary/50">
+                                        <Youtube className="me-2 inline transition-transform duration-300 group-hover:scale-110" />
+                                        Gabung sekarang
+                                        <div className="bg-primary absolute -top-1 -right-1 h-3 w-3 animate-pulse rounded-full" />
+                                    </CtaButton>
+                                </Link>
                             </div>
                         </div>
                     </div>

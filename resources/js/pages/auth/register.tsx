@@ -9,6 +9,7 @@ import { Head, useForm } from '@inertiajs/react';
 import axios from 'axios';
 import { CheckCircle, LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useAnalytics } from '@/hooks/use-analytics';
 
 type RegisterForm = {
     username: string;
@@ -22,6 +23,7 @@ type RegisterForm = {
 export default function Register() {
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
+    const { trackEngagement, trackConversion, trackPayment } = useAnalytics();
 
     const { data, setData, post, processing, errors, reset, setError } = useForm<Required<RegisterForm>>({
         username: '',
@@ -31,13 +33,6 @@ export default function Register() {
         password: '',
         password_confirmation: '',
     });
-
-    // const handleSubmit: FormEventHandler = (e) => {
-    //     e.preventDefault();
-    //     post(route('register'), {
-    //         onFinish: () => reset('password', 'password_confirmation'),
-    //     });
-    // };
 
     useEffect(() => {
         // Dynamically load Midtrans script
@@ -53,19 +48,35 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Track form submission attempt
+        trackConversion('registration_attempt');
+
         try {
             // 1. Minta Snap Token + validasi form
             const res = await axios.post(route('register.get-snap-token'), data);
 
             if (res.data.snapToken) {
+                // Track payment flow initiation
+                trackEngagement('payment_flow_started');
+
                 window.snap.pay(res.data.snapToken, {
                     onSuccess: async function () {
                         setToastMessage('Payment success, account is being created.');
                         setShowToast(true);
                         setTimeout(() => setShowToast(false), 2000);
 
+                        // Track successful payment
+                        trackPayment('success', {
+                            payment_method: 'midtrans',
+                            amount: 499000,
+                        });
+
                         // 2. Kalau bayar berhasil, buat akun
                         post(route('register'), {
+                            onSuccess: () => {
+                                // Track successful registration
+                                trackConversion('registration_complete');
+                            },
                             onFinish: () => reset('password', 'password_confirmation'),
                         });
                     },
@@ -73,15 +84,24 @@ export default function Register() {
                         setToastMessage('Payment pending');
                         setShowToast(true);
                         setTimeout(() => setShowToast(false), 4000);
+                        
+                        trackPayment('pending');
                     },
                     onError: function (error) {
                         setToastMessage('Payment failed, please try again.');
                         setShowToast(true);
                         setTimeout(() => setShowToast(false), 4000);
+                        
+                        trackPayment('failed', { error: error.message });
                     },
                 });
             }
         } catch (err: any) {
+            // Track form validation errors
+            trackEngagement('form_validation_error', {
+                errors: err.response?.data?.errors ? Object.keys(err.response.data.errors) : []
+            });
+
             if (err.response && err.response.data && err.response.data.errors) {
                 const validationErrors = err.response.data.errors;
 
@@ -93,6 +113,14 @@ export default function Register() {
                 console.error(err);
             }
         }
+    };
+
+    const handleFieldFocus = (fieldName: string) => {
+        trackEngagement('form_field_focus', { field: fieldName });
+    };
+
+    const handleFieldBlur = (fieldName: string) => {
+        trackEngagement('form_field_blur', { field: fieldName });
     };
 
     return (
@@ -122,6 +150,8 @@ export default function Register() {
                                 autoComplete="username"
                                 value={data.username}
                                 onChange={(e) => setData('username', e.target.value)}
+                                onFocus={() => handleFieldFocus('username')}
+                                onBlur={() => handleFieldBlur('username')}
                                 disabled={processing}
                                 placeholder="Username"
                             />
@@ -138,6 +168,8 @@ export default function Register() {
                                 autoComplete="name"
                                 value={data.name}
                                 onChange={(e) => setData('name', e.target.value)}
+                                onFocus={() => handleFieldFocus('name')}
+                                onBlur={() => handleFieldBlur('name')}
                                 disabled={processing}
                                 placeholder="Full name"
                             />
@@ -155,6 +187,8 @@ export default function Register() {
                             autoComplete="email"
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
+                            onFocus={() => handleFieldFocus('email')}
+                            onBlur={() => handleFieldBlur('email')}
                             disabled={processing}
                             placeholder="email@example.com"
                         />
@@ -171,6 +205,8 @@ export default function Register() {
                             autoComplete="phone"
                             value={data.phone}
                             onChange={(e) => setData('phone', e.target.value)}
+                            onFocus={() => handleFieldFocus('phone')}
+                            onBlur={() => handleFieldBlur('phone')}
                             disabled={processing}
                             placeholder="628xxxxxxxxx"
                         />
@@ -188,6 +224,8 @@ export default function Register() {
                                 autoComplete="new-password"
                                 value={data.password}
                                 onChange={(e) => setData('password', e.target.value)}
+                                onFocus={() => handleFieldFocus('password')}
+                                onBlur={() => handleFieldBlur('password')}
                                 disabled={processing}
                                 placeholder="Password"
                             />
@@ -203,6 +241,8 @@ export default function Register() {
                                 autoComplete="new-password"
                                 value={data.password_confirmation}
                                 onChange={(e) => setData('password_confirmation', e.target.value)}
+                                onFocus={() => handleFieldFocus('password_confirmation')}
+                                onBlur={() => handleFieldBlur('password_confirmation')}
                                 disabled={processing}
                                 placeholder="Confirm password"
                             />

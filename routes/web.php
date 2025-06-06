@@ -8,6 +8,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ModuleMaterialController;
+use App\Http\Controllers\AnalyticsController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -27,6 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Admin routes
     Route::prefix('admin')->name('admin.')->group(function () {
+        // Dashboard route
         Route::get('/', function () {
             $stats = [
                 'total_users' => \App\Models\User::count(),
@@ -40,12 +42,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ]);
         })->name('dashboard');
 
+        // Analytics routes
+        Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
+        Route::get('/analytics/export', [AnalyticsController::class, 'export'])->name('analytics.export');
+        
+        // Resource routes
         Route::resource('courses', CourseController::class);
         Route::resource('modules', ModuleController::class);
         Route::resource('module-materials', ModuleMaterialController::class);
         Route::resource('users', UserController::class);
     });
 });
+
+// Analytics tracking API
+Route::post('/api/analytics/track', [AnalyticsController::class, 'track'])->name('analytics.track');
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

@@ -1,71 +1,196 @@
-import { NavFooter } from '@/components/nav-footer';
+
+import { AudioWaveform, BookOpen, Bot, Command, Frame, GalleryVerticalEnd, Map, PieChart, Settings2, SquareTerminal, Users, BarChart3 } from 'lucide-react';
+
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { BookOpen, BookOpenCheck, Folder, LayoutGrid, Library, SquarePlay } from 'lucide-react';
-import AppLogo from './app-logo';
+import { TeamSwitcher } from '@/components/team-switcher';
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarRail,
+} from '@/components/ui/sidebar';
+import { usePage } from '@inertiajs/react';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/admin',
-        icon: LayoutGrid,
+// This is sample data.
+const data = {
+    user: {
+        name: 'shadcn',
+        email: 'm@example.com',
+        avatar: '/avatars/shadcn.jpg',
     },
-    {
-        title: 'Courses',
-        href: '/admin/courses',
-        icon: BookOpenCheck,
-    },
-    {
-        title: 'Modules',
-        href: '/admin/modules',
-        icon: SquarePlay,
-    },
-    {
-        title: 'Materials',
-        href: '/admin/module-materials',
-        icon: Library,
-    },
-];
+    teams: [
+        {
+            name: 'Acme Inc',
+            logo: GalleryVerticalEnd,
+            plan: 'Enterprise',
+        },
+        {
+            name: 'Acme Corp.',
+            logo: AudioWaveform,
+            plan: 'Startup',
+        },
+        {
+            name: 'Evil Corp.',
+            logo: Command,
+            plan: 'Free',
+        },
+    ],
+    navMain: [
+        {
+            title: 'Playground',
+            url: '#',
+            icon: SquareTerminal,
+            isActive: true,
+            items: [
+                {
+                    title: 'History',
+                    url: '#',
+                },
+                {
+                    title: 'Starred',
+                    url: '#',
+                },
+                {
+                    title: 'Settings',
+                    url: '#',
+                },
+            ],
+        },
+        {
+            title: 'Models',
+            url: '#',
+            icon: Bot,
+            items: [
+                {
+                    title: 'Genesis',
+                    url: '#',
+                },
+                {
+                    title: 'Explorer',
+                    url: '#',
+                },
+                {
+                    title: 'Quantum',
+                    url: '#',
+                },
+            ],
+        },
+        {
+            title: 'Documentation',
+            url: '#',
+            icon: BookOpen,
+            items: [
+                {
+                    title: 'Introduction',
+                    url: '#',
+                },
+                {
+                    title: 'Get Started',
+                    url: '#',
+                },
+                {
+                    title: 'Tutorials',
+                    url: '#',
+                },
+                {
+                    title: 'Changelog',
+                    url: '#',
+                },
+            ],
+        },
+        {
+            title: 'Settings',
+            url: '#',
+            icon: Settings2,
+            items: [
+                {
+                    title: 'General',
+                    url: '#',
+                },
+                {
+                    title: 'Team',
+                    url: '#',
+                },
+                {
+                    title: 'Billing',
+                    url: '#',
+                },
+                {
+                    title: 'Limits',
+                    url: '#',
+                },
+            ],
+        },
+    ],
+    projects: [
+        {
+            name: 'Design Engineering',
+            url: '#',
+            icon: Frame,
+        },
+        {
+            name: 'Sales & Marketing',
+            url: '#',
+            icon: PieChart,
+        },
+        {
+            name: 'Travel',
+            url: '#',
+            icon: Map,
+        },
+    ],
+};
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { url } = usePage();
+    
+    const adminNavItems = [
+        {
+            title: 'Dashboard',
+            url: route('admin.dashboard'),
+            icon: SquareTerminal,
+            isActive: url === '/admin',
+        },
+        {
+            title: 'Analytics',
+            url: route('admin.analytics'),
+            icon: BarChart3,
+            isActive: url.startsWith('/admin/analytics'),
+        },
+        {
+            title: 'Courses',
+            url: route('admin.courses.index'),
+            icon: BookOpen,
+            isActive: url.startsWith('/admin/courses'),
+        },
+        {
+            title: 'Modules',
+            url: route('admin.modules.index'),
+            icon: BookOpen,
+            isActive: url.startsWith('/admin/modules'),
+        },
+        {
+            title: 'Users',
+            url: route('admin.users.index'),
+            icon: Users,
+            isActive: url.startsWith('/admin/users'),
+        },
+    ];
 
-export function AppSidebar() {
     return (
-        <Sidebar collapsible="icon" variant="floating">
+        <Sidebar collapsible="icon" {...props}>
             <SidebarHeader>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
-                            <Link href={route('admin.dashboard')} prefetch>
-                                <AppLogo />
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
+                <TeamSwitcher teams={data.teams} />
             </SidebarHeader>
-
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={adminNavItems} />
             </SidebarContent>
-
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
-                <NavUser />
+                <NavUser user={data.user} />
             </SidebarFooter>
+            <SidebarRail />
         </Sidebar>
     );
 }
