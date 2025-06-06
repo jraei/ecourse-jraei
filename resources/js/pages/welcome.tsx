@@ -1,17 +1,16 @@
-
 import AppLogo from '@/components/app-logo';
+import { CurriculumSection } from '@/components/landing/curriculum-section';
+import { FaqSection } from '@/components/landing/faq-section';
 import { HeroBadge } from '@/components/landing/hero-badge';
 import { LearningBenefits } from '@/components/landing/learning-benefits';
-import { VideoPlayer } from '@/components/landing/video-player';
-import { VideoResults } from '@/components/landing/video-results';
-import { CurriculumSection } from '@/components/landing/curriculum-section';
 import { MentorProfile } from '@/components/landing/mentor-profile';
 import { PricingSection } from '@/components/landing/pricing-section';
-import { FaqSection } from '@/components/landing/faq-section';
+import { VideoPlayer } from '@/components/landing/video-player';
+import { VideoResults } from '@/components/landing/video-results';
 import { CtaButton } from '@/components/ui/cta-button';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { ArrowRight, Youtube } from 'lucide-react';
+import { Youtube } from 'lucide-react';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
@@ -62,7 +61,7 @@ export default function Welcome() {
                 </header>
 
                 {/* Headline Section */}
-                <section className="relative overflow-hidden py-20 lg:py-32">
+                <section className="relative overflow-hidden pt-20 lg:pt-12">
                     <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="space-y-8 text-center">
                             <div className="animate-fade-in">
@@ -72,30 +71,31 @@ export default function Welcome() {
                             <div className="animate-fade-in space-y-6" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
                                 <h1 className="text-foreground mx-auto max-w-5xl text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
                                     <span className="block">Belajar Editing Tingkat Tinggi</span>
-                                    <span className="mt-2 block">Dan Tingkatkan Views Video</span>
+                                    <span className="mt-2 block">
+                                        Dan Tingkatkan Views <span className="text-primary">Video</span>
+                                    </span>
                                     <span className="from-primary via-primary/80 to-primary animate-gradient-x bg-gradient-to-r bg-clip-text text-transparent">
                                         Youtube Sebanyak 31%
                                     </span>
                                 </h1>
 
-                                <p className="text-muted-foreground mx-auto max-w-2xl text-xl leading-relaxed">
-                                    Dibimbing dari 0 sampai menguasai software editing baru dengan teknik profesional yang terbukti meningkatkan
-                                    engagement.
+                                <p className="text-muted-foreground mx-auto max-w-2xl text-base leading-relaxed md:text-xl">
+                                    Dibimbing dari 0 sampai bisa menguasai software editing baru
                                 </p>
                             </div>
 
-                            <div className="animate-fade-in" style={{ animationDelay: '400ms', animationFillMode: 'both' }}>
-                                <CtaButton variant="secondary" size="lg2" className="group border-primary/50">
+                            {/* <div className="animate-fade-in" style={{ animationDelay: '400ms', animationFillMode: 'both' }}>
+                                <CtaButton variant="secondary" size="lg" className="group border-primary/50">
                                     Gabung sekarang
                                     <ArrowRight className="ms-2 inline h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                                 </CtaButton>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </section>
 
                 {/* Hero Video Section */}
-                <section className="relative py-16 lg:py-24">
+                <section className="relative py-8 lg:pt-12 lg:pb-24">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="space-y-12">
                             <div className="animate-fade-in" style={{ animationDelay: '600ms', animationFillMode: 'both' }}>
@@ -114,7 +114,7 @@ export default function Welcome() {
                 </section>
 
                 {/* Learning Benefits Section */}
-                <section className="border-border/50 relative border-t py-16 lg:py-24">
+                <section className="border-border/50 relative border-t py-16 lg:py-32">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-5 lg:gap-16">
                             {/* Left column - Image (40%) */}
@@ -122,7 +122,7 @@ export default function Welcome() {
                                 <div className="relative">
                                     <div className="border-border/50 shadow-primary/10 aspect-[4/3] overflow-hidden rounded-2xl border shadow-2xl">
                                         <img
-                                            src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop"
+                                            src="/storage/landing/davinci.jpg"
                                             alt="DaVinci Resolve workspace"
                                             className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                                             loading="lazy"
@@ -166,10 +166,11 @@ export default function Welcome() {
                     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
                         <div className="text-center">
                             <div className="mb-4 flex items-center justify-center gap-3">
-                                <div className="bg-primary/20 flex h-8 w-8 items-center justify-center rounded-lg">
-                                    <Youtube className="text-primary h-4 w-4" />
+                                <div className="flex items-center justify-center rounded-lg">
+                                    {/* <Youtube className="text-primary h-4 w-4" /> */}
+                                    <AppLogo />
                                 </div>
-                                <span className="text-foreground text-xl font-bold">Editor Amplifier</span>
+                                {/* <span className="text-foreground text-xl font-bold">Editor Amplifier</span> */}
                             </div>
                             <p className="text-muted-foreground text-sm">© 2024 Editor Amplifier. Tingkatkan skills video editing Anda.</p>
                         </div>

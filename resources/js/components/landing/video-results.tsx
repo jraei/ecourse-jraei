@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { Clock, Eye, Play } from 'lucide-react';
+import { Clock, Play } from 'lucide-react';
 import { useState } from 'react';
 
 interface VideoResult {
@@ -15,54 +15,54 @@ interface VideoResult {
 const videoResults: VideoResult[] = [
     {
         id: '1',
-        title: 'Cinematic Color Grading Masterclass',
-        thumbnail: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=800&h=450&fit=crop',
-        url: '',
+        title: 'Cara Heroisgod Menjadi Anomali TERBERSAR Di Youtube',
+        thumbnail: '/storage/landing/videoThumbnail/thumbnail-1.jpeg',
+        url: 'https://www.youtube.com/watch?v=8OFFMcRVaT4',
         views: '2.1M',
         duration: '12:45',
         description: 'Advanced color grading techniques used in Hollywood productions',
     },
     {
         id: '2',
-        title: 'Motion Graphics & Text Animation',
-        thumbnail: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=450&fit=crop',
-        url: '',
+        title: 'Cara Gen Z Kehilangan 30 Tahun Umur Mereka',
+        thumbnail: '/storage/landing/videoThumbnail/thumbnail-2.jpeg',
+        url: 'https://www.youtube.com/watch?v=pUxudulRizo',
         views: '1.8M',
         duration: '15:32',
         description: 'Creating professional motion graphics and text animations',
     },
     {
         id: '3',
-        title: 'Audio Mixing & Sound Design',
-        thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=450&fit=crop',
-        url: '',
+        title: '7 Hal Yang Gw Harap Gw Tau Sebelum Jadi Youtuber Gaming',
+        thumbnail: '/storage/landing/videoThumbnail/thumbnail-3.jpeg',
+        url: 'https://www.youtube.com/watch?v=TIy3GzYhVos',
         views: '1.5M',
         duration: '18:22',
         description: 'Professional audio editing and sound design techniques',
     },
     {
         id: '4',
-        title: 'Advanced Transitions & Effects',
-        thumbnail: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&h=450&fit=crop',
-        url: '',
+        title: 'Youtuber, Lu Gobl*k Kalo Masi Lakuin Ini',
+        thumbnail: '/storage/landing/videoThumbnail/thumbnail-4.jpeg',
+        url: 'https://www.youtube.com/watch?v=IXO_tCg1F0Q&t=327s',
         views: '2.3M',
         duration: '14:18',
         description: 'Seamless transitions and professional visual effects',
     },
     {
         id: '5',
-        title: 'Multicam Editing Workflow',
-        thumbnail: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&h=450&fit=crop',
-        url: '',
+        title: 'Gw Membuat Video 100.000 Views, Ini Caranya',
+        thumbnail: '/storage/landing/videoThumbnail/thumbnail-5.jpeg',
+        url: 'https://www.youtube.com/watch?v=FDBhmYGdGeM&t=48s',
         views: '1.2M',
         duration: '16:55',
         description: 'Professional multicamera editing workflow optimization',
     },
     {
         id: '6',
-        title: 'Export Settings & Optimization',
-        thumbnail: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=450&fit=crop',
-        url: 'https://tinped.com',
+        title: 'Youtuber, Kita Udah Masuk Era Baru (Adaptasi Atau Mati)',
+        thumbnail: '/storage/landing/videoThumbnail/thumbnail-6.jpeg',
+        url: 'https://www.youtube.com/watch?v=O6MZMkV_WbI',
         views: '980K',
         duration: '11:30',
         description: 'Optimal export settings for different platforms',
@@ -144,10 +144,10 @@ function VideoCard({ video, delay }: VideoCardProps) {
 
                 {/* Video Stats */}
                 <div className="absolute top-3 right-3 flex gap-2">
-                    <div className="flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 backdrop-blur-sm">
+                    {/* <div className="flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 backdrop-blur-sm">
                         <Eye className="h-3 w-3 text-white/80" />
                         <span className="text-xs text-white/80">{video.views}</span>
-                    </div>
+                    </div> */}
                     <div className="flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 backdrop-blur-sm">
                         <Clock className="h-3 w-3 text-white/80" />
                         <span className="text-xs text-white/80">{video.duration}</span>
@@ -221,15 +221,15 @@ export function VideoResults() {
                         <div className="animate-fade-in">
                             <div className="bg-primary/10 border-primary/20 inline-flex items-center gap-2 rounded-full border px-4 py-2 backdrop-blur-sm">
                                 <div className="bg-primary h-2 w-2 animate-pulse rounded-full" />
-                                <span className="text-primary text-sm font-medium">Hasil Video Siswa</span>
+                                <span className="text-primary text-sm font-medium">Hasil Video Editing</span>
                             </div>
                         </div>
 
                         <div className="animate-fade-in space-y-4" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
                             <h2 className="text-foreground text-4xl font-bold md:text-5xl lg:text-6xl">
-                                <span className="block">Video Results dari</span>
+                                <span className="block">Ga Percaya Bisa Bagus?</span>
                                 <span className="from-primary via-primary/80 to-primary bg-gradient-to-r bg-clip-text text-transparent">
-                                    Alumni Kami
+                                    Lihat Hasilnya!
                                 </span>
                             </h2>
                             <p className="text-muted-foreground mx-auto max-w-3xl text-xl leading-relaxed">
@@ -261,7 +261,7 @@ export function VideoResults() {
                                 ))}
                             </div>
                             <span className="text-foreground text-sm">
-                                <span className="text-primary font-semibold">12,000+</span> alumni sudah bergabung
+                                <span className="text-primary font-semibold">200+</span> murid sudah bergabung
                             </span>
                         </div>
                     </div>

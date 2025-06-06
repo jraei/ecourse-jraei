@@ -14,8 +14,7 @@ const ctaButtonVariants = cva(
       },
       size: {
         default: "h-12 px-8 py-3",
-        lg: "h-14 px-10 py-4 text-lg",
-        lg2: "h-14 px-14 py-4 text-lg",
+        lg: "h-12 md:h-14 text-base px-10 py-4 md:text-lg",
       },
     },
     defaultVariants: {
