@@ -1,4 +1,3 @@
-
 import AppLogo from '@/components/app-logo';
 import { CurriculumSection } from '@/components/landing/curriculum-section';
 import { FaqSection } from '@/components/landing/faq-section';
@@ -6,12 +5,12 @@ import { HeroBadge } from '@/components/landing/hero-badge';
 import { LearningBenefits } from '@/components/landing/learning-benefits';
 import { MentorProfile } from '@/components/landing/mentor-profile';
 import { PricingSection } from '@/components/landing/pricing-section';
-import { VideoPlayer } from '@/components/landing/video-player';
 import { VideoResults } from '@/components/landing/video-results';
 import { CtaButton } from '@/components/ui/cta-button';
+import { VideoPlayer } from '@/components/video-player';
 import { useAnalytics } from '@/hooks/use-analytics';
-import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { useDwellTime } from '@/hooks/use-dwell-time';
+import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Youtube } from 'lucide-react';
@@ -20,7 +19,7 @@ import { useEffect } from 'react';
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
     const { trackVisit, trackEngagement } = useAnalytics();
-    
+
     // Initialize tracking hooks
     useScrollTracking();
     const hasEngaged = useDwellTime(15000);
@@ -34,7 +33,7 @@ export default function Welcome() {
     const handleCtaClick = () => {
         trackEngagement('cta_click', {
             button_text: 'Gabung sekarang',
-            location: 'hero_section'
+            location: 'hero_section',
         });
     };
 
@@ -122,7 +121,12 @@ export default function Welcome() {
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="space-y-12">
                             <div className="animate-fade-in" style={{ animationDelay: '600ms', animationFillMode: 'both' }}>
-                                <VideoPlayer />
+                                {/* <VideoPlayer /> */}
+                                <VideoPlayer
+                                    src="/storage/landing/heroVideo/video.mp4"
+                                    title={'VSL - Belajar Editing Tingkat Tinggi'}
+                                    className="aspect-video w-full lg:h-[600px]"
+                                />
                             </div>
 
                             <div className="animate-fade-in text-center" style={{ animationDelay: '800ms', animationFillMode: 'both' }}>

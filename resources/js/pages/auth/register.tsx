@@ -4,12 +4,12 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAnalytics } from '@/hooks/use-analytics';
 import AuthLayout from '@/layouts/auth-layout';
 import { Head, useForm } from '@inertiajs/react';
 import axios from 'axios';
 import { CheckCircle, LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useAnalytics } from '@/hooks/use-analytics';
 
 type RegisterForm = {
     username: string;
@@ -71,12 +71,9 @@ export default function Register() {
                             amount: 499000,
                         });
 
+                        trackConversion('registration_complete');
                         // 2. Kalau bayar berhasil, buat akun
                         post(route('register'), {
-                            onSuccess: () => {
-                                // Track successful registration
-                                trackConversion('registration_complete');
-                            },
                             onFinish: () => reset('password', 'password_confirmation'),
                         });
                     },
@@ -84,14 +81,14 @@ export default function Register() {
                         setToastMessage('Payment pending');
                         setShowToast(true);
                         setTimeout(() => setShowToast(false), 4000);
-                        
+
                         trackPayment('pending');
                     },
                     onError: function (error) {
                         setToastMessage('Payment failed, please try again.');
                         setShowToast(true);
                         setTimeout(() => setShowToast(false), 4000);
-                        
+
                         trackPayment('failed', { error: error.message });
                     },
                 });
@@ -99,7 +96,7 @@ export default function Register() {
         } catch (err: any) {
             // Track form validation errors
             trackEngagement('form_validation_error', {
-                errors: err.response?.data?.errors ? Object.keys(err.response.data.errors) : []
+                errors: err.response?.data?.errors ? Object.keys(err.response.data.errors) : [],
             });
 
             if (err.response && err.response.data && err.response.data.errors) {

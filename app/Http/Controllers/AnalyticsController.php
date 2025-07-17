@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Http\Controllers;
@@ -15,12 +14,12 @@ class AnalyticsController extends Controller
     {
         $dateRange = $request->get('range', '30'); // days
         $startDate = Carbon::now()->subDays($dateRange);
-        
+
         $stats = $this->getAnalyticsStats($startDate);
         $chartData = $this->getChartData($startDate);
         $referralData = $this->getReferralData($startDate);
         $conversionFunnel = $this->getConversionFunnel($startDate);
-        
+
         return Inertia::render('admin/analytics', [
             'stats' => $stats,
             'chartData' => $chartData,
@@ -32,19 +31,22 @@ class AnalyticsController extends Controller
 
     public function track(Request $request)
     {
+        // Debug request
+        \Log::info('Analytics Request:', $request->all());
+
         $sessionId = $request->session()->getId();
         $ipHash = hash('sha256', $request->ip() . config('app.key'));
-        
+
         UserAnalytic::create([
             'session_id' => $sessionId,
-            'event_type' => $request->event_type,
-            'event_data' => $request->event_data ?? [],
-            'referral_source' => $request->referral_source,
-            'utm_source' => $request->utm_source,
-            'utm_medium' => $request->utm_medium,
-            'utm_campaign' => $request->utm_campaign,
-            'utm_content' => $request->utm_content,
-            'utm_term' => $request->utm_term,
+            'event_type' => $request->input('event_type'),
+            'event_data' => $request->input('event_data') ?? [],
+            'referral_source' => $request->input('referral_source'),
+            'utm_source' => $request->input('utm_source'),
+            'utm_medium' => $request->input('utm_medium'),
+            'utm_campaign' => $request->input('utm_campaign'),
+            'utm_content' => $request->input('utm_content'),
+            'utm_term' => $request->input('utm_term'),
             'ip_hash' => $ipHash,
             'user_agent' => $request->userAgent(),
             'user_id' => auth()->id(),
@@ -98,10 +100,10 @@ class AnalyticsController extends Controller
     private function getChartData($startDate)
     {
         return UserAnalytic::select(
-                DB::raw('DATE(created_at) as date'),
-                DB::raw('COUNT(*) as total'),
-                'event_type'
-            )
+            DB::raw('DATE(created_at) as date'),
+            DB::raw('COUNT(*) as total'),
+            'event_type'
+        )
             ->where('created_at', '>=', $startDate)
             ->whereIn('event_type', ['visit', 'conversion', 'payment'])
             ->groupBy(['date', 'event_type'])
@@ -159,7 +161,7 @@ class AnalyticsController extends Controller
     {
         $dateRange = $request->get('range', '30');
         $startDate = Carbon::now()->subDays($dateRange);
-        
+
         $data = UserAnalytic::where('created_at', '>=', $startDate)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -169,10 +171,10 @@ class AnalyticsController extends Controller
             'Content-Disposition' => 'attachment; filename="analytics-export.csv"',
         ];
 
-        $callback = function() use ($data) {
+        $callback = function () use ($data) {
             $file = fopen('php://output', 'w');
             fputcsv($file, ['Date', 'Event Type', 'Referral Source', 'Event Data', 'User ID']);
-            
+
             foreach ($data as $row) {
                 fputcsv($file, [
                     $row->created_at->format('Y-m-d H:i:s'),

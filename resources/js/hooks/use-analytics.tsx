@@ -1,4 +1,3 @@
-
 import { useCallback } from 'react';
 
 interface AnalyticsEvent {
@@ -27,10 +26,12 @@ export function useAnalytics() {
                 utm_term: event.utm_term || urlParams.get('utm_term'),
             };
 
-            await fetch('/api/analytics/track', {
+            await fetch(route('analytics.track'), {
                 method: 'POST',
+                credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json',
+
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
                 },
                 body: JSON.stringify(eventData),
@@ -51,53 +52,65 @@ export function useAnalytics() {
         });
     }, [track]);
 
-    const trackScroll = useCallback((depth: number) => {
-        track({
-            event_type: 'scroll',
-            event_data: {
-                depth,
-                page: window.location.pathname,
-                timestamp: new Date().toISOString(),
-            },
-        });
-    }, [track]);
+    const trackScroll = useCallback(
+        (depth: number) => {
+            track({
+                event_type: 'scroll',
+                event_data: {
+                    depth,
+                    page: window.location.pathname,
+                    timestamp: new Date().toISOString(),
+                },
+            });
+        },
+        [track],
+    );
 
-    const trackEngagement = useCallback((type: string, data?: Record<string, any>) => {
-        track({
-            event_type: 'engagement',
-            event_data: {
-                type,
-                page: window.location.pathname,
-                timestamp: new Date().toISOString(),
-                ...data,
-            },
-        });
-    }, [track]);
+    const trackEngagement = useCallback(
+        (type: string, data?: Record<string, any>) => {
+            track({
+                event_type: 'engagement',
+                event_data: {
+                    type,
+                    page: window.location.pathname,
+                    timestamp: new Date().toISOString(),
+                    ...data,
+                },
+            });
+        },
+        [track],
+    );
 
-    const trackConversion = useCallback((type: string, data?: Record<string, any>) => {
-        track({
-            event_type: 'conversion',
-            event_data: {
-                type,
-                page: window.location.pathname,
-                timestamp: new Date().toISOString(),
-                ...data,
-            },
-        });
-    }, [track]);
+    const trackConversion = useCallback(
+        (type: string, data?: Record<string, any>) => {
+            track({
+                event_type: 'conversion',
+                event_data: {
+                    type,
+                    page: window.location.pathname,
+                    timestamp: new Date().toISOString(),
+                    ...data,
+                },
+            });
+        },
+        [track],
+    );
 
-    const trackPayment = useCallback((status: string, data?: Record<string, any>) => {
-        track({
-            event_type: 'payment',
-            event_data: {
-                status,
-                amount: 499000,
-                currency: 'IDR',
-                timestamp: new Date().toISOString(),
-                ...data,
-            },
-        });
-    }, [track]);
+    const trackPayment = useCallback(
+        (status: string, data?: Record<string, any>) => {
+            track({
+                event_type: 'payment',
+                event_data: {
+                    status,
+                    amount: 499000,
+                    currency: 'IDR',
+                    timestamp: new Date().toISOString(),
+                    ...data,
+                },
+            });
+        },
+        [track],
+    );
 
     return {
         track,

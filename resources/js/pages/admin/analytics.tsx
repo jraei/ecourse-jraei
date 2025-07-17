@@ -1,20 +1,16 @@
-
-import { MetricCard } from '@/components/analytics/metric-card';
-import { RevenueChart } from '@/components/analytics/revenue-chart';
 import { ConversionFunnel } from '@/components/analytics/conversion-funnel';
+import { MetricCard } from '@/components/analytics/metric-card';
 import { ReferralChart } from '@/components/analytics/referral-chart';
+import { RevenueChart } from '@/components/analytics/revenue-chart';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AdminLayout from '@/layouts/admin-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
-import { BarChart3, Download, Eye, TrendingUp, Users, CreditCard, DollarSign, Target } from 'lucide-react';
+import { CreditCard, DollarSign, Download, Eye, Target, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/admin' },
-    { title: 'Analytics' },
-];
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Dashboard', href: '/admin' }, { title: 'Analytics' }];
 
 interface AnalyticsProps {
     stats: {
@@ -63,19 +59,17 @@ export default function Analytics({ stats, chartData, referralData, conversionFu
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Analytics Dashboard" />
-            
-            <div className="min-h-screen bg-background">
+
+            <div className="bg-background min-h-screen">
                 {/* Header */}
-                <div className="border-b border-border/50 bg-card/30 backdrop-blur-sm">
+                <div className="border-border/50 bg-card/30 border-b backdrop-blur-sm">
                     <div className="px-6 py-8">
                         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                             <div>
-                                <h1 className="text-3xl font-bold text-foreground">Analytics Dashboard</h1>
-                                <p className="text-muted-foreground mt-2">
-                                    Comprehensive insights into user behavior and conversion metrics
-                                </p>
+                                <h1 className="text-foreground text-3xl font-bold">Analytics Dashboard</h1>
+                                <p className="text-muted-foreground mt-2">Comprehensive insights into user behavior and conversion metrics</p>
                             </div>
-                            
+
                             <div className="flex items-center gap-4">
                                 <Select value={selectedRange} onValueChange={handleRangeChange}>
                                     <SelectTrigger className="w-40">
@@ -88,7 +82,7 @@ export default function Analytics({ stats, chartData, referralData, conversionFu
                                         <SelectItem value="365">Last year</SelectItem>
                                     </SelectContent>
                                 </Select>
-                                
+
                                 <Button onClick={handleExport} variant="outline">
                                     <Download className="mr-2 h-4 w-4" />
                                     Export CSV
@@ -98,10 +92,10 @@ export default function Analytics({ stats, chartData, referralData, conversionFu
                     </div>
                 </div>
 
-                <div className="p-6 space-y-8">
+                <div className="space-y-8 p-6">
                     {/* Primary Metrics */}
                     <div>
-                        <h2 className="text-xl font-semibold text-foreground mb-6">Key Performance Indicators</h2>
+                        <h2 className="text-foreground mb-6 text-xl font-semibold">Key Performance Indicators</h2>
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                             <MetricCard
                                 title="Total Visits"
@@ -151,34 +145,28 @@ export default function Analytics({ stats, chartData, referralData, conversionFu
                     <ConversionFunnel data={conversionFunnel} />
 
                     {/* Insights Section */}
-                    <div className="rounded-xl border border-border/50 bg-card/30 p-6 backdrop-blur-sm">
-                        <h3 className="text-lg font-semibold text-foreground mb-4">Key Insights</h3>
+                    <div className="border-border/50 bg-card/30 rounded-xl border p-6 backdrop-blur-sm">
+                        <h3 className="text-foreground mb-4 text-lg font-semibold">Key Insights</h3>
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                            <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
+                            <div className="bg-primary/10 border-primary/20 rounded-lg border p-4">
                                 <div className="text-primary font-semibold">Top Referral Source</div>
-                                <div className="text-sm text-muted-foreground mt-1">
-                                    {referralData[0]?.referral_source || 'No data'} 
+                                <div className="text-muted-foreground mt-1 text-sm">
+                                    {referralData[0]?.referral_source || 'No data'}
                                     {referralData[0] && ` (${referralData[0].count} visits)`}
                                 </div>
                             </div>
-                            
-                            <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
-                                <div className="text-green-400 font-semibold">Revenue per Visit</div>
-                                <div className="text-sm text-muted-foreground mt-1">
-                                    {stats.total_visits > 0 
-                                        ? formatCurrency(stats.total_revenue / stats.total_visits)
-                                        : 'Rp 0'
-                                    }
+
+                            <div className="rounded-lg border border-green-500/20 bg-green-500/10 p-4">
+                                <div className="font-semibold text-green-400">Revenue per Visit</div>
+                                <div className="text-muted-foreground mt-1 text-sm">
+                                    {stats.total_visits > 0 ? formatCurrency(stats.total_revenue / stats.total_visits) : 'Rp 0'}
                                 </div>
                             </div>
-                            
-                            <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                                <div className="text-blue-400 font-semibold">Avg. Revenue per User</div>
-                                <div className="text-sm text-muted-foreground mt-1">
-                                    {stats.unique_visitors > 0
-                                        ? formatCurrency(stats.total_revenue / stats.unique_visitors)
-                                        : 'Rp 0'
-                                    }
+
+                            <div className="rounded-lg border border-blue-500/20 bg-blue-500/10 p-4">
+                                <div className="font-semibold text-blue-400">Avg. Revenue per User</div>
+                                <div className="text-muted-foreground mt-1 text-sm">
+                                    {stats.unique_visitors > 0 ? formatCurrency(stats.total_revenue / stats.unique_visitors) : 'Rp 0'}
                                 </div>
                             </div>
                         </div>

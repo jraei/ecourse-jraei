@@ -45,7 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Analytics routes
         Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
         Route::get('/analytics/export', [AnalyticsController::class, 'export'])->name('analytics.export');
-        
+
         // Resource routes
         Route::resource('courses', CourseController::class);
         Route::resource('modules', ModuleController::class);
