@@ -1,5 +1,6 @@
 import AppLogo from '@/components/app-logo';
-import { BonusSection } from '@/components/landing/bonus-section';
+import { BonusSection, bonusData } from '@/components/landing/bonus-section';
+import { IndividualBonusSection } from '@/components/landing/individual-bonus-section';
 import { CurriculumSection } from '@/components/landing/curriculum-section';
 import { FaqSection } from '@/components/landing/faq-section';
 import { HeroBadge } from '@/components/landing/hero-badge';
@@ -184,6 +185,11 @@ export default function Welcome() {
 
                 {/* Bonus Section */}
                 <BonusSection />
+
+                {/* Individual Bonus Sections */}
+                {bonusData.standard.map((bonus, index) => (
+                    <IndividualBonusSection key={bonus.id} bonus={bonus} index={index} />
+                ))}
 
                 {/* Mentor Profile Section */}
                 <MentorProfile />

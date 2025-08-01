@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/react';
 import { CheckCircle, Clock, Play, Sparkles, Tag, Youtube } from 'lucide-react';
 import { useState } from 'react';
 
-const bonusData = {
+export const bonusData = {
     premium: {
         title: 'Full Course Value Youtuber Eksklusif',
         badge: 'Bonus #01',
@@ -279,74 +279,7 @@ export function BonusSection() {
                     </div>
                 </div>
 
-                {/* Standard Bonuses */}
-                <div className="mb-20 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    {bonusData.standard.map((bonus, index) => (
-                        <div
-                            key={bonus.id}
-                            className="animate-fade-in group from-card/50 to-card/20 border-border/50 hover:border-primary/50 hover:shadow-primary/10 relative overflow-hidden rounded-2xl border bg-gradient-to-br transition-all duration-500 hover:scale-105 hover:shadow-2xl"
-                            style={{ animationDelay: `${800 + index * 200}ms`, animationFillMode: 'both' }}
-                        >
-                            {/* Background Image */}
-                            <div className="relative aspect-[4/3] overflow-hidden">
-                                <img
-                                    src={`https://images.unsplash.com/${bonus.image}?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80`}
-                                    alt={bonus.title}
-                                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-                                {/* Badge */}
-                                <div className="absolute top-4 left-4">
-                                    <Badge variant="outline" className="bg-primary/90 border-primary text-primary-foreground backdrop-blur-sm">
-                                        {bonus.badge}
-                                    </Badge>
-                                </div>
-
-                                {/* Value Badge */}
-                                <div className="absolute top-4 right-4">
-                                    <div className="from-primary to-accent text-primary-foreground rounded-full bg-gradient-to-r px-3 py-1 text-sm font-bold">
-                                        Value {bonus.value}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Content */}
-                            <div className="space-y-4 p-6">
-                                <h3 className="text-foreground group-hover:text-primary text-xl font-bold transition-colors duration-300">
-                                    {bonus.title}
-                                </h3>
-
-                                <p className="text-muted-foreground leading-relaxed">{bonus.description}</p>
-
-                                {/* Features */}
-                                <div className="space-y-2">
-                                    {bonus.features.map((feature, idx) => (
-                                        <div key={idx} className="flex items-center gap-2">
-                                            <CheckCircle className="text-primary h-4 w-4 flex-shrink-0" />
-                                            <span className="text-muted-foreground text-sm">{feature}</span>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* CTA */}
-                                <div className="pt-4">
-                                    <Link href={route('register')}>
-                                        <CtaButton variant="secondary" size="default" className="w-full">
-                                            <Youtube className="h-4 w-4" />
-                                            Gabung Sekarang
-                                        </CtaButton>
-                                    </Link>
-                                </div>
-                            </div>
-
-                            {/* Hover Glow Effect */}
-                            <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                                <div className="from-primary/5 to-accent/5 absolute inset-0 bg-gradient-to-br via-transparent" />
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                {/* Note: Individual bonus sections are now rendered separately */}
 
                 {/* Value Summary */}
                 <div className="animate-fade-in text-center" style={{ animationDelay: '1400ms', animationFillMode: 'both' }}>
