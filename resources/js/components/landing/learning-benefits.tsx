@@ -42,20 +42,25 @@ export function LearningBenefits() {
                     <div className="bg-primary/20 flex h-8 w-8 items-center justify-center rounded-full">
                         <CheckCircle className="text-primary h-12 w-12" />
                     </div>
-                    <h3 className="text-foreground text-2xl font-bold">Kenapa Davinci Resolve</h3>
+                    <h3 className="text-foreground text-2xl font-bold">Kalian Akan Belajar</h3>
                 </div>
+                <h2 className="text-primary text-5xl font-bold">Davinci Resolve</h2>
                 <p className="text-muted-foreground text-lg leading-relaxed">
-                    Davinci Resolve adalah software editing gratis yang powerful. Software ini akan menjadi software utama yang kalian gunakan dalam
-                    editor amplifier karena :
+                    Davinci Resolve adalah software editing powerfull all in one yang dikembangkan oleh blackmagic design software ini akan menjadi
+                    software utama yang kalian gunakan dalam editor amplifier karena :
                 </p>
-                <p className="text-muted-foreground/80 text-sm">
+                {/* <p className="text-muted-foreground/80 text-sm">
                     Dari basic hingga advanced techniques yang akan mengubah konten Anda menjadi karya profesional.
-                </p>
+                </p> */}
             </div>
 
             <div className="space-y-4">
                 <BenefitItem icon={<HandCoins className="h-6 w-6" />} title="Gratis, jadi gaperlu bayar apa apa lagi" delay={100} />
-                <BenefitItem icon={<CheckCircle className="h-6 w-6" />} title="Fitur Lengkap, animasi, motion graphic, color grade" delay={200} />
+                <BenefitItem
+                    icon={<CheckCircle className="h-6 w-6" />}
+                    title="Fitur Lengkap, vfx, animasi, color grade (semuanya lengkap jadi gaperlu belajar software lain)"
+                    delay={200}
+                />
                 <BenefitItem
                     icon={<Shield className="h-6 w-6" />}
                     title="Reliable, sudah berjalan dari 2004 dan fundamentalnya selalu sama"

@@ -233,8 +233,8 @@ export function VideoResults() {
                                 </span>
                             </h2>
                             <p className="text-muted-foreground mx-auto max-w-3xl text-xl leading-relaxed">
-                                Lihat transformasi luar biasa dari video amatir menjadi konten berkualitas profesional setelah menguasai teknik
-                                editing tingkat tinggi.
+                                Hasil video youtube mentor yang di edit dengan pengetahuan yang ada di kelas ini. yang menyentuh puluhan sampai
+                                ratusan ribu views
                             </p>
                         </div>
                     </div>

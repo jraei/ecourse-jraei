@@ -206,7 +206,7 @@ export function MentorProfile() {
                         <div className="animate-fade-in">
                             <div className="bg-primary/10 border-primary/20 inline-flex items-center gap-2 rounded-full border px-4 py-2 backdrop-blur-sm">
                                 <div className="bg-primary h-2 w-2 animate-pulse rounded-full" />
-                                <span className="text-primary text-sm font-medium">Meet Your Mentor</span>
+                                <span className="text-primary text-sm font-medium">Mentor Editor Amplifier</span>
                             </div>
                         </div>
 
@@ -249,7 +249,7 @@ export function MentorProfile() {
                                             )}
 
                                             <img
-                                                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=800&fit=crop&crop=face"
+                                                src="/storage/landing/mentor.JPG"
                                                 alt="Professional Video Editor"
                                                 className={cn(
                                                     'h-full w-full object-cover transition-all duration-700',

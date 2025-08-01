@@ -7,32 +7,37 @@ const faqs = [
     {
         id: '1',
         question: 'Apakah course ini cocok untuk pemula?',
-        answer: 'Sangat cocok! Course ini dirancang untuk mengakomodasi semua level, dari pemula absolut hingga editor berpengalaman. Kami mulai dari dasar-dasar editing dan secara bertahap meningkat ke teknik profesional yang lebih advanced.',
+        answer: 'Ya! Course ini disusun sedemekian rupa agar siapapun bisa  belajar mulai dari pemula sampai editor yang professional. tapi inget, lu tetep harus kasi effort dan terus belajar. karena kita ga cuman bakal mempelejari teknik dasarnya tapi juga fitur fitur advance yang ada didalam software kita',
     },
     {
         id: '2',
-        question: 'Software apa yang diperlukan?',
-        answer: 'Course ini menggunakan DaVinci Resolve (gratis) dan Adobe Premiere Pro. Kami juga menyediakan alternatif untuk software editing lainnya. Semua software yang digunakan tersedia untuk Windows, Mac, dan Linux.',
+        question: 'Kelas Editor Amplifier Ini Untuk Siapa?',
+        answer: 'Kelas Editor Amplifier dikembangkan khususnya untuk youtuber, tetapi juga bisa dipelajari oleh tipe editor lain. karena kita fokusny adalah untuk membuat visual effects, yang tentunya gaya editing yang bisa dipakai di platform lain juga seperti tiktok, ig reels, shorts, dll, jadi kelas ini cocok untuk semua yang ingin menjadi video editor',
     },
     {
         id: '3',
-        question: 'Berapa lama akses course ini?',
-        answer: 'Akses Anda adalah SELAMANYA! Sekali membeli, Anda akan mendapatkan akses ke semua materi course, update terbaru, dan bonus content tanpa batas waktu. Tidak ada biaya berlangganan atau biaya tersembunyi.',
+        question: 'Saya Bukan Youtuber, Apa Masi Bisa Ikut Kelasnya?',
+        answer: 'Ya! Course ini bukan cuman dikembangkan untuk youtuber saja tapi juga akan dikembangkan kedepannya untuk mengajari gaya editing lain selain youtube. jadi kalian bisa banget belajar disini selama kalian berfokus membuat visual effects',
     },
     {
         id: '4',
-        question: 'Apakah ada garansi uang kembali?',
-        answer: 'Ya! Kami menawarkan garansi 30 hari uang kembali 100%. Jika dalam 30 hari pertama Anda merasa course ini tidak sesuai ekspektasi, kami akan mengembalikan uang Anda tanpa pertanyaan.',
+        question: 'Apakah Materinya Ini Saja Dan Tidak Akan Di Update Lagi?',
+        answer: 'Tidak, Materinya akan terus BERTAMBAH seiring berjalannya waktu. kalian juga bisa request modul dan materi apa yang kalian inginkan. dan jika banyak yang meminta, kita akan bikinkan modul itu untuk kalian. jadi masi banyak materi yang menanti kalian kedepannya',
     },
     {
         id: '5',
-        question: 'Bagaimana cara mendapatkan support?',
-        answer: 'Anda akan mendapatkan akses ke komunitas privat dengan 12,000+ member, direct mentoring dari instruktur, dan support email 24/7. Rata-rata response time kami adalah kurang dari 2 jam.',
+        question: 'Bagaimana Sistem Pembelajarannya?',
+        answer: 'Kalian akan diberi akses ke member area dimana kalian bisa membuka dan menonton modul video yang disediakan kapan saja dan dimana saja. ini berarti kalian bisa langsung akses semua modulnya melalui website editoramplifier.com saja dan sudah bisa langsung menonton dari device kalian',
     },
     {
         id: '6',
-        question: 'Apakah materi akan terus diupdate?',
-        answer: 'Absolutely! Industri video editing terus berkembang, dan kami berkomitmen untuk selalu mengupdate materi dengan teknik dan trend terbaru. Semua update gratis untuk member lifetime.',
+        question: 'Software Apa Yang Digunakan?',
+        answer: 'Software yang digunakan adalah davinci resolve, software editing professional terbaik di dunia yang juga dengan harga terbaik di dunia (gratis 😉). software ini cukup lengkap untuk semua kebutuhan editing mulai dari clipping, animasi dan visual effects, color grading dan juga design semuanya bisa. jadi lu gaperlu belajar software lain setelah belajar davinci karena semuanya udah bisa dilakuin didalamnya',
+    },
+    {
+        id: '7',
+        question: 'Apakah Sukses Dapet Views Itu Dijamin?',
+        answer: 'Tidak, tidak ada hal yang pasti di dunia ini dan itu termasuk juga ke platform ini. karena tidak semua orang bisa menaruh effort yang diperlukan untuk sukses maka hasilnya tidak bisa dijamin untuk kalian. tetapi selama kalian tetap menaruh effort dan terus mengikuti pembelajarannya, kalian akan memiliki kemungkinan sukses yang jauh lebih tinggi dibanding 99% editor dan youtuber lain di luar sana.',
     },
 ];
 

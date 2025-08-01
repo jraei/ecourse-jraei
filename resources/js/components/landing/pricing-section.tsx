@@ -6,12 +6,12 @@ import { useState } from 'react';
 
 const benefits = [
     {
-        title: '15+ Video Tutorial Lengkap',
+        title: '50+ Modul Pembelajaran',
         description: 'Tutorial step-by-step dari basic hingga advanced editing techniques',
     },
     {
-        title: 'Template & Preset Premium',
-        description: 'Akses ke library template dan preset senilai $500+ gratis',
+        title: 'Asset Editing Siap Pakai',
+        description: 'Akses Ke Ratusan Aset Editing Siap Pakai',
     },
     {
         title: 'Private Community Access',
@@ -22,12 +22,12 @@ const benefits = [
         description: 'Dapatkan update materi terbaru selamanya tanpa biaya tambahan',
     },
     {
-        title: 'Expert Mentoring Support',
-        description: 'Konsultasi langsung dengan mentor profesional kapan saja',
+        title: 'Full Course Access',
+        description: 'Akses material course lengkap dari basic hingga advanced techniques',
     },
     {
-        title: 'Certificate of Completion',
-        description: 'Sertifikat resmi untuk portofolio dan karir Anda',
+        title: 'Materi Daging Youtube',
+        description: 'Akses Ke Puluhan Materi Daging Youtube',
     },
 ];
 
@@ -101,14 +101,14 @@ export function PricingSection() {
 
                         <div className="animate-fade-in space-y-4" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
                             <h2 className="text-foreground text-4xl font-bold md:text-5xl lg:text-6xl">
-                                <span className="block">Akses Selamanya</span>
+                                <span className="block">Harga Early Access 50 Orang Pertama </span>
                                 <span className="from-primary via-primary/80 to-primary bg-gradient-to-r bg-clip-text text-transparent">
-                                    Harga Spesial
+                                    Berakhir Tanggal 16 Agustus 2025
                                 </span>
                             </h2>
-                            <p className="text-muted-foreground mx-auto max-w-2xl text-xl leading-relaxed">
-                                Dapatkan akses lifetime ke semua materi premium dengan harga yang tidak akan pernah terulang lagi.
-                            </p>
+                            {/* <p className="text-muted-foreground mx-auto max-w-2xl text-xl leading-relaxed">
+                                Harga Early Access Khusus 50 Orang Pertama Berakhir Tanggal 16 Agustus 2025{' '}
+                            </p> */}
                         </div>
                     </div>
 
@@ -150,12 +150,12 @@ export function PricingSection() {
                                 <div className="space-y-4 text-center">
                                     <div className="space-y-2">
                                         <div className="flex items-center justify-center gap-2">
-                                            <span className="text-muted-foreground text-2xl line-through">Rp 2.999.000</span>
+                                            <span className="text-muted-foreground text-2xl line-through">Rp 3.752.000</span>
                                             <span className="bg-destructive/20 text-destructive rounded-md px-2 py-1 text-sm font-medium">-83%</span>
                                         </div>
                                         <div className="flex items-baseline justify-center gap-1">
                                             <span className="text-primary text-2xl font-medium">Rp</span>
-                                            <span className="text-foreground text-6xl font-bold tracking-tight lg:text-7xl">499.000</span>
+                                            <span className="text-foreground text-6xl font-bold tracking-tight lg:text-7xl">294.000</span>
                                         </div>
                                         <p className="text-muted-foreground text-lg">Akses selamanya • Tanpa biaya bulanan</p>
                                     </div>

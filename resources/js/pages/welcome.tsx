@@ -97,12 +97,12 @@ export default function Welcome() {
                                         Dan Tingkatkan Views <span className="text-primary">Video</span>
                                     </span>
                                     <span className="from-primary via-primary/80 to-primary animate-gradient-x bg-gradient-to-r bg-clip-text text-transparent">
-                                        Youtube Sebanyak 31%
+                                        Youtube Sebanyak 71%
                                     </span>
                                 </h1>
 
                                 <p className="text-muted-foreground mx-auto max-w-2xl text-base leading-relaxed md:text-xl">
-                                    Dibimbing dari 0 sampai bisa menguasai software editing baru
+                                    Harga Early Access Berlaku Tanggal 9 Agustus 2025 - 16 Agustus 2025 Khusus Untuk 50 Orang Pertama
                                 </p>
                             </div>
 
@@ -151,7 +151,7 @@ export default function Welcome() {
                                 <div className="relative">
                                     <div className="border-border/50 shadow-primary/10 aspect-[4/3] overflow-hidden rounded-2xl border shadow-2xl">
                                         <img
-                                            src="/storage/landing/davinci.jpg"
+                                            src="/storage/landing/davinci.png"
                                             alt="DaVinci Resolve workspace"
                                             className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                                             loading="lazy"

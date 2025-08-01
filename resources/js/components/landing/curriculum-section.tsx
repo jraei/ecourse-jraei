@@ -1,11 +1,11 @@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
-import { ChevronDown, ChevronRight, CirclePlay, Clock, Play, Star, Users } from 'lucide-react';
+import { ChevronDown, ChevronRight, CirclePlay, Clock, Play } from 'lucide-react';
 import { useState } from 'react';
 
 interface CurriculumModule {
     id: string;
-    number: number;
+    number: string | number; // Allow both string and number for flexibility
     title: string;
     videoCount: number;
     duration: string;
@@ -19,73 +19,91 @@ interface CurriculumModule {
 const curriculumModules: CurriculumModule[] = [
     {
         id: '1',
-        number: 1,
-        title: 'DaVinci Resolve Fundamentals',
+        number: '01.',
+        title: 'Cara Berpikir Editor Profesional',
         videoCount: 12,
         duration: '2.5 jam',
         description:
-            'Pelajari dasar-dasar DaVinci Resolve dari instalasi hingga navigasi workspace. Modul ini akan membekali Anda dengan fondasi kuat untuk editing profesional.',
-        thumbnail: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop',
+            'Di materi ini lu akan belajar cara berpikir editor kelas dunia, apa yang mereka pikirkan saat editing, gimana cara mereka menata scene, dll. materi ini juga akan membantu lu memiliki mindset belajar yang tepat, sehingga perkembangan lu akan lebih cepat sebagai editor',
+        thumbnail: '/storage/landing/mindseteditor.jpg',
         topics: ['Interface Overview', 'Project Setup', 'Media Import', 'Timeline Basics', 'Keyboard Shortcuts'],
         difficulty: 'Beginner',
         students: 15420,
     },
     {
         id: '2',
-        number: 2,
-        title: 'Advanced Cutting & Assembly',
+        number: '02.',
+        title: 'Persiapan Sebelum Mulai Editing',
         videoCount: 18,
         duration: '4.2 jam',
-        description: 'Teknik cutting profesional, multicam editing, dan assembly workflow yang digunakan di industri film Hollywood.',
-        thumbnail: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&h=600&fit=crop',
+        description:
+            'Di materi ini kita akan siapin lu semua hal yang lu perlu disiapin sebelum mulai editing. seperti cara mendownload softwarenya, caranya melakukan foldering, hal yang harus dihindari saat editing. gimana lengkap banget kan? bahkan cara downloadnya aja ditemenin, jadi lu gausah khawatir kesasar saat belajar',
+        thumbnail: '/storage/landing/settingup.jpg',
         topics: ['Multicam Sync', 'Advanced Trimming', 'J & L Cuts', 'Match Frame', 'Audio Sync'],
         difficulty: 'Intermediate',
         students: 12850,
     },
     {
         id: '3',
-        number: 3,
-        title: 'Color Grading Mastery',
+        number: '03.',
+        title: 'Mempelajari Dasar Dari Davinci Resolve',
         videoCount: 24,
         duration: '6.8 jam',
-        description: 'Menguasai color grading tingkat Hollywood dengan teknik primary dan secondary correction, plus LUT management profesional.',
-        thumbnail: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=800&h=600&fit=crop',
+        description:
+            'Setelah itu, akhirnya kita akan belajar software yang kita nantikan yaitu davinci resolve. disini lu akan belajar dasar dasarnya agar lu bisa memahami software ini',
+        thumbnail: '/storage/landing/davincibasic.jpg',
         topics: ['Primary Correction', 'Secondary Grading', 'LUT Application', 'Skin Tone Correction', 'Creative Looks'],
         difficulty: 'Advanced',
         students: 9640,
     },
     {
         id: '4',
-        number: 4,
-        title: 'Motion Graphics & Animation',
+        number: '04.',
+        title: 'Cara Mengatur Audio',
         videoCount: 16,
         duration: '3.7 jam',
-        description: 'Buat motion graphics yang memukau dengan Fusion. Dari text animation hingga complex compositing untuk hasil yang cinematic.',
-        thumbnail: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop',
+        description:
+            'Ga cuman editing doang, lu juga bakal diajarin caranya mengatur audio dalam video lu. disini bakal diajarin caranya merekam suara, mengatur suara, dan lagu serta sound effect yang tentunya lolos copyright. lu juga bakal dapet ratusan aset dan sfx gratis yang siap pakai. jadi lu juga gausah ribet ribet kumpulin sendiri',
+        thumbnail: '/storage/landing/audio.jpg',
         topics: ['Fusion Basics', 'Text Animation', 'Shape Animation', 'Particle Systems', 'Compositing'],
         difficulty: 'Advanced',
         students: 8320,
     },
     {
         id: '5',
-        number: 5,
-        title: 'Audio Post-Production',
+        number: '05.',
+        title: 'Mempelajari Fitur Advanced Dari Davinci Resolve',
         videoCount: 14,
         duration: '3.1 jam',
-        description: 'Audio mixing, sound design, dan Fairlight workflow untuk menghasilkan audio berkualitas broadcast standard.',
-        thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop',
+        description:
+            'Setelah lu udah mulai familiar dengan davinci resolve, dan editing secara keseluruhan. kita akhirnya akan belajar fitur fitur advancenya untuk membuat editing yang lebih bagus. tapi disini tuh bukan cuman kasi tau lu fitur advancenya aja, tapi juga berfokus untuk membuat gaya editing yang paling diminatin di jaman ini yaitu VFX Editing',
+        thumbnail: '/storage/landing/davinciadvance.jpg',
         topics: ['Audio Mixing', 'Sound Design', 'Noise Reduction', 'EQ & Compression', 'Surround Sound'],
         difficulty: 'Intermediate',
         students: 7890,
     },
     {
         id: '6',
-        number: 6,
-        title: 'Delivery & Export Optimization',
+        number: '06.',
+        title: 'Cara Mengedit Video Youtube',
         videoCount: 8,
         duration: '1.8 jam',
-        description: 'Optimasi export untuk berbagai platform dengan render settings yang tepat untuk YouTube, Instagram, dan platform lainnya.',
-        thumbnail: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop',
+        description:
+            'Dan tentunya,  setelah mempelajari semua section dibelakang soal editing, kita akan belajar persisnya cara mengedit video youtube. editor amplifier ini dikembangkan khusus untuk youtuber. jadi tentunya ini akan jadi section paling daging untuk kalian para youtuber',
+        thumbnail: '/storage/landing/youtubeediting.jpg',
+        topics: ['Render Settings', 'Platform Optimization', 'Batch Export', 'Quality Control', 'Archive Workflow'],
+        difficulty: 'Beginner',
+        students: 11250,
+    },
+    {
+        id: '7',
+        number: '07.',
+        title: 'Sistem Saat Mengedit Video Secara Langsung',
+        videoCount: 8,
+        duration: '1.8 jam',
+        description:
+            'Hore! lu udah belajar semua soal editing mulai dari basic dan advance, sekarang lu udah siap buat mulai ngedit secara langsung, tapi tunggu gimana persisnya mengedit video secara beneran? well tenang, section dikembangkan khusus untuk membimbing kalian saat mengedit video secara langsung agar tidak kesasar arah.',
+        thumbnail: '/storage/landing/editingprinciples.jpg',
         topics: ['Render Settings', 'Platform Optimization', 'Batch Export', 'Quality Control', 'Archive Workflow'],
         difficulty: 'Beginner',
         students: 11250,
@@ -120,7 +138,7 @@ function CurriculumCard({ module, delay }: CurriculumCardProps) {
             style={{ animationDelay: `${delay}ms`, animationFillMode: 'both' }}
         >
             {/* Floating Number Badge */}
-            <div className="absolute -top-1 -left-1 z-10">
+            {/* <div className="absolute -top-1 -left-1 z-10">
                 <div
                     className={cn(
                         'flex h-12 w-12 items-center justify-center rounded-2xl',
@@ -132,9 +150,9 @@ function CurriculumCard({ module, delay }: CurriculumCardProps) {
                 >
                     {module.number}
                 </div>
-            </div>
+            </div> */}
 
-            <div className="p-6 md:flex md:gap-6">
+            <div className="bg-primary/15 p-6 md:flex md:gap-6">
                 {/* Thumbnail Section */}
                 <div className="mb-6 md:mb-0 md:w-2/5">
                     <div className="relative aspect-video overflow-hidden rounded-xl">
@@ -181,11 +199,12 @@ function CurriculumCard({ module, delay }: CurriculumCardProps) {
                 <div className="space-y-4 md:w-3/5">
                     {/* Header */}
                     <div className="space-y-3">
+                        <h2 className="text-primary text-2xl font-bold">{module.number}</h2>
                         <div className="flex flex-wrap items-center gap-3">
-                            <h3 className="text-foreground group-hover:text-primary text-xl font-bold transition-colors duration-300">
+                            <h3 className="text-foreground group-hover:text-primary text-3xl font-bold transition-colors duration-300">
                                 {module.title}
                             </h3>
-                            <div
+                            {/* <div
                                 className={cn(
                                     'rounded-full border px-2 py-1 text-xs font-medium',
                                     'bg-gradient-to-r backdrop-blur-sm',
@@ -193,14 +212,14 @@ function CurriculumCard({ module, delay }: CurriculumCardProps) {
                                 )}
                             >
                                 {module.difficulty}
-                            </div>
+                            </div> */}
                         </div>
 
                         <p className="text-muted-foreground text-sm leading-relaxed">{module.description}</p>
                     </div>
 
                     {/* Stats */}
-                    <div className="text-muted-foreground flex items-center gap-6 text-sm">
+                    {/* <div className="text-muted-foreground flex items-center gap-6 text-sm">
                         <div className="flex items-center gap-1">
                             <Users className="h-4 w-4" />
                             <span>{module.students.toLocaleString()} siswa</span>
@@ -209,7 +228,7 @@ function CurriculumCard({ module, delay }: CurriculumCardProps) {
                             <Star className="h-4 w-4 text-yellow-400" fill="currentColor" />
                             <span>4.9 rating</span>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Expandable Topics */}
                     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="space-y-3">
@@ -217,7 +236,7 @@ function CurriculumCard({ module, delay }: CurriculumCardProps) {
                             <div
                                 role="button"
                                 tabIndex={0}
-                                className="bg-muted/20 hover:bg-muted/30 flex w-full cursor-pointer items-center justify-between rounded-lg px-4 py-3 text-left transition-colors"
+                                className="hover:bg-muted/30 flex w-full cursor-pointer items-center justify-between rounded-lg bg-transparent px-4 py-3 text-left transition-colors"
                             >
                                 <span className="text-foreground text-sm font-medium">
                                     <CirclePlay className="me-2 inline-block" />
@@ -285,13 +304,13 @@ export function CurriculumSection() {
                                 </span>
                             </h2>
                             <p className="text-muted-foreground mx-auto max-w-3xl text-xl leading-relaxed">
-                                Roadmap pembelajaran terstruktur dari basic hingga advanced, dirancang khusus untuk menghasilkan editor professional
-                                dalam waktu singkat.
+                                Lu akan dibimbing dari <span className="text-primary">A-Z</span> melalui modul modul yang sudah disusun secara rapih.
+                                buat pastiin kalau lu bisa jadi editor professional (pemula juga bisa!)
                             </p>
                         </div>
 
                         {/* Course Stats */}
-                        <div className="animate-fade-in flex justify-center" style={{ animationDelay: '400ms', animationFillMode: 'both' }}>
+                        {/* <div className="animate-fade-in flex justify-center" style={{ animationDelay: '400ms', animationFillMode: 'both' }}>
                             <div className="bg-card/30 border-border/30 inline-flex items-center gap-8 rounded-2xl border px-8 py-4 backdrop-blur-sm">
                                 <div className="text-center">
                                     <div className="text-primary text-2xl font-bold">{curriculumModules.length}</div>
@@ -308,7 +327,7 @@ export function CurriculumSection() {
                                     <div className="text-muted-foreground text-xs">Durasi</div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Curriculum Cards */}
