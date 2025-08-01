@@ -81,7 +81,7 @@ export function PricingSection() {
     const [isCardHovered, setIsCardHovered] = useState(false);
 
     return (
-        <section className="relative overflow-hidden py-20 lg:py-32">
+        <section className="relative overflow-hidden py-20 lg:py-32" id="pricing-section">
             {/* Background Effects */}
             <div className="absolute inset-0">
                 <div className="via-primary/5 absolute inset-0 bg-gradient-to-b from-transparent to-transparent" />
@@ -101,12 +101,8 @@ export function PricingSection() {
 
                         <div className="animate-fade-in space-y-4" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
                             <h2 className="text-foreground text-4xl font-bold md:text-5xl lg:text-6xl">
-                                <span className="from-primary via-primary/80 to-primary block bg-gradient-to-r bg-clip-text text-transparent">
-                                    Harga Early Access 50 Orang Pertama{' '}
-                                </span>
-                                <span className="from-primary via-primary/80 to-primary bg-gradient-to-r bg-clip-text text-transparent">
-                                    Berakhir Tanggal 16 Agustus 2025
-                                </span>
+                                <span className="block bg-clip-text text-white/80">Harga Early Access 50 Orang Pertama </span>
+                                <span className="bg-clip-text text-green-500">Berakhir Tanggal 16 Agustus 2025</span>
                             </h2>
                             {/* <p className="text-muted-foreground mx-auto max-w-2xl text-xl leading-relaxed">
                                 Harga Early Access Khusus 50 Orang Pertama Berakhir Tanggal 16 Agustus 2025{' '}
@@ -156,7 +152,7 @@ export function PricingSection() {
                                             <span className="bg-destructive/20 text-destructive rounded-md px-2 py-1 text-sm font-medium">-83%</span>
                                         </div>
                                         <div className="flex items-center justify-center gap-2">
-                                            <span className="text-muted-foreground text-2xl line-through">Rp 499.000</span>
+                                            <span className="text-2xl text-green-500 line-through">Rp 499.000</span>
                                             <span className="bg-primary/80 text-accent rounded-md px-2 py-1 text-xs font-semibold">
                                                 50 Orang Pertama
                                             </span>
@@ -187,7 +183,7 @@ export function PricingSection() {
                                             'animate-glow-pulse',
                                         )}
                                     >
-                                        Join Sekarang
+                                        Dibuka Tanggal 9/08/2025
                                         <Rocket className="ms-2 inline h-5 w-5" />
                                         <div className="bg-primary absolute top-0 right-0 h-3 w-3 animate-ping rounded-full" />
                                     </CtaButton>

@@ -1,4 +1,6 @@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { CtaButton } from '@/components/ui/cta-button';
+import { useAnalytics } from '@/hooks/use-analytics';
 import { cn } from '@/lib/utils';
 import { ChevronDown, ChevronRight, CirclePlay, Clock, Play } from 'lucide-react';
 import { useState } from 'react';
@@ -274,6 +276,21 @@ function CurriculumCard({ module, delay }: CurriculumCardProps) {
 }
 
 export function CurriculumSection() {
+    const { trackVisit, trackEngagement } = useAnalytics();
+
+    const handleCtaClick = () => {
+        trackEngagement('cta_click', {
+            button_text: 'Gabung sekarang',
+            location: 'curriculum_section',
+        });
+
+        // scroll to pricing section
+        const pricingSection = document.getElementById('pricing-section');
+        if (pricingSection) {
+            pricingSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     const totalVideos = curriculumModules.reduce((sum, module) => sum + module.videoCount, 0);
     const totalDuration = curriculumModules.reduce((sum, module) => {
         const hours = parseFloat(module.duration.replace(' jam', ''));
@@ -338,7 +355,7 @@ export function CurriculumSection() {
                     </div>
 
                     {/* Bottom CTA */}
-                    <div className="animate-fade-in space-y-6 text-center" style={{ animationDelay: '1400ms', animationFillMode: 'both' }}>
+                    {/* <div className="animate-fade-in space-y-6 text-center" style={{ animationDelay: '1400ms', animationFillMode: 'both' }}>
                         <div className="from-primary/10 via-primary/5 to-primary/10 border-primary/20 rounded-2xl border bg-gradient-to-r p-8 backdrop-blur-sm">
                             <h3 className="text-foreground mb-4 text-2xl font-bold">Siap Mulai Journey Editing Professional Anda?</h3>
                             <p className="text-muted-foreground mx-auto mb-6 max-w-2xl">
@@ -351,6 +368,18 @@ export function CurriculumSection() {
                                 <span>✓ Komunitas eksklusif</span>
                             </div>
                         </div>
+                    </div> */}
+
+                    <div className="pt-6 text-center">
+                        <button onClick={handleCtaClick}>
+                            <CtaButton
+                                variant="primary"
+                                size="lg"
+                                className="group transform text-center transition-all duration-300 hover:scale-105"
+                            >
+                                <span className="relative z-10">Gabung Sekarang</span>
+                            </CtaButton>
+                        </button>
                     </div>
                 </div>
             </div>

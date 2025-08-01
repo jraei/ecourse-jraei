@@ -16,56 +16,62 @@ const videoResults: VideoResult[] = [
     {
         id: '1',
         title: 'Cara Heroisgod Menjadi Anomali TERBERSAR Di Youtube',
-        thumbnail: '/storage/landing/videoThumbnail/thumbnail-1.jpeg',
+        thumbnail: '/storage/landing/thumbnailResult/heroisgod.jpg',
         url: 'https://www.youtube.com/watch?v=8OFFMcRVaT4',
         views: '2.1M',
         duration: '12:45',
-        description: 'Advanced color grading techniques used in Hollywood productions',
+        description:
+            'Biar gw bilang sekarang. lu lagi ngeliat Anomali TERBESAR di youtube, HEROISGOD. hertod, sang youtuber kecil, pencetus saber roam, si analyst ato analisis.......',
     },
     {
         id: '2',
         title: 'Cara Gen Z Kehilangan 30 Tahun Umur Mereka',
-        thumbnail: '/storage/landing/videoThumbnail/thumbnail-2.jpeg',
+        thumbnail: '/storage/landing/thumbnailResult/genz.jpg',
         url: 'https://www.youtube.com/watch?v=pUxudulRizo',
         views: '1.8M',
-        duration: '15:32',
-        description: 'Creating professional motion graphics and text animations',
+        duration: '8:05',
+        description:
+            'Gen z sering digadang gadang dengan steriotipe sebagai generasi tanpa harapan, manja, lemah, oleh orang orang. akan tetapi faktanya...... ',
     },
     {
         id: '3',
         title: '7 Hal Yang Gw Harap Gw Tau Sebelum Jadi Youtuber Gaming',
-        thumbnail: '/storage/landing/videoThumbnail/thumbnail-3.jpeg',
+        thumbnail: '/storage/landing/thumbnailResult/7hal.jpg',
         url: 'https://www.youtube.com/watch?v=TIy3GzYhVos',
         views: '1.5M',
         duration: '18:22',
-        description: 'Professional audio editing and sound design techniques',
+        description:
+            'Gw udah jadi youtuber selama 6 tahun, dan ini udah jadi perjalanan yang panjang. mulai dari channel pertama gw yang gajelas seperti kebanyakan youtuber pemula.......',
     },
     {
         id: '4',
         title: 'Youtuber, Lu Gobl*k Kalo Masi Lakuin Ini',
-        thumbnail: '/storage/landing/videoThumbnail/thumbnail-4.jpeg',
+        thumbnail: '/storage/landing/thumbnailResult/intro.jpg',
         url: 'https://www.youtube.com/watch?v=IXO_tCg1F0Q&t=327s',
         views: '2.3M',
         duration: '14:18',
-        description: 'Seamless transitions and professional visual effects',
+        description:
+            'Ya, Lu denger gw bener, intro itu gaguna dan buang buang waktu. mau lu youtuber pemula yang masi kecil, youtuber gaming yang konsisten.........',
     },
     {
         id: '5',
-        title: 'Gw Membuat Video 100.000 Views, Ini Caranya',
-        thumbnail: '/storage/landing/videoThumbnail/thumbnail-5.jpeg',
-        url: 'https://www.youtube.com/watch?v=FDBhmYGdGeM&t=48s',
+        title: 'Kalo Lu Youtuber Gaming Yang Viewsnya Kecil, Tonton Ini',
+        thumbnail: '/storage/landing/thumbnailResult/kaloluyutubergeming.jpg',
+        url: 'https://www.youtube.com/watch?v=UhAoE4OLIV8',
         views: '1.2M',
-        duration: '16:55',
-        description: 'Professional multicamera editing workflow optimization',
+        duration: '8:11',
+        description:
+            'Ada beberapa channel gaming yang udah mendapat kesuksesan diluar perkiraan lu. disaat lu masih kesusahan buat dapetin 1000 subscriber dan 4000 jam tayang..........',
     },
     {
         id: '6',
-        title: 'Youtuber, Kita Udah Masuk Era Baru (Adaptasi Atau Mati)',
-        thumbnail: '/storage/landing/videoThumbnail/thumbnail-6.jpeg',
-        url: 'https://www.youtube.com/watch?v=O6MZMkV_WbI',
+        title: 'Cara Memulai Channel Youtube Di 2025 (Full Course)',
+        thumbnail: '/storage/landing/thumbnailResult/vsl.jpg',
+        url: 'https://www.youtube.com/watch?v=HTMep-Lwde8',
         views: '980K',
-        duration: '11:30',
-        description: 'Optimal export settings for different platforms',
+        duration: '52:08',
+        description:
+            'Jadi, selamat datang di full course youtube bervalue. ini bakal jadi breakdown penuh gimana lu bisa merubah channel lu, mau yang masi youtuber pemul........',
     },
 ];
 
@@ -252,7 +258,7 @@ export function VideoResults() {
                     {/* Bottom CTA */}
                     <div className="animate-fade-in text-center" style={{ animationDelay: '1200ms', animationFillMode: 'both' }}>
                         <p className="text-muted-foreground mb-6">
-                            Ingin hasil seperti ini? Bergabunglah dengan ribuan creator yang sudah merasakan transformasi.
+                            Ingin hasil seperti ini? Bergabunglah dengan ratusan member yang sudah merasakan transformasi.
                         </p>
                         <div className="from-primary/20 to-primary/10 border-primary/30 inline-flex items-center gap-3 rounded-full border bg-gradient-to-r px-6 py-3 backdrop-blur-sm">
                             <div className="flex -space-x-2">

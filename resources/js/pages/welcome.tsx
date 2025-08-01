@@ -1,6 +1,5 @@
 import AppLogo from '@/components/app-logo';
-import { BonusSection, bonusData } from '@/components/landing/bonus-section';
-import { IndividualBonusSection } from '@/components/landing/individual-bonus-section';
+import { BonusSection } from '@/components/landing/bonus-section';
 import { CurriculumSection } from '@/components/landing/curriculum-section';
 import { FaqSection } from '@/components/landing/faq-section';
 import { HeroBadge } from '@/components/landing/hero-badge';
@@ -15,7 +14,6 @@ import { useDwellTime } from '@/hooks/use-dwell-time';
 import { useScrollTracking } from '@/hooks/use-scroll-tracking';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Youtube } from 'lucide-react';
 import { useEffect } from 'react';
 
 export default function Welcome() {
@@ -37,6 +35,12 @@ export default function Welcome() {
             button_text: 'Gabung sekarang',
             location: 'hero_section',
         });
+
+        // scroll to pricing section
+        const pricingSection = document.getElementById('pricing-section');
+        if (pricingSection) {
+            pricingSection.scrollIntoView({ behavior: 'smooth' });
+        }
     };
 
     return (
@@ -71,12 +75,12 @@ export default function Welcome() {
                                         >
                                             Log in
                                         </Link>
-                                        <Link
+                                        {/* <Link
                                             href={route('register')}
                                             className="border-border/50 text-foreground hover:border-primary/30 hover:bg-card/50 inline-block rounded-lg border px-4 py-2 text-sm leading-normal transition-all duration-300"
                                         >
                                             Register
-                                        </Link>
+                                        </Link> */}
                                     </>
                                 )}
                             </div>
@@ -125,20 +129,23 @@ export default function Welcome() {
                             <div className="animate-fade-in" style={{ animationDelay: '600ms', animationFillMode: 'both' }}>
                                 {/* <VideoPlayer /> */}
                                 <VideoPlayer
-                                    src="/storage/landing/heroVideo/video.mp4"
+                                    src="https://www.youtube.com/watch?v=HTMep-Lwde8&ab_channel=YuvenLie"
                                     title={'VSL - Belajar Editing Tingkat Tinggi'}
                                     className="aspect-video w-full lg:h-[600px]"
                                 />
                             </div>
 
-                            <div className="animate-fade-in text-center" style={{ animationDelay: '800ms', animationFillMode: 'both' }}>
-                                <Link href={route('register')} onClick={handleCtaClick}>
-                                    <CtaButton variant="secondary" size="lg" className="group border-primary/50">
-                                        <Youtube className="me-2 inline transition-transform duration-300 group-hover:scale-110" />
-                                        Gabung sekarang
-                                        <div className="bg-primary absolute -top-1 -right-1 h-3 w-3 animate-pulse rounded-full" />
+                            {/* CTA Button */}
+                            <div className="pt-6 text-center">
+                                <button onClick={handleCtaClick}>
+                                    <CtaButton
+                                        variant="primary"
+                                        size="lg"
+                                        className="group transform text-center transition-all duration-300 hover:scale-105"
+                                    >
+                                        <span className="relative z-10">Gabung Sekarang</span>
                                     </CtaButton>
-                                </Link>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -185,11 +192,6 @@ export default function Welcome() {
 
                 {/* Bonus Section */}
                 <BonusSection />
-
-                {/* Individual Bonus Sections */}
-                {bonusData.standard.map((bonus, index) => (
-                    <IndividualBonusSection key={bonus.id} bonus={bonus} index={index} />
-                ))}
 
                 {/* Mentor Profile Section */}
                 <MentorProfile />

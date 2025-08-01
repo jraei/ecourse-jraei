@@ -1,7 +1,7 @@
-import { Badge } from '@/components/ui/badge';
+import { IndividualBonusSection } from '@/components/landing/individual-bonus-section';
 import { CtaButton } from '@/components/ui/cta-button';
-import { Link } from '@inertiajs/react';
-import { CheckCircle, Clock, Play, Sparkles, Tag, Youtube } from 'lucide-react';
+import { useAnalytics } from '@/hooks/use-analytics';
+import { Clock, Play, Sparkles, Tag, Youtube } from 'lucide-react';
 import { useState } from 'react';
 
 export const bonusData = {
@@ -25,7 +25,7 @@ export const bonusData = {
                 title: 'Full Course Youtube 2',
                 duration: '50+ Menit',
                 description:
-                    'Di Full Course kedua ini, gw bakal bahas lebih lanjut soal cara membangun channel baru dan sampai ke 1000 subscriber dan 4000 jam tayang dari 0. Kita akan mendalami banyak hal mulai dari faktor x, tipe tipe youtuber, dan proses penuh gimana caranya lu bisa membuat video youtube yang bisa mendapat banyak views',
+                    'Di Full Course kedua ini, lu bakal belajar  lebih lanjut soal cara membangun channel baru dan sampai ke 1000 subscriber dan 4000 jam tayang dari 0. Kita akan mendalami banyak hal mulai dari faktor x, tipe tipe youtuber, dan proses penuh gimana caranya lu bisa membuat video youtube yang bisa mendapat banyak views',
                 thumbnail: '/storage/landing/bonusCourses/bonus-course-2.jpg',
             },
             {
@@ -33,8 +33,40 @@ export const bonusData = {
                 title: 'Full Course Ide Video',
                 duration: '24+ Menit',
                 description:
-                    'Di Full Course ini, gw bakal tunjukkin ke lu metode mencari ide video TERBAIK sekaligus TERCEPAT. metode ini udah digunain oleh youtuber besar seperti mrbeast, ryan trahan, dan youtuber besar lainnya. bisa dibilang, ini adalah rahasia mereka, itu kenapa course ini akan sangat valuable. mau lu channel yang udah besar atau yang masi dibawah 1000 subscriber dan 4000 jam tayang. ide video adalah segalanya, dan course ini akan memberi lu segalanya',
+                    'Di Full Course ini, lu bakal belajar  metode mencari ide video TERBAIK sekaligus TERCEPAT. metode ini udah digunain oleh youtuber besar seperti mrbeast, ryan trahan, dan youtuber besar lainnya. bisa dibilang, ini adalah rahasia mereka, itu kenapa course ini akan sangat valuable. ',
                 thumbnail: '/storage/landing/bonusCourses/bonus-course-3.jpg',
+            },
+            {
+                id: 4,
+                title: 'Full Course Algorithm',
+                duration: '??+ Menit',
+                description:
+                    'Sebelum lu mulai lakuin apapun buat sukses. tentunya lu harus pahamin game yang lu coba mainin. disini lu bakal belajar secara lengkap gimana persisnya algoritma youtube bekerja. dan apa yang bikin video dapet views dan enggak.',
+                thumbnail: '/storage/landing/bonusCourses/tanda-tanya.jpg',
+            },
+            {
+                id: 5,
+                title: 'Full Course Thumbnail',
+                duration: '??+ Menit',
+                description:
+                    'Di Full Course ini, lu bakal belajar semua yang lu perlu tahu soal thumbnail. mulai dari apa itu thumbnail, gimana cara thumbnail bisa bikin lu dapet banyak views, serta formula asli dan panduan lengkap soal gimana caranya lu bisa membuat thumbnail lu sendiri untuk video youtube lu',
+                thumbnail: '/storage/landing/bonusCourses/tanda-tanya.jpg',
+            },
+            {
+                id: 6,
+                title: 'Full Course Hook',
+                duration: '??+ Menit',
+                description:
+                    'Di Full Course ini, lu bakal belajar Hook. salah satu bagian terpenting di youtube yaitu 30 detik pertama yang terkenal karena memiliki penuruan paling drastis di retensi penonton. disini lu bakal belajar lengkap caranya menyusun hook yang bisa membuat persentase retensi tinggi.',
+                thumbnail: '/storage/landing/bonusCourses/tanda-tanya.jpg',
+            },
+            {
+                id: 7,
+                title: 'Full Course Scriptwriting',
+                duration: '??+ Menit',
+                description:
+                    'Dan di Full Course Terakhir ini, lu bakal belajar Scriptwriting. ini akan menjadi seluruh inti dari video lu. dan yang nentuin video lu bagus atau enggak yaitu seni dari penyusunan script video itu sendiri. disini kita bakal bahas lengkap struktur struktur dan apa yang harus lu pahami soal script, demi membuat video youtube lu sendiri,',
+                thumbnail: '/storage/landing/bonusCourses/tanda-tanya.jpg',
             },
         ],
     },
@@ -42,29 +74,31 @@ export const bonusData = {
         {
             id: 2,
             badge: 'Bonus #02',
-            title: 'Template Pack Eksklusif',
-            value: 'Rp 150.000',
+            title: 'Puluhan Materi Daging Cara Meningkatkan Views Di Youtube',
+            value: 'Rp 997.000',
             description:
-                'Kumpulan template editing premium yang sudah terbukti meningkatkan engagement. Termasuk title cards, transitions, dan color grading presets.',
-            image: 'photo-1498050108023-c5249f4df085',
+                'Ga cuman full coursenya, lu juga bakal dapet akses ke puluhan materi lainnya yang membahas berbagai macam aspek soal youtube. bener bener, ibarat lu kayak beli 2 course dalam sekali beli',
+            image: '/storage/landing/bonusImages/bonus2.png',
             features: ['50+ Template Premium', 'Color Grading Presets', 'Custom Transitions'],
         },
         {
             id: 3,
             badge: 'Bonus #03',
-            title: 'Music Library Bebas Copyright',
-            value: 'Rp 200.000',
-            description: 'Akses selamanya ke library musik bebas copyright dengan 200+ track berkualitas tinggi untuk semua genre video content.',
-            image: 'photo-1519389950473-47ba0277781c',
+            title: 'Komunitas Eksklusif Value Youtuber',
+            value: 'Rp 499.000',
+            description:
+                'Lu juga bakal dapet akses ke komunitas Value Youtuber. yang berisi 300+ member dengan tujuan yang sama dengan lu. yaitu mengembangkan channel youtube lu dan membuat editing yang lebih baik. lu bisa bertanya ke gw/member jika ada masalah disana ataupun lu bisa berkoneksi sesama youtuber',
+            image: '/storage/landing/bonusImages/bonus3.png',
             features: ['200+ Music Tracks', 'Bebas Copyright', 'Update Bulanan'],
         },
         {
             id: 4,
             badge: 'Bonus #04',
-            title: '1-on-1 Portfolio Review',
-            value: 'Rp 300.000',
-            description: 'Sesi review personal untuk portfolio editing kamu dengan feedback detail dan strategi improvement yang actionable.',
-            image: 'photo-1483058712412-4245e9b90334',
+            title: 'Ratusan+ Asets Editing Siap Pakai (SFX, Elements, Green Sreen, dll)',
+            value: 'Rp 257.000',
+            description:
+                'Dan tentunya lu juga bakal dapet library editing berisi aset aset, sfx, green screen, overlay, plugins, dll yang udah dikumpulin selama 5 tahun. biar lu gausah kumpulin sendiri aset lu dan bisa langsung mulai edit video lu.',
+            image: '/storage/landing/bonusImages/bonusresource.png',
             features: ['60 Menit Review', 'Feedback Detail', 'Action Plan'],
         },
     ],
@@ -81,7 +115,35 @@ export function BonusSection() {
     const [activePreview, setActivePreview] = useState(1);
     const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
-    const totalValue = 540000 + 150000 + 200000 + 300000; // Rp 1,190,000
+    const { trackVisit, trackEngagement } = useAnalytics();
+
+    const handleCtaClick = () => {
+        trackEngagement('cta_click', {
+            button_text: 'Gabung sekarang',
+            location: 'bonus_premium_section',
+        });
+
+        // scroll to pricing section
+        const pricingSection = document.getElementById('pricing-section');
+        if (pricingSection) {
+            pricingSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    const handleCtaClick2 = () => {
+        trackEngagement('cta_click', {
+            button_text: 'Ambil bonus sekarang',
+            location: 'total_value_box',
+        });
+
+        // scroll to pricing section
+        const pricingSection = document.getElementById('pricing-section');
+        if (pricingSection) {
+            pricingSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    const totalValue = 3752000; // Rp 1,190,000
 
     return (
         <section className="relative overflow-hidden py-20 lg:py-32">
@@ -188,6 +250,7 @@ export function BonusSection() {
                                         <Tag className="text-primary h-4 w-4" />
                                         <span className="text-primary font-bold">Value Senilai {bonusData.premium.value}</span>
                                     </div>
+                                    <p className="text-muted-foreground mx-auto max-w-4xl text-lg leading-relaxed">{bonusData.premium.description}</p>
                                 </div>
 
                                 <div className="grid items-start gap-8 lg:grid-cols-5">
@@ -246,8 +309,6 @@ export function BonusSection() {
                                     {/* Right Column - Descriptions */}
                                     <div className="lg:col-span-3">
                                         <div className="space-y-6">
-                                            <p className="text-muted-foreground text-lg leading-relaxed">{bonusData.premium.description}</p>
-
                                             {/* Course Details */}
                                             {bonusData.premium.courses.map((course, index) => (
                                                 <div
@@ -274,34 +335,50 @@ export function BonusSection() {
                                         </div>
                                     </div>
                                 </div>
+                                {/* CTA Button */}
+                                <div className="pt-6 text-center">
+                                    <button onClick={handleCtaClick}>
+                                        <CtaButton
+                                            variant="primary"
+                                            size="lg"
+                                            className="group transform text-center transition-all duration-300 hover:scale-105"
+                                        >
+                                            <span className="relative z-10">Gabung Sekarang</span>
+                                        </CtaButton>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {/* Individual Bonus Sections */}
                 {/* Note: Individual bonus sections are now rendered separately */}
+                {bonusData.standard.map((bonus, index) => (
+                    <IndividualBonusSection key={bonus.id} bonus={bonus} index={index} />
+                ))}
 
                 {/* Value Summary */}
                 <div className="animate-fade-in text-center" style={{ animationDelay: '1400ms', animationFillMode: 'both' }}>
                     <div className="from-primary/10 via-card/50 to-accent/10 border-primary/30 inline-block rounded-3xl border bg-gradient-to-br p-8 backdrop-blur-sm">
                         <div className="space-y-4">
-                            <h3 className="text-foreground mb-2 text-2xl font-bold md:text-3xl">Total Nilai Bonus</h3>
+                            <h3 className="text-foreground mb-2 text-2xl font-bold md:text-3xl">Total Value Yang Lu Dapatkan</h3>
                             <div className="from-primary via-primary/80 to-accent bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
                                 Rp {totalValue.toLocaleString('id-ID')}
                             </div>
                             <p className="text-muted-foreground mx-auto max-w-2xl">
-                                Semua bonus senilai <span className="text-primary font-bold">Rp {totalValue.toLocaleString('id-ID')}</span> ini kamu
-                                dapatkan <span className="text-primary font-bold">GRATIS</span> saat bergabung dengan course kami!
+                                Semua bonus senilai <span className="text-primary font-bold">Rp {totalValue.toLocaleString('id-ID')}</span> ini lu
+                                dapatkan <span className="text-primary font-bold">GRATIS</span> saat bergabung di kelas ini!
                             </p>
 
                             <div className="pt-4">
-                                <Link href={route('register')}>
+                                <button onClick={handleCtaClick2}>
                                     <CtaButton variant="primary" size="lg" className="group">
-                                        <Sparkles className="h-5 w-5 group-hover:animate-spin" />
-                                        Ambil Semua Bonus Sekarang
-                                        <div className="bg-primary absolute -top-1 -right-1 h-3 w-3 animate-ping rounded-full" />
+                                        <Sparkles className="me-3 inline-block h-3 w-3 group-hover:animate-spin" />
+                                        <span>Ambil Bonus Sekarang</span>
+                                        {/* <div className="bg-primary absolute -top-1 -right-1 h-3 w-3 animate-ping rounded-full" /> */}
                                     </CtaButton>
-                                </Link>
+                                </button>
                             </div>
                         </div>
                     </div>

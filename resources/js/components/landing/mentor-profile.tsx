@@ -51,37 +51,37 @@ const credentials: Credential[] = [
 const achievements: Achievement[] = [
     {
         id: '1',
-        image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop',
+        image: '/storage/landing/thumbnailResult/vsl.jpg',
         title: 'Hollywood Project',
         description: 'Color grading for indie film',
     },
     {
         id: '2',
-        image: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=400&h=300&fit=crop',
+        image: '/storage/landing/thumbnailResult/7hal.jpg',
         title: 'Netflix Series',
         description: 'Post-production supervisor',
     },
     {
         id: '3',
-        image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop',
+        image: '/storage/landing/thumbnailResult/genz.jpg',
         title: 'Music Video',
         description: 'Grammy nominated artist',
     },
     {
         id: '4',
-        image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=400&h=300&fit=crop',
+        image: '/storage/landing/thumbnailResult/heroisgod.jpg',
         title: 'Commercial Work',
         description: 'Fortune 500 companies',
     },
     {
         id: '5',
-        image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=300&fit=crop',
+        image: '/storage/landing/thumbnailResult/intro.jpg',
         title: 'Documentary',
         description: 'Award winning documentary',
     },
     {
         id: '6',
-        image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop',
+        image: '/storage/landing/thumbnailResult/kaloluyutubergeming.jpg',
         title: 'Training Content',
         description: 'Educational video series',
     },
@@ -169,10 +169,10 @@ function AchievementImage({ achievement, delay }: AchievementImageProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
                 {/* Content Overlay */}
-                <div className="absolute inset-0 flex flex-col justify-end p-4">
+                {/* <div className="absolute inset-0 flex flex-col justify-end p-4">
                     <h4 className="mb-1 font-semibold text-white">{achievement.title}</h4>
                     <p className="text-xs text-white/80">{achievement.description}</p>
-                </div>
+                </div> */}
 
                 {/* Play Icon Overlay */}
                 <div
@@ -218,8 +218,8 @@ export function MentorProfile() {
                                 </span>
                             </h2>
                             <p className="text-muted-foreground mx-auto max-w-3xl text-xl leading-relaxed">
-                                Dipandu langsung oleh professional editor dengan pengalaman Hollywood dan portfolio internasional yang telah dipercaya
-                                oleh brand-brand ternama dunia.
+                                Dipandu langsung oleh mentor yang secara aktif membuat konten dalam youtube dan sudah mendapaat 500+ ribu views dalam
+                                4 tahun.
                             </p>
                         </div>
                     </div>
@@ -375,11 +375,13 @@ export function MentorProfile() {
                                 <div className="bg-card/30 border-border/30 relative rounded-2xl border p-6 backdrop-blur-sm">
                                     <div className="text-primary/30 absolute -top-2 -left-2 font-serif text-4xl">"</div>
                                     <blockquote className="text-foreground pl-6 leading-relaxed italic">
-                                        Video editing bukan hanya tentang teknik, tapi tentang bercerita. Saya akan mengajarkan Anda cara mengubah
-                                        footage mentah menjadi karya yang memukau dan memorable.
+                                        "Ketika mencari tahu tentang sesuatu, kita seharusnya tidak menghadapinya dengan menentukan terlebih dahulu
+                                        hal itu akan terlihat seperti apa menurut asumsi kita. karena arogan untuk mengasumsikan bahwa kita tahu
+                                        sesuatu yang kita tidak tahu. kita seharusnya menghadapinya dengan intensi untuk mencari tahu lebih banyak
+                                        tentang hal itu, karena kita tidak tahu hal itu"
                                     </blockquote>
                                     <div className="mt-4 text-right">
-                                        <cite className="text-muted-foreground text-sm not-italic">- Sarah Johnson</cite>
+                                        <cite className="text-muted-foreground text-sm not-italic">- Yuven Lie</cite>
                                     </div>
                                 </div>
                             </div>
