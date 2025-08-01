@@ -94,14 +94,16 @@ export function PricingSection() {
                     <div className="space-y-6 text-center">
                         <div className="animate-fade-in">
                             <div className="bg-primary/10 border-primary/20 inline-flex items-center gap-2 rounded-full border px-4 py-2 backdrop-blur-sm">
-                                <Star className="text-primary h-4 w-4 animate-spin" style={{ animationDuration: '3s' }} />
-                                <span className="text-primary text-sm font-medium">Investasi Terbaik</span>
+                                <Star className="h-4 w-4 animate-spin text-white" style={{ animationDuration: '3s' }} />
+                                <span className="text-sm font-medium text-white">Investasi Terbaik</span>
                             </div>
                         </div>
 
                         <div className="animate-fade-in space-y-4" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
                             <h2 className="text-foreground text-4xl font-bold md:text-5xl lg:text-6xl">
-                                <span className="block">Harga Early Access 50 Orang Pertama </span>
+                                <span className="from-primary via-primary/80 to-primary block bg-gradient-to-r bg-clip-text text-transparent">
+                                    Harga Early Access 50 Orang Pertama{' '}
+                                </span>
                                 <span className="from-primary via-primary/80 to-primary bg-gradient-to-r bg-clip-text text-transparent">
                                     Berakhir Tanggal 16 Agustus 2025
                                 </span>
@@ -152,6 +154,12 @@ export function PricingSection() {
                                         <div className="flex items-center justify-center gap-2">
                                             <span className="text-muted-foreground text-2xl line-through">Rp 3.752.000</span>
                                             <span className="bg-destructive/20 text-destructive rounded-md px-2 py-1 text-sm font-medium">-83%</span>
+                                        </div>
+                                        <div className="flex items-center justify-center gap-2">
+                                            <span className="text-muted-foreground text-2xl line-through">Rp 499.000</span>
+                                            <span className="bg-primary/80 text-accent rounded-md px-2 py-1 text-xs font-semibold">
+                                                50 Orang Pertama
+                                            </span>
                                         </div>
                                         <div className="flex items-baseline justify-center gap-1">
                                             <span className="text-primary text-2xl font-medium">Rp</span>
