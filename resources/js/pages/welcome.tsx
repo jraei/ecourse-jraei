@@ -1,5 +1,4 @@
 import AppLogo from '@/components/app-logo';
-import { BonusSection } from '@/components/landing/bonus-section';
 import { CurriculumSection } from '@/components/landing/curriculum-section';
 import { FaqSection } from '@/components/landing/faq-section';
 import { HeroBadge } from '@/components/landing/hero-badge';
@@ -181,9 +180,6 @@ export default function Welcome() {
 
                 {/* Curriculum Section */}
                 <CurriculumSection />
-
-                {/* Bonus Section */}
-                <BonusSection />
 
                 {/* Mentor Profile Section */}
                 <MentorProfile />
